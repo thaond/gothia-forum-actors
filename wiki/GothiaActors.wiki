@@ -103,6 +103,8 @@ Strukturer i Liferay är de fält som finns i en artikel. Artiklar och mallar ä
 
 == Sätta upp Liferay med Tomcat ==
 
+http://code.google.com/p/oppna-program/wiki/Anvisningar_Utvecklingsmilo_Portlet
+
 == Bygga Gothia Actors ==
 
 == Produktionssätta Portlets == 
