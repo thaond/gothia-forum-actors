@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE display PUBLIC "-//Liferay//DTD Display 6.0.0//EN" "http://www.liferay.com/dtd/liferay-display_6_0_0.dtd">
+
+<display>
+	<category name="Gothia Forum">
+		<portlet id="actorsForm"></portlet>
+        <portlet id="actorsSearch"></portlet>
+        <portlet id="actorsSearchResult"></portlet>
+        <portlet id="actorsSearchThinClient"></portlet>
+        <portlet id="moreLikeThis"></portlet>        
+	</category>
+</display>
