@@ -5,6 +5,8 @@
 
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/gothiaforum-site.tiff
 
+http://oppna-program-webbisar.googlecode.com/svn/wiki/bilder/db_tabeller.png
+
 = Bakgrund till Gothia Forum =
 
 Gothia Forum har kommit till för att underlätta och driva det kliniska forskningssamarbetet mellan sjukvård, akademi och forskningsföretag i Västra Götaland. Vi vill i och med denna tjänst bygga upp en virtuell mötesplats och resurs för alla som arbetar med klinisk forskning.
