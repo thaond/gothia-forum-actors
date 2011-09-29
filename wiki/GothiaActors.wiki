@@ -84,4 +84,12 @@ Denna portlets funktion är att konfigurera vilka artiklar som ska visas på oli
 
 = Arkitektur av Gothia Actors =
 
+== Söktjänsten och Workflow ==
+Nedan visas en bild över hur Gothia Actors är byggt. Gothia Actors använder solr-web genom Liferay. För att göra sökfrågor mot Solr (för mer om solr se http://lucene.apache.org/solr/ ). För att använda solr i Liferay behövs war filen för solr-web deployas in och ange adressen till solr server. Då ersätts standard sökmotorn i Liferay mot Solr.  För att göra sökningar mot solr är det bara att använda Liferays vanliga api för sökningar. solr-web ser även till att all data som skall vara sökbar indexeras i solrs index.  
+
+== En aktörs uppbyggnad ==
+En aktör består av flera av Liferays standard entiteter. En aktör har en organisation där användaren är medlem av organisationen. Organisationen kan ha flera medlemmar om det är fler användare som har anslutit sig till aktören.  
+
 = Artiklar, strukturer och mallar i Liferay =
+Efter som att en presentation av en aktör är en artikel i Liferay kan den visas på många olika sätt på olika platser i portalen beroende på vilken mall vi väljer att visa den med. Som när vi visar sökträffarna (dom små röda korten) så används en mall  GF_ACTOR_LIST och när vi visar presentationen så används en annan mall GF_ACTOR_TEMPLATE.  Det finns även en mall som heter GF_MORE_LIKE_THIS och den används när liknande aktörer visas. 
+Strukturer i Liferay är de fält som finns i en artikel. Artiklar och mallar är kopplade till strukturer. GF_SERVICE är den struktur som används för de 
