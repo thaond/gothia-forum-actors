@@ -97,5 +97,3 @@ http://gothia-forum-actors.googlecode.com/svn/wiki/images/actor.png
 = Artiklar, strukturer och mallar i Liferay =
 Efter som att en presentation av en aktör är en artikel i Liferay kan den visas på många olika sätt på olika platser i portalen beroende på vilken mall vi väljer att visa den med. Som när vi visar sökträffarna (dom små röda korten) så används en mall  GF_ACTOR_LIST och när vi visar presentationen så används en annan mall GF_ACTOR_TEMPLATE.  Det finns även en mall som heter GF_MORE_LIKE_THIS och den används när liknande aktörer visas. 
 Strukturer i Liferay är de fält som finns i en artikel. Artiklar och mallar är kopplade till strukturer. GF_SERVICE är den struktur som används för de 
-
-<g:plusone size="medium"></g:plusone>
