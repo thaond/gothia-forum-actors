@@ -1,6 +1,6 @@
 <%--
 
-    Copyright 2011 Västra Götalandsregionen
+    Copyright 2010 Västra Götalandsregionen
 
       This library is free software; you can redistribute it and/or modify
       it under the terms of version 2.1 of the GNU Lesser General Public
