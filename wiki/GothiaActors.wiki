@@ -1,3 +1,5 @@
+= Under uppbyggnad = 
+
 = Gothia Actors =
 
 = Innehåll =
@@ -61,11 +63,24 @@ http://gothia-forum-actors.googlecode.com/svn/wiki/images/pressentationactor.png
 == Actors Form ==
 Utöver själva sök-tjänsten finns det även en portlet för att mata in aktörer i ett formulär. Denna portlet är den största och mest komplicerade av de sex. Den visas bara när man är inloggad som en användare på en gömd sida som heter Vår Sida med URL:en var-sida. Om användaren inte har skapat någon presentation uppmanas den till att antingen skapa en eller att ansluta till en befintlig aktör.
 
-=== skapa ny presentation ===
+http://gothia-forum-actors.googlecode.com/svn/wiki/images/anlutellerskapa.png
+
+=== Skapa ny presentation ===
 
 Om en användare väljer att skapa en presentation så kommer denne till ett formulär där den får fylla i dess uppgifter. Formuläret har validering som kontrollerar att de obligatoriska fält är ifyllda och att telefonnummer är giltiga osv. Det finns en Liferay komponent kallad liferay-ui:asset-tags-selector. Där går det skapa nya helt egna taggar. Den autocompletear på de taggar som redan finns i portalen och det går även välja bland de som finns in en lista.
 
+
+http://gothia-forum-actors.googlecode.com/svn/wiki/images/form.png
+
 När användaren har klickat vidare så kommer denne till nästa steg. Att ladda upp en logotyp till presentationen.  Efter det så visas en förhandsgranskning av presentationen. Det går att redigera den igen om det är något om skall ändras. Eller så går det att skicka iväg den för godkännande.  När den skickas iväg så startar ett workflow. Detta innebär att den eller de som är administratörer på Gothia Forum får ett mail om att ett nytt workflow-ärende har kommit. Då kan administratören gå in och granska presentationen som är en artikel. Om administratören tycker innehållet ser okej ut kan han godkänna den. Annars kan han avslå artikeln. Han har även möjlighet att redigera artikeln och sen godkänna den. När en artikel har blivit godkänd så går det att hitta och se den i söktjänsten. I dagsläget skickas inget e-post meddelande till ägaren av aktörspresentationen. För workflowet använder vi kaleo-web som är Liferays egna workflow engine. För att detta skal fungera måste ett wolkflow som heter Singel Approver slås på för artiklar i Liferay detta görs i kontrollpanelen.
+
+== Show Similar Actors ==
+Det finns en portlet för att visa liknande aktörer. Denna portlet skall finnas på samma sida som Actors Search Result portleten. Det den gör är att den visar aktörer som har en likhet med den aktör som för tillfället visas i Actors Search Result portleten. Detta gör den genom att Actors Search Result portleten skickar taggarna för aktören men public render parameters. Som läses in av Show Similar Actors som gör en sökning mot Solr och får där igenom en aktörer att visa. 
+
+http://gothia-forum-actors.googlecode.com/svn/wiki/images/liknande.png
+
+== Settings ==
+Denna portlets funktion är att konfigurera vilka artiklar som ska visas på olika vyer i portletarna i Gothia Actors projektet. Även i temat finns det artiklar som går att konfigurera på detta sätt. Anledning till att det är byggt så här är att det ska gå att byta de texter som visas på ett enkelt sätt. Genom att byta ID:t till ett annat så kan texterna enkelt ändras. Den använder något som kallas för expando fält i Liferay. Expando fälten är satta på gruppen för gothiaforum.com. Sen plockas ID:t till artikeln upp genom dessa expando fält på de ställen där artikeln ska visa. Det finns tre sådana konfigurerbara  artiklar i Actors Search en som alltid visas en som bara visas när ingen sökning är gjord och en när sökningen inte ger några träffar.
 
 = Arkitektur av Gothia Actors =
 
