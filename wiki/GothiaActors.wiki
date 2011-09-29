@@ -1,18 +1,7 @@
-Gothia Actors
+= Gothia Actors =
 
-= Inneh√•ll =
+= Innehåll =
 <wiki:toc/> 
-
-Innehållsförteckning
-
-|| Gothia Actors ||
-|| Innehållsförteckning ||
-|| Bakgrund till Gothia Forum ||
-|| Vad är en aktör? ||
-|| Portlettar ||
-|| skapa ny presentation ||
-|| Arkitektur av Gothia Actors ||
-|| Artiklar, strukturer och mallar i Liferay ||
 
 = Bakgrund till Gothia Forum =
 
