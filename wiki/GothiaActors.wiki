@@ -3,6 +3,8 @@
 = Innehåll =
 <wiki:toc/> 
 
+http://code.google.com/p/gothia-forum-actors/source/browse/wiki/images/gothiaforum-site.tiff
+
 = Bakgrund till Gothia Forum =
 
 Gothia Forum har kommit till för att underlätta och driva det kliniska forskningssamarbetet mellan sjukvård, akademi och forskningsföretag i Västra Götaland. Vi vill i och med denna tjänst bygga upp en virtuell mötesplats och resurs för alla som arbetar med klinisk forskning.
