@@ -55,7 +55,7 @@ Det finns en portlet som ligger på förstasidan den har ingen egen funktionalit
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/frontpagesearch.png
 
 == Actors Search Result ==
-Den sista portleten va söktjänsten är Actors Search Result det den gör är att den visar presentationen av en aktör. Den visar upp presentationen som är en artikel i Liferay med en speciell mall mer om detta senare.   På presentationen visas de taggar som är satt på aktören dessa går att klicka på. Då görs en ny sökning på denna tagg. Det finns även kontakt uppgifter till den person som är ansvarig för aktören på presentationen.
+Den sista portleten va söktjänsten är Actors Search Result det den gör är att den visar presentationen av en aktör. Den visar upp presentationen som är en artikel i Liferay med en speciell mall mer om detta senare.   På presentationen visas de taggar som är satt på aktören dessa går att klicka på. Då görs en ny sökning på denna tagg och träffaran av sökningen presenteras. Det finns även kontakt uppgifter till den person som är ansvarig för aktören på presentationen.
 
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/pressentationactor.png
 
