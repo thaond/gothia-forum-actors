@@ -38,8 +38,7 @@ Den kliniska forskningen i Västra Götalandsregionen är beroende av att det sk
 En aktör är organisation eller ett företag som vill synas på Gothia Forums nätverk av aktörer. En aktör kan skapa en profil på Gothia Forums hemsida där de kan beskriva sina tjänster och sin verksamhet.  Med hjälp av söktjänsten som är kopplat till presentationerna i nätverket skall det bli enklare att hitta olika aktörer som är verksamma inom klinisk forskning/prövning. Besökare skall få en överblick över vilka resurser finns tillgängliga och snabbt hitta kontaktuppgifter till en aktör.
 
 = Portlettar =
-
-Gothia Actors består totalt av sex portletar. Söktjänst för Gothia Forum som består av tre portletar. En som är själva söktjänsten där sökningen görs och där sökträffarna visas. 
+Gothia Actors består totalt av sex portletar. Söktjänst för Gothia Forum som består av tre portletar. Ut över de finns en för att skapa upp aktörer, en för att genen rikare upplevelse av aktörs presentationen och en i kontrollpanelen för att konfigurera vilka artiklar (texter) som skall visas i portletarna och i temat.
 
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/menubar.png
 
@@ -61,7 +60,7 @@ Den sista portleten är Actors Search Result det den gör är att den visar pres
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/pressentationactor.png
 
 == Actors Form ==
-Utöver själva sök-tjänsten finns det även en portlet för att mata in aktörer i ett formulär. Denna portlet är den största och mest komplicerade av de sex. Den visas bara när man är inloggad som en användare på en gömd sida som heter Vår Sida med URL:en var-sida. Om användaren inte har skapat någon presentation uppmanas den till att antingen skapa en eller att ansluta till en befintlig aktör.
+Utöver själva sök-tjänsten finns det även en portlet för att mata in aktörer i ett formulär. Denna portlet är den största och mest komplicerade av de sex. Den visas bara när man är inloggad som en användare på en gömd sida som heter _Vår Sida_ med URL:en var-sida. Om användaren inte har skapat någon presentation uppmanas den till att antingen skapa en eller att ansluta till en befintlig aktör.
 
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/anlutellerskapa.png
 
