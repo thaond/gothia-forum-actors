@@ -39,6 +39,8 @@ En aktör är organisation eller ett företag som vill synas på Gothia Forums n
 
 Gothia Actors består totalt av sex portletar. Söktjänst för Gothia Forum som består av tre portletar. En som är själva söktjänsten där sökningen görs och där sökträffarna visas. Denna portlet kalas för Actors Search. Denna portlet har autocomplete på de taggar som finns på aktörs presentationerna. Den visar upp ett litet ”kort” av presentationen som är en artikel i Liferay med en speciell mall, mer om detta senare.
 
+http://gothia-forum-actors.googlecode.com/svn/wiki/images/menubar.png
+
 Det finns en portlet som ligger på förstasidan den har ingen egen funktionalitet förutom att att autocompleta på taggar och skicka vidare sökningen till Actors Search portleten. Denna portlet kallas för Actors Search thin client.
 
 Den sista portleten är Actors Search Result det den gör är att den visar presentationen av en aktör. Den visar upp presentationen som är en artikel i Liferay med en speciell mall mer om detta senare.   På presentationen visas de taggar som är satt på aktören dessa går att klicka på. Då görs en ny sökning på denna tagg. Det finns även kontakt uppgifter till den person som är ansvarig för aktören på presentationen.
