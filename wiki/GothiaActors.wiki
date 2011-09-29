@@ -35,7 +35,7 @@ Den kliniska forskningen i Västra Götalandsregionen är beroende av att det sk
 
 = Vad är en aktör? =
 
-En aktör är organisation eller ett företag som vill synas på Gothia Forums nätverk av aktörer. En aktör kan skapa en profil på Gothia Forums hemsida där de kan beskriva sina tjänster och sin verksamhet.  Med hjälp av söktjänsten som är kopplat till presentationerna i nätverket skall det bli enklare att hitta olika aktörer som är verksamma inom klinisk forskning/prövning. Besökare skall få en överblick över vilka resurser finns tillgängliga och snabbt hitta kontaktuppgifter till en aktör.
+En aktör är organisation eller ett företag som vill synas på Gothia Forums nätverk av aktörer. En aktör kan skapa en profil på Gothia Forums webbportal där de kan beskriva sina tjänster och sin verksamhet. Med hjälp av söktjänsten som är kopplat till presentationerna i nätverket skall det bli enklare att hitta olika aktörer som är verksamma inom klinisk forskning/prövning. Besökare skall få en överblick över vilka resurser finns tillgängliga och snabbt hitta kontaktuppgifter till en aktör.
 
 = Portlettar =
 Gothia Actors består totalt av sex portletar. Söktjänst för Gothia Forum som består av tre portletar. Ut över de finns en för att skapa upp aktörer, en för att genen rikare upplevelse av aktörs presentationen och en i kontrollpanelen för att konfigurera vilka artiklar (texter) som skall visas i portletarna och i temat.
@@ -50,17 +50,17 @@ http://gothia-forum-actors.googlecode.com/svn/wiki/images/actrosSearchmedauto.pn
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/hits.png
 
 == Actors Search thin client ==
-Det finns en portlet som ligger på förstasidan den har ingen egen funktionalitet förutom att att autocompleta på taggar och skicka vidare sökningen till Actors Search portleten. Denna portlet kallas för Actors Search thin client.
+Det finns en portlet som ligger på förstasidan den har ingen egen funktionalitet förutom att att autocompleta på taggar och skickar vidare sökningen till Actors Search portleten. Denna portlet kallas för Actors Search thin client.
 
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/frontpagesearch.png
 
 == Actors Search Result ==
-Den sista portleten är Actors Search Result det den gör är att den visar presentationen av en aktör. Den visar upp presentationen som är en artikel i Liferay med en speciell mall mer om detta senare.   På presentationen visas de taggar som är satt på aktören dessa går att klicka på. Då görs en ny sökning på denna tagg. Det finns även kontakt uppgifter till den person som är ansvarig för aktören på presentationen.
+Den sista portleten va söktjänsten är Actors Search Result det den gör är att den visar presentationen av en aktör. Den visar upp presentationen som är en artikel i Liferay med en speciell mall mer om detta senare.   På presentationen visas de taggar som är satt på aktören dessa går att klicka på. Då görs en ny sökning på denna tagg. Det finns även kontakt uppgifter till den person som är ansvarig för aktören på presentationen.
 
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/pressentationactor.png
 
 == Actors Form ==
-Utöver själva sök-tjänsten finns det även en portlet för att mata in aktörer i ett formulär. Denna portlet är den största och mest komplicerade av de sex. Den visas bara när man är inloggad som en användare på en gömd sida som heter _Vår Sida_ med URL:en var-sida. Om användaren inte har skapat någon presentation uppmanas den till att antingen skapa en eller att ansluta till en befintlig aktör.
+Utöver själva sök-tjänsten finns det även en portlet för att mata in aktörer i ett formulär. Denna portlet är den största och mest komplicerade av de sex. Den visas bara när man är inloggad som en användare på en gömd sida som heter _Vår Sida_ med URL:en var-sida. Om man går till url för _vår sida_ och inte är inloggad skall den vara konfigurerad så att den inte visas. Om användaren inte har skapat någon presentation uppmanas den till att antingen skapa en eller att ansluta till en befintlig aktör.
 
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/anlutellerskapa.png
 
@@ -97,3 +97,6 @@ http://gothia-forum-actors.googlecode.com/svn/wiki/images/actor.png
 = Artiklar, strukturer och mallar i Liferay =
 Efter som att en presentation av en aktör är en artikel i Liferay kan den visas på många olika sätt på olika platser i portalen beroende på vilken mall vi väljer att visa den med. Som när vi visar sökträffarna (dom små röda korten) så används en mall  GF_ACTOR_LIST och när vi visar presentationen så används en annan mall GF_ACTOR_TEMPLATE.  Det finns även en mall som heter GF_MORE_LIKE_THIS och den används när liknande aktörer visas. 
 Strukturer i Liferay är de fält som finns i en artikel. Artiklar och mallar är kopplade till strukturer. GF_SERVICE är den struktur som används för de 
+
+
+= Instruktioner för att sätta upp Gothia Actros =
