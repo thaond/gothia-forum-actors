@@ -87,7 +87,7 @@ Denna portlets funktion är att konfigurera vilka artiklar som ska visas på oli
 == Söktjänsten och Workflow ==
 Nedan visas en bild över hur Gothia Actors är byggt. Gothia Actors använder solr-web genom Liferay. För att göra sökfrågor mot Solr (för mer om solr se http://lucene.apache.org/solr/ ). För att använda solr i Liferay behövs war filen för solr-web deployas in och ange adressen till solr server. Då ersätts standard sökmotorn i Liferay mot Solr.  För att göra sökningar mot solr är det bara att använda Liferays vanliga api för sökningar. solr-web ser även till att all data som skall vara sökbar indexeras i solrs index.  
 
-http://gothia-forum-actors.googlecode.com/svn/wiki/images/actorSearch.png
+http://gothia-forum-actors.googlecode.com/svn/wiki/images/gothia-actors.png
 
 
 == En aktörs uppbyggnad ==
