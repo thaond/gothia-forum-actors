@@ -42,7 +42,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.WebKeys;
 
 /**
- * @author simgo3 test
+ * @author simgo3
  */
 
 @Controller
