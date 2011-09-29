@@ -6,7 +6,7 @@ Innehållsförteckning
 || Innehållsförteckning ||
 || Bakgrund till Gothia Forum ||
 || Vad är en aktör? ||
-|| Portletar ||
+|| Portlettar ||
 || skapa ny presentation ||
 || Arkitektur av Gothia Actors ||
 || Artiklar, strukturer och mallar i Liferay ||
@@ -41,7 +41,7 @@ Den kliniska forskningen i Västra Götalandsregionen är beroende av att det sk
 
 En aktör är organisation eller ett företag som vill synas på Gothia Forums nätverk av aktörer. En aktör kan skapa en profil på Gothia Forums hemsida där de kan beskriva sina tjänster och sin verksamhet.  Med hjälp av söktjänsten som är kopplat till presentationerna i nätverket skall det bli enklare att hitta olika aktörer som är verksamma inom klinisk forskning/prövning. Besökare skall få en överblick över vilka resurser finns tillgängliga och snabbt hitta kontaktuppgifter till en aktör.
 
-= Portletar =
+= Portlettar =
 
 Gothia Actors består totalt av sex portletar. Söktjänst för Gothia Forum som består av tre portletar. En som är själva söktjänsten där sökningen görs och där sökträffarna visas. Denna portlet kalas för Actors Search. Denna portlet har autocomplete på de taggar som finns på aktörs presentationerna. Den visar upp ett litet ”kort” av presentationen som är en artikel i Liferay med en speciell mall, mer om detta senare.
 
