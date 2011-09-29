@@ -1,0 +1,62 @@
+Gothia Actors
+
+Innehållsförteckning
+
+|| Gothia Actors ||
+|| Innehållsförteckning ||
+|| Bakgrund till Gothia Forum ||
+|| Vad är en aktör? ||
+|| Portletar ||
+|| skapa ny presentation ||
+|| Arkitektur av Gothia Actors ||
+|| Artiklar, strukturer och mallar i Liferay ||
+
+= Bakgrund till Gothia Forum =
+
+Gothia Forum har kommit till för att underlätta och driva det kliniska forskningssamarbetet mellan sjukvård, akademi och forskningsföretag i Västra Götaland. Vi vill i och med denna tjänst bygga upp en virtuell mötesplats och resurs för alla som arbetar med klinisk forskning.
+
+Gothia Forum är en mötesplats och en frivillig resurs för alla som arbetar med klinisk forskning i regionen. Forskare inom Västra Götalandsregionen samt svenska och utländska forskningsföretag kan vända sig till oss.
+
+Vi ger service inom fyra områden:
+
+Information
+
+En viktig del av Gothia Forums verksamhet är att samla och sprida information om pågående klinisk forskning inom VGR. Vi vill också sprida kunskap om utbudet av resurser för den kliniska forskningen som finns inom regionen och inom våra samarbetsorganisationer och företag.
+
+Kvalitetsstöd
+
+Gothia Forum vill verka för god kvalitet inom en kliniska forskningen och därför arbetar vi för att samordna resurser för kvalitetskontroll. Vi kan även erbjuda monitorering och auditering...?
+
+Dessutom erbjuder Gothia Forum i samarbete med läkemedelsindustrin utbildningar inom GCP och deltar i utvecklingen av nya utbildningar
+
+Projektstöd
+
+Genom Gothia Forum kan du få kontakter som kan hjälpa till med formaliteterna kring din forskning. Det kan handla om att upprätta forskningskontrakt och ansökningar av olika slag. Vi kan också erbjuda hjälp att hitta prövare inom olika discipliner och patienter via olika databaser inom VGR.
+
+Strategisk utveckling
+
+Den kliniska forskningen i Västra Götalandsregionen är beroende av att det sker en kontinuerlig utveckling av de resurser som behövs för forskningen. För att Sverige och VGR skall kunna hålla en fortsatt internationell hög standard är den utvecklingen sker i samarbete med alla inblandade aktörer. Gothia Forum har möjlighet att identifiera, besluta och genomföra strategiska utvecklingsinsatser.
+
+= Vad är en aktör? =
+
+En aktör är organisation eller ett företag som vill synas på Gothia Forums nätverk av aktörer. En aktör kan skapa en profil på Gothia Forums hemsida där de kan beskriva sina tjänster och sin verksamhet.  Med hjälp av söktjänsten som är kopplat till presentationerna i nätverket skall det bli enklare att hitta olika aktörer som är verksamma inom klinisk forskning/prövning. Besökare skall få en överblick över vilka resurser finns tillgängliga och snabbt hitta kontaktuppgifter till en aktör.
+
+= Portletar =
+
+Gothia Actors består totalt av sex portletar. Söktjänst för Gothia Forum som består av tre portletar. En som är själva söktjänsten där sökningen görs och där sökträffarna visas. Denna portlet kalas för Actors Search. Denna portlet har autocomplete på de taggar som finns på aktörs presentationerna. Den visar upp ett litet ”kort” av presentationen som är en artikel i Liferay med en speciell mall, mer om detta senare.
+
+Det finns en portlet som ligger på förstasidan den har ingen egen funktionalitet förutom att att autocompleta på taggar och skicka vidare sökningen till Actors Search portleten. Denna portlet kallas för Actors Search thin client.
+
+Den sista portleten är Actors Search Result det den gör är att den visar presentationen av en aktör. Den visar upp presentationen som är en artikel i Liferay med en speciell mall mer om detta senare.   På presentationen visas de taggar som är satt på aktören dessa går att klicka på. Då görs en ny sökning på denna tagg. Det finns även kontakt uppgifter till den person som är ansvarig för aktören på presentationen.
+
+Utöver själva sök-tjänsten finns det även en portlet för att mata in aktörer i ett formulär. Denna portlet är den största och mest komplicerade av de sex. Den visas bara när man är inloggad som en användare på en gömd sida som heter Vår Sida med URL:en var-sida. Om användaren inte har skapat någon presentation uppmanas den till att antingen skapa en eller att ansluta till en befintlig aktör.
+
+=== skapa ny presentation ===
+
+Om en användare väljer att skapa en presentation så kommer denne till ett formulär där den får fylla i dess uppgifter. Formuläret har validering som kontrollerar att de obligatoriska fält är ifyllda och att telefonnummer är giltiga osv. Det finns en Liferay komponent kallad liferay-ui:asset-tags-selector. Där går det skapa nya helt egna taggar. Den autocompletear på de taggar som redan finns i portalen och det går även välja bland de som finns in en lista.
+
+När användaren har klickat vidare så kommer denne till nästa steg. Att ladda upp en logotyp till presentationen.  Efter det så visas en förhandsgranskning av presentationen. Det går att redigera den igen om det är något om skall ändras. Eller så går det att skicka iväg den för godkännande.  När den skickas iväg så startar ett workflow. Detta innebär att den eller de som är administratörer på Gothia Forum får ett mail om att ett nytt workflow-ärende har kommit. Då kan administratören gå in och granska presentationen som är en artikel. Om administratören tycker innehållet ser okej ut kan han godkänna den. Annars kan han avslå artikeln. Han har även möjlighet att redigera artikeln och sen godkänna den. När en artikel har blivit godkänd så går det att hitta och se den i söktjänsten. I dagsläget skickas inget e-post meddelande till ägaren av aktörspresentationen. För workflowet använder vi kaleo-web som är Liferays egna workflow engine. För att detta skal fungera måste ett wolkflow som heter Singel Approver slås på för artiklar i Liferay detta görs i kontrollpanelen.
+
+= Arkitektur av Gothia Actors =
+
+= Artiklar, strukturer och mallar i Liferay =
