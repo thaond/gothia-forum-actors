@@ -100,3 +100,9 @@ Strukturer i Liferay är de fält som finns i en artikel. Artiklar och mallar ä
 
 
 = Instruktioner för att sätta upp Gothia Actros =
+
+== Sätta upp Liferay ==
+
+== Bygga Gothia Actors ==
+
+== Produktionssätta Portlets == 
