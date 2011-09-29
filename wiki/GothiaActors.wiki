@@ -42,9 +42,9 @@ Gothia Actors består totalt av sex portletar. Söktjänst för Gothia Forum som
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/menubar.png
 
 == Actors Search ==
-Denna portlet kalas för Actors Search. Denna portlet har autocomplete på de taggar som finns på aktörs presentationerna. Den visar upp ett litet ”kort” av presentationen som är en artikel i Liferay med en speciell mall, mer om detta senare.
+Denna portlet kalas för Actors Search. Denna portlet har funktionen autocomplete på de taggar som finns på aktörs presentationerna. Den visar upp ett litet ”kort” av presentationen som är en artikel i Liferay med en speciell mall, mer om detta senare.
 
-http://gothia-forum-actors.googlecode.com/svn/wiki/images/actorsSearch.png
+http://gothia-forum-actors.googlecode.com/svn/wiki/images/actrosSearchmedauto.png
 
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/hits.png
 
