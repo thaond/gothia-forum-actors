@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright 2011 Västra Götalandsregionen This library is free software; you can redistribute it and/or modify it 
+  under the terms of version 2.1 of the GNU Lesser General Public License as published by the Free Software Foundation. 
+  This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+  of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. 
+  You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to the 
+  Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA -->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        	http://www.springframework.org/schema/context
+        	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+      
+   <bean id="settingsService" class="se.gothiaforum.settings.service.impl.SettingsServiceImpl"/>   
+      
+          
+   <bean id="actorsService" class="se.gothiaforum.actorsarticle.service.impl.ActorsServiceImpl">
+     <constructor-arg name="actorsArticleConverterService" 	ref="actorsArticleConverterService"/>
+     <constructor-arg name="actorsServiceUtil" 				ref="actorsServiceUtil"/> 
+     <constructor-arg name="assetEntryService" 				ref="assetEntryService"/>  
+     <constructor-arg name="counterService" 				ref="counterService"/>
+     <constructor-arg name="IGImageService" 				ref="IGImageService"/>  
+     <constructor-arg name="IGFolderService" 				ref="IGFolderService"/>       
+     <constructor-arg name="articleService" 				ref="articleService"/> 
+     <constructor-arg name="articleResourceService" 		ref="articleResourceService"/>
+     <constructor-arg name="organizationService" 			ref="organizationService"/>    
+     <constructor-arg name="socialRequestService" 			ref="socialRequestService"/> 
+     <constructor-arg name="roleService" 					ref="roleService"/> 
+     <constructor-arg name="userService" 					ref="userService"/>
+  </bean>   
+  
+  <bean id="actorsServiceUtil" class="se.gothiaforum.actorsarticle.util.ActorsServiceUtil">
+     <constructor-arg name="assetEntryService" 				ref="assetEntryService"/>   
+     <constructor-arg name="classNameService" 				ref="classNameService"/>
+     <constructor-arg name="counterService" 				ref="counterService"/>
+     <constructor-arg name="listTypeService" 				ref="listTypeService"/>
+     <constructor-arg name="organizationService" 			ref="organizationService"/>
+     <constructor-arg name="templateService" 				ref="templateService"/>
+     <constructor-arg name="structureService" 				ref="structureService"/>
+     <constructor-arg name="roleService" 					ref="roleService"/> 
+     <constructor-arg name="userGroupRoleService" 			ref="userGroupRoleService"/> 
+     <constructor-arg name="userService" 					ref="userService"/>
+  </bean>   
+  
+ 
+    
+  <bean id="articleService" 			     class="com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil" 	 	   factory-method="getService" />
+  <bean id="counterService" 			     class="com.liferay.counter.service.CounterLocalServiceUtil" 					       factory-method="getService" />
+  <bean id="userService" 				     class="com.liferay.portal.service.UserLocalServiceUtil" 						       factory-method="getService" />
+  <bean id="structureService" 			     class="com.liferay.portlet.journal.service.JournalStructureLocalServiceUtil" 	   factory-method="getService" />
+  <bean id="templateService" 			     class="com.liferay.portlet.journal.service.JournalTemplateLocalServiceUtil" 	       factory-method="getService" />
+  <bean id="articleResourceService" 	     class="com.liferay.portlet.journal.service.JournalArticleResourceLocalServiceUtil"  factory-method="getService" />
+  <bean id="assetEntryService" 			     class="com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil" 			   factory-method="getService" />
+  <bean id="classNameService" 		   	     class="com.liferay.portal.service.ClassNameLocalServiceUtil" 					   factory-method="getService" />
+  <bean id="organizationService"             class="com.liferay.portal.service.OrganizationLocalServiceUtil"                     factory-method="getService" />  
+  <bean id="assetTagService"  			     class="com.liferay.portlet.asset.service.AssetTagLocalServiceUtil" 				   factory-method="getService" /> 
+  <bean id="listTypeService"                 class="com.liferay.portal.service.ListTypeServiceUtil"                              factory-method="getService" />
+  <bean id="socialRequestService"            class="com.liferay.portlet.social.service.SocialRequestLocalServiceUtil"            factory-method="getService" /> 
+  <bean id="socialRequestInterpreterService" class="com.liferay.portlet.social.service.SocialRequestInterpreterLocalServiceUtil" factory-method="getService" /> 
+
+  <bean id="roleService"                     class="com.liferay.portal.service.RoleLocalServiceUtil"                             factory-method="getService" /> 
+  <bean id="IGImageService"                  class="com.liferay.portlet.imagegallery.service.IGImageLocalServiceUtil"            factory-method="getService" /> 
+  <bean id="IGFolderService"                 class="com.liferay.portlet.imagegallery.service.IGFolderLocalServiceUtil"           factory-method="getService" /> 
+  <bean id="userGroupRoleService"            class="com.liferay.portal.service.UserGroupRoleLocalServiceUtil"                    factory-method="getService" /> 
+  <bean id="groupService"                    class="com.liferay.portal.service.GroupLocalServiceUtil"                            factory-method="getService" /> 
+
+  <bean id="expandoColumnService"            class="com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil"           factory-method="getService" /> 
+  <bean id="expandoTableService"             class="com.liferay.portlet.expando.service.ExpandoTableLocalServiceUtil"            factory-method="getService" /> 
+  <bean id="expandoValueService"             class="com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil"            factory-method="getService" /> 
+  
+ 
+  <bean id="workflowHandlerRegistry"         class="com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil" />
+  <bean id="actorsArticleConverterService"   class="se.gothiaforum.actorsarticle.service.impl.ActorsArticleConverterServiceImpl"/>
+  
+
+  
+  
+
+
+
+</beans>        
