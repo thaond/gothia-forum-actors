@@ -3,7 +3,7 @@
 = Innehåll =
 <wiki:toc/> 
 
-http://code.google.com/p/gothia-forum-actors/svn/wiki/images/gothiaforum-site.tiff
+http://gothia-forum-actors.googlecode.com/svn/wiki/images/gothiaforum-site.tiff
 
 = Bakgrund till Gothia Forum =
 
