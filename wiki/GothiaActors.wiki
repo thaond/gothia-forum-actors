@@ -1,6 +1,6 @@
-= Under uppbyggnad = 
-
 = Gothia Actors =
+Nedan följer en beskrivning av projektet Gothia Actor som har utförts av VGR IT åt Gothia Forum.
+Projektet är byggt enligt Öppna Programs Referensarkitekturens, för mer om den se http://code.google.com/p/oppna-program/wiki/Introduktion_till_RA
 
 = Innehåll =
 <wiki:toc/> 
@@ -38,12 +38,12 @@ Den kliniska forskningen i Västra Götalandsregionen är beroende av att det sk
 En aktör är organisation eller ett företag som vill synas på Gothia Forums nätverk av aktörer. En aktör kan skapa en profil på Gothia Forums webbportal där de kan beskriva sina tjänster och sin verksamhet. Med hjälp av söktjänsten som är kopplat till presentationerna i nätverket skall det bli enklare att hitta olika aktörer som är verksamma inom klinisk forskning/prövning. Besökare skall få en överblick över vilka resurser finns tillgängliga och snabbt hitta kontaktuppgifter till en aktör.
 
 = Portlettar =
-Gothia Actors består totalt av sex portletar. Söktjänst för Gothia Forum som består av tre portletar. Ut över de finns en för att skapa upp aktörer, en för att genen rikare upplevelse av aktörs presentationen och en i kontrollpanelen för att konfigurera vilka artiklar (texter) som skall visas i portletarna och i temat.
+Gothia Actors består totalt av sex portletar. Söktjänst för Gothia Forum som består av tre portletar. Ut över de finns en för att skapa upp aktörer, en för att ge en rikare upplevelse av aktörs presentationen och en i kontrollpanelen för att konfigurera vilka artiklar (texter) som skall visas i portletarna och i temat.
 
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/menubar.png
 
 == Actors Search ==
-Denna portlet kalas för Actors Search. Denna portlet har funktionen autocomplete på de taggar som finns på aktörs presentationerna. Den visar upp ett litet ”kort” av presentationen som är en artikel i Liferay med en speciell mall, mer om detta senare.
+Denna portlet kalas för Actors Search. Denna portlet har funktionen autocomplete på de taggar som finns på aktörs presentationerna. Den visar upp träffra av sökningen som ett litet ”kort” av presentationen. Detta kort är en artikel i Liferay med en speciell mall, mer om detta senare.
 
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/actrosSearchmedauto.png
 
@@ -84,9 +84,15 @@ Denna portlets funktion är att konfigurera vilka artiklar som ska visas på oli
 = Arkitektur av Gothia Actors =
 
 == Söktjänsten och Workflow ==
-Nedan visas en bild över hur Gothia Actors är byggt. Gothia Actors använder solr-web genom Liferay. För att göra sökfrågor mot Solr (för mer om solr se http://lucene.apache.org/solr/ ). För att använda solr i Liferay behövs war filen för solr-web deployas in och ange adressen till solr server. Då ersätts standard sökmotorn i Liferay mot Solr.  För att göra sökningar mot solr är det bara att använda Liferays vanliga api för sökningar. solr-web ser även till att all data som skall vara sökbar indexeras i solrs index.  
+Nedan visas en bild över hur Gothia Actors är byggt. 
+
+=== Solr ===
+Solr-web är en integration mellan Solr och Liferay. Gothia Actors använder Solr-web genom Liferay. För att göra sökfrågor mot Solr (för mer om Solr se http://lucene.apache.org/solr/ ). För att använda solr i Liferay behövs war filen för Solr-web deployas in och ange adressen till Solr server. Då ersätts standard sökmotorn i Liferay mot Solr.  För att göra sökningar mot solr är det bara att använda Liferays vanliga api för sökningar. Solr-web ser även till att all data som skall vara sökbar indexeras i Solrs index. War filen för Solr-web finns på Liferays kundzon att hämta. Detta kan bara de som är registrerade kunder hos Liferay göra.
 
 http://gothia-forum-actors.googlecode.com/svn/wiki/images/gothia-actors.png
+
+=== Kaleo === 
+Kaleo  är Liferays egna workflow engine. Som också denna går att finna på Liferays kundzon som en .war fil. I detta projekt används den för att få workflow hantering på artiklar. Så att när en artikel har skapats så går den inte direkt att publicera. Den måste först godkännas genom en arbetsflöde av en administratör. Först när den har blivit godkänd så blir den synlig för besökarna genom söktjänsten.   
 
 
 == En aktörs uppbyggnad ==
@@ -96,15 +102,34 @@ http://gothia-forum-actors.googlecode.com/svn/wiki/images/actor.png
 
 = Artiklar, strukturer och mallar i Liferay =
 Efter som att en presentation av en aktör är en artikel i Liferay kan den visas på många olika sätt på olika platser i portalen beroende på vilken mall vi väljer att visa den med. Som när vi visar sökträffarna (dom små röda korten) så används en mall  GF_ACTOR_LIST och när vi visar presentationen så används en annan mall GF_ACTOR_TEMPLATE.  Det finns även en mall som heter GF_MORE_LIKE_THIS och den används när liknande aktörer visas. 
-Strukturer i Liferay är de fält som finns i en artikel. Artiklar och mallar är kopplade till strukturer. GF_SERVICE är den struktur som används för de 
+Strukturer i Liferay är de fält som finns i en artikel. Artiklar och mallar är kopplade till strukturer. För att alla artiklar som används för att presentera en aktör används struktur GF_SERVICE.
 
 
 = Instruktioner för att sätta upp Gothia Actros =
 
 == Sätta upp Liferay med Tomcat ==
 
+För att sätta upp Liferay följ länken nedan. 
 http://code.google.com/p/oppna-program/wiki/Anvisningar_Utvecklingsmilo_Portlet
 
 == Bygga Gothia Actors ==
+För att gothia så används maven för mer om detta se 
+http://code.google.com/p/oppna-program/wiki/Anvisningar_Utvecklingsmiljo#Bygg_och_skapa_eclipse-projektfiler_f%C3%B6r_systemet
 
 == Produktionssätta Portlets == 
+
+Hela Gothia Forum projektet består totalt av 9 stycken war filer inklusive denna för Gothia Actors.
+
+*Gothia Actors
+*Gothia Theme (CSS markup)
+*Solr
+*Kaleo
+*Custom Velocity Rools RSS Hook
+*Googel Maps Portlet 
+*Gothia Layouts
+*Hotell Liferay Hooks
+*Web Form Portlet
+
+== Övrigt ==
+
+Kan vara bra att känna till http://code.google.com/p/oppna-program/wiki/regler_och_riktlinjer
