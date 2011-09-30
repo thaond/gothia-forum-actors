@@ -59,13 +59,13 @@ public class ActorArticleValidator implements Validator {
 		ActorArticle actorArticle = (ActorArticle) target;
 		System.out.println("HAGY IN  VALIDATE");
 		ValidatorUtils.removeLeadingAndTrailingWhitespacesOnAllStringFields(actorArticle); // Remove leading and
-																						   // trailing spaces on
-																						   // all String fields
+		                                                                                   // trailing spaces on
+		                                                                                   // all String fields
 
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "companyName", "code.missing", "invalid-companyName");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "ingress", "code.missing", "invalid-ingress");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "code.missing", "invalid-name");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address", "code.missing", "invalid-address");
+		// ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address", "code.missing", "invalid-address");
 
 		if (actorArticle.getCompanyName().length() > ValidationConstants.LENGHT_VALIDATION_DEFAULT) {
 			errors.rejectValue("companyName", "code.to.long", "to-long-companyName");
