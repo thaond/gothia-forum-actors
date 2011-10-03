@@ -113,7 +113,7 @@ För att sätta upp Liferay följ länken nedan.
 http://code.google.com/p/oppna-program/wiki/Anvisningar_Utvecklingsmilo_Portlet
 
 == Bygga Gothia Actors ==
-För att gothia så används maven för mer om detta se 
+För att bygga gothia så används maven för mer om detta se 
 http://code.google.com/p/oppna-program/wiki/Anvisningar_Utvecklingsmiljo#Bygg_och_skapa_eclipse-projektfiler_f%C3%B6r_systemet
 
 == Produktionssätta Portlets == 
