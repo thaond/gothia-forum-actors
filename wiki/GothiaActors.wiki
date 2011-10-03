@@ -120,15 +120,15 @@ http://code.google.com/p/oppna-program/wiki/Anvisningar_Utvecklingsmiljo#Bygg_oc
 
 Hela Gothia Forum projektet består totalt av 9 stycken war filer inklusive denna för Gothia Actors.
 
-* Gothia Actors
-* Gothia Theme (CSS markup)
-* Solr
-* Kaleo
-* Custom Velocity Rools RSS Hook
-* Googel Maps Portlet 
-* Gothia Layouts
-* Hotell Liferay Hooks
-* Web Form Portlet
+  * Gothia Actors
+  * Gothia Theme (CSS markup)
+  * Solr
+  * Kaleo
+  * Custom Velocity Rools RSS Hook
+  * Googel Maps Portlet 
+  * Gothia Layouts
+  * Hotell Liferay Hooks
+  * Web Form Portlet
 
 == Övrigt ==
 
