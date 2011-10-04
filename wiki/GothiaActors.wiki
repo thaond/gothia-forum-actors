@@ -14,7 +14,7 @@ http://gothia-forum-actors.googlecode.com/svn/wiki/images/gothiaforum-site.png
 
 Gothia Forum har kommit till för att underlätta och driva det kliniska forskningssamarbetet mellan sjukvård, akademi och forskningsföretag i Västra Götaland. Vi vill i och med denna tjänst bygga upp en virtuell mötesplats och resurs för alla som arbetar med klinisk forskning.
 
-Gothia Forum är en mötesplats och en frivillig resurs för alla som arbetar med klinisk forskning i regionen. Forskare inom Västra Götalandsregionen samt svenska och utländska forskningsföretag kan vända sig till oss.
+Gothia Forum är en mötesplats och en frivillig resurs för alla som arbetar med klinisk forskning i regionen. Forskare inom Västra Götalandsregionen samt svenska och utländska forskningsföretag kan vända sig till oss. Ett centralt begrepp i Gothia Forum är `aktörer`. Se förklaring nedan angående vad som menas med en `aktör`.
 
 *Vi ger service inom fyra områden:*
 
