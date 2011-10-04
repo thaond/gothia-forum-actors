@@ -1,6 +1,6 @@
 = Introduktion till projektet Gothia Actors =
 Nedan följer en beskrivning av projektet Gothia Actor som har utförts av VGR IT åt Gothia Forum.
-Projektet är byggt enligt Öppna Programs Referensarkitekturens, för mer om den se http://code.google.com/p/oppna-program/wiki/Introduktion_till_RA
+Projektet är byggt enligt Öppna Programs Referensarkitekturens, för mer om den se [http://code.google.com/p/oppna-program/wiki/Introduktion_till_RA Introduktion till Referensarkitektur]
 
 = Innehåll =
 <wiki:toc/> 
