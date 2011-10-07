@@ -55,6 +55,11 @@
 
     </div>
 </div>
+<div style="display: none">
+    ${hostName}
+</div>
+
+
 <liferay-util:html-bottom>
     <script type="text/javascript" charset="utf-8">
         AUI().use('aui-autocomplete', 'aui-io', 'json', function(A) {
