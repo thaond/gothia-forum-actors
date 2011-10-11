@@ -31,14 +31,14 @@
         <portlet>
                 <portlet-name>actorsSearch</portlet-name>   
                 <friendly-url-mapper-class>com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper</friendly-url-mapper-class>
-                <friendly-url-mapping>sok</friendly-url-mapping>
+                <friendly-url-mapping>s</friendly-url-mapping>
                 <friendly-url-routes>actors-search-friendly-url-routes.xml</friendly-url-routes>
                 <css-class-wrapper>gothia-actorssearch-portlet</css-class-wrapper>    
         </portlet> 
         <portlet>
                 <portlet-name>actorsSearchResult</portlet-name>   
                 <friendly-url-mapper-class>com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper</friendly-url-mapper-class>
-                <friendly-url-mapping>aktor</friendly-url-mapping>
+                <friendly-url-mapping>a</friendly-url-mapping>
                 <friendly-url-routes>actors-search-result-friendly-url-routes.xml</friendly-url-routes>
                 <css-class-wrapper>gothia-actorssearchresult-portlet</css-class-wrapper>    
         </portlet> 

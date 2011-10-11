@@ -35,6 +35,10 @@
   <portlet:param name="action" value="search" />
 </portlet:actionURL>
 
+<portlet:actionURL name="searchForAll" var="searchForAllURL">
+  <portlet:param name="action" value="searchForAll" />
+</portlet:actionURL>
+
 <portlet:renderURL var="showActorURL">
     <portlet:param name="view" value="showActorArticle" />
     <portlet:param name="articleId" value="1" />
@@ -46,9 +50,12 @@
 <aui:form action="<%= searchURL%>" method="post" name="addActorsArticleFM" cssClass="gothia-search-form">
     <div id="<portlet:namespace />searchInputWrap" class="search-input-wrap clearfix">
         <aui:input name="searchTerm" type="text" cssClass="gothia-search-input" label="" />
-        <aui:button type="submit" value="search" />
+        <aui:button type="submit" value="search" />  
     </div>
 </aui:form>
+
+<aui:a cssClass="gothia-search-view-all" href="${searchForAllURL}"><liferay-ui:message key="view-all"/></aui:a>
+
 
 ${searchArticleContent} 
 ${searchFirstTimeArticleContent} 
