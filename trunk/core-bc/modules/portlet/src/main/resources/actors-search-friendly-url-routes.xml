@@ -23,9 +23,13 @@
 <!DOCTYPE routes PUBLIC "-//Liferay//DTD Friendly URL Routes 6.0.0//EN" "http://www.liferay.com/dtd/liferay-friendly-url-routes_6_0_0.dtd">
 
 <routes>
-     <route>
-        <pattern>/sokterm={searchTerm}</pattern>
-         <generated-parameter name="searchTerm">{searchTerm}</generated-parameter>
+    <route>
+        <!-- 
+        Matches pattern from top to bottom.      
+         -->
+        <pattern>/view-all</pattern>
+        <generated-parameter name="viewAll">viewAll</generated-parameter>
+        <generated-parameter name="searchTerm"></generated-parameter>
         <implicit-parameter name="p_p_id">actorsSearch_WAR_gothia_actorscorebcmoduleportlet</implicit-parameter>
         <implicit-parameter name="p_p_lifecycle">0</implicit-parameter>
         <implicit-parameter name="p_p_state">normal</implicit-parameter>
@@ -33,17 +37,17 @@
         <implicit-parameter name="p_p_col_id">column-1</implicit-parameter>
         <implicit-parameter name="p_p_col_count">1</implicit-parameter>
     </route> 
+     <route>
+        <pattern>/{searchTerm}</pattern>
+         <generated-parameter name="searchTerm">{searchTerm}</generated-parameter>
+        <implicit-parameter name="p_p_id">actorsSearch_WAR_gothia_actorscorebcmoduleportlet</implicit-parameter>
+        <implicit-parameter name="p_p_lifecycle">0</implicit-parameter>
+        <implicit-parameter name="p_p_state">normal</implicit-parameter>
+        <implicit-parameter name="p_p_mode">view</implicit-parameter>
+        <implicit-parameter name="p_p_col_id">column-1</implicit-parameter>
+        <implicit-parameter name="p_p_col_count">1</implicit-parameter>
+    </route>    
 </routes>
 
 
 
-<!--         <generated-parameter name="searchTerm">{searchTerm}</generated-parameter> 
-
-
-               
-        
-        
-        
-        
-        =&=&=&=&=&=1
--->

@@ -22,17 +22,21 @@ package se.gothiaforum.controller.actorssearch;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,11 +62,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.search.Document;
-import com.liferay.portal.kernel.search.Hits;
-import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.SearchException;
-import com.liferay.portal.kernel.search.StringQueryImpl;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.service.GroupLocalService;
@@ -70,6 +70,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
+import com.liferay.portlet.journal.NoSuchArticleException;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 
@@ -95,8 +96,11 @@ public class ActorsSearchController {
 	@Autowired
 	private SettingsService settingsService;
 
+	@Autowired
+	private ActroSolrQuery actroSolrQuery;
+
 	@RenderMapping
-	public String showFormView(RenderRequest request, Model model) {
+	public String showFormView(RenderRequest request, RenderResponse response, Model model) {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 
@@ -104,65 +108,68 @@ public class ActorsSearchController {
 		long groupId = themeDisplay.getScopeGroupId();
 
 		String searchTerm = request.getParameter("searchTerm");
+		String viewAll = request.getParameter("viewAll");
 
-		if (searchTerm != null) {
+		System.out.println("searchTerm  ========== " + searchTerm + "=============" + viewAll);
+
+		if (searchTerm != null || viewAll != null) {
+
+			if (viewAll != null) {
+				actroSolrQuery.findAllActorQuery();
+				actroSolrQuery.setRows(1000);
+			} else if (searchTerm != null) {
+				actroSolrQuery.actorQuery(searchTerm.toLowerCase());
+				actroSolrQuery.setStart(0);
+				actroSolrQuery.setRows(10);
+			}
 
 			try {
+				actroSolrQuery.filterActors("");
 
-				ActroSolrQuery query = new ActroSolrQuery();
+				QueryResponse queryResponse = actroSolrQuery.query();
 
-				// query.
-
-				StringQueryImpl query2 = new StringQueryImpl("(" + searchTerm + " OR assetTagNames:" + searchTerm
-				        + ") AND (entryClassName:com.liferay.portlet.journal.model.JournalArticle AND type:"
-				        + ActorsConstants.TYPE_ACTOR + " AND status:0)");
-
-				query.filterActors("");
-
-				query.actorQuery(searchTerm);
-
-				int start = 0;
-				int end = 100;
-
-				System.out.println("query  " + query);
-
-				System.out.println("query.getStringQueryImpl()  " + query.getStringQueryImpl());
-
-				System.out.println("query2 " + query2);
-
-				// SearchEngineUtil.getSearchEngine().getIndexSearcher().search("SYSTEM_ENGINE", companyId, query,
-				// sort, start, end);
-
-				// SearchEngineUtil.getSearchReaderDestinationName(searchEngineId);
-				// SearchEngineUtil.getSearchEngine().getIndexSearcher().
-
-				Hits hits = SearchEngineUtil.search(companyId, query2, start, end);
-				// SearchEngineUtil.search(companyId, groupIds, userId, className, query, start, end);
 				List<ActorArticle> actorArticles = new ArrayList<ActorArticle>();
+				Iterator<SolrDocument> resultIter = null;
+				if (queryResponse != null) {
+					if (queryResponse.getResults() != null) {
 
-				System.out.println("hits.getLength()" + hits.getLength());
+						System.out.println("queryResponse number of found  = "
+						        + queryResponse.getResults().getNumFound());
 
-				for (Document d : hits.getDocs()) {
-					ActorArticle actorArticle = new ActorArticle();
-					actorArticle.setArticleId(d.get(ActorsConstants.ACTORS_ARTICLE_PK));
+						resultIter = queryResponse.getResults().iterator();
 
-					long curGroupId = Long.valueOf(d.get(ActorsConstants.GROUP_ID));
+						while (resultIter.hasNext()) {
+							SolrDocument doc = resultIter.next();
+							ActorArticle actorArticle = new ActorArticle();
+							actorArticle.setArticleId((String) doc
+							        .getFieldValue(ActorsConstants.ACTORS_ARTICLE_PK));
+							actorArticle.setGroupId(Long.valueOf((String) doc
+							        .getFieldValue(ActorsConstants.GROUP_ID)));
 
-					actorArticle.setGroupId(curGroupId);
+							// In case of faulty solr index take care of not adding incorrect articles.
+							try {
+								JournalArticle journalArticle = articleService.getArticle(
+								        actorArticle.getGroupId(), actorArticle.getArticleId());
+								actorArticle.setContent(articleService.getArticleContent(journalArticle,
+								        ActorsConstants.GLOBAL_LIST_TEMPLATEID, null,
+								        themeDisplay.getLanguageId(), themeDisplay));
 
-					JournalArticle journalArticle = articleService.getArticle(actorArticle.getGroupId(),
-					        actorArticle.getArticleId());
-					actorArticle.setContent(articleService.getArticleContent(journalArticle,
-					        ActorsConstants.GLOBAL_LIST_TEMPLATEID, null, themeDisplay.getLanguageId(),
-					        themeDisplay));
+								String namePrefix = groupService.getGroup(actorArticle.getGroupId())
+								        .getFriendlyURL();
 
-					String namePrefix = groupService.getGroup(curGroupId).getFriendlyURL();
+								actorArticle.setProfileURL(ActorsConstants.PROFILE_RIDERECT_URL
+								        + namePrefix.substring(1));
 
-					actorArticle.setProfileURL(ActorsConstants.PROFILE_RIDERECT_URL + namePrefix.substring(1));
+								System.out.println("actorArticle.getArticleId = " + actorArticle.getArticleId());
 
-					System.out.println("actorArticle.getCompanyName = " + actorArticle.getCompanyName());
+								actorArticles.add(actorArticle);
+							} catch (NoSuchArticleException e) {
+								log.warn(e.getMessage());
+								System.out.println("Warning: " + e.getMessage() + "may reindex.");
+							}
 
-					actorArticles.add(actorArticle);
+						}
+					}
 				}
 
 				/*
@@ -236,6 +243,8 @@ public class ActorsSearchController {
 	public void search(ActionRequest request, ActionResponse response, SessionStatus sessionStatus,
 	        @RequestParam("searchTerm") String searchTerm, Model model) {
 
+		System.out.println("searchTerm = " + searchTerm);
+
 		try {
 			String redirect = ActorsConstants.SEARCH_RIDERECT_URL
 			        + URLEncoder.encode(searchTerm, ActorsConstants.UTF_8);
@@ -244,7 +253,22 @@ public class ActorsSearchController {
 			throw new RuntimeException("TODO: Handle this exception better", e);
 		}
 
-		// response.setRenderParameter("searchTerm", searchTerm);
+	}
+
+	/*
+	 * This method receives an parameter (searchTerm) and just send it to the render using an public render
+	 * parameter. Where the render performs the search on that searchTerm.
+	 */
+	@ActionMapping(params = "action=searchForAll")
+	public void searchForAll(ActionRequest request, ActionResponse response, SessionStatus sessionStatus,
+	        Model model) {
+
+		try {
+			String redirect = ActorsConstants.SEARCH_RIDERECT_URL + "view-all";
+			response.sendRedirect(redirect);
+		} catch (IOException e) {
+			throw new RuntimeException("TODO: Handle this exception better", e);
+		}
 
 	}
 
@@ -256,7 +280,7 @@ public class ActorsSearchController {
 	public void serveResource(@RequestParam("searchTerm") String searchFor, ResourceRequest request,
 	        ResourceResponse response) throws IOException, PortletException {
 
-		System.out.println("searchFor = " + searchFor);
+		// System.out.println("searchFor = " + searchFor);
 
 		try {
 
@@ -270,7 +294,7 @@ public class ActorsSearchController {
 				jsonRow.put("name", tag.getName());
 				jsonResult.put(jsonRow);
 
-				System.out.println("tagname = " + tag.getName());
+				// System.out.println("tagname = " + tag.getName());
 			}
 
 			JSONObject jsonResponse = JSONFactoryUtil.createJSONObject();
@@ -312,3 +336,82 @@ public class ActorsSearchController {
 		return tagsList;
 	}
 }
+
+// ActroSolrQuery query = new ActroSolrQuery();
+
+// query.
+
+/*
+ * StringQueryImpl query2 = new StringQueryImpl("(\"" + searchTerm + "\" OR assetTagNames:\"" + searchTerm +
+ * "\") AND (entryClassName:com.liferay.portlet.journal.model.JournalArticle AND type:" +
+ * ActorsConstants.TYPE_ACTOR + " AND status:0)");
+ */
+
+// int start = 0;
+// int end = 100;
+
+// System.out.println("query  " + query);
+
+// System.out.println("query.getStringQueryImpl()  " + query.getStringQueryImpl());
+
+// System.out.println("query2 " + query2);
+
+// SearchEngineUtil.getSearchEngine().getIndexSearcher().search("SYSTEM_ENGINE", companyId, query,
+// sort, start, end);
+
+// SearchEngineUtil.getSearchReaderDestinationName(searchEngineId);
+// SearchEngineUtil.getSearchEngine().getIndexSearcher().
+
+/*
+ * if (searchTerm.equals("")) {
+ * 
+ * System.out.println("empty search"); query2 = new StringQueryImpl(
+ * "entryClassName:com.liferay.portlet.journal.model.JournalArticle AND type:" + ActorsConstants.TYPE_ACTOR +
+ * " AND status:0");
+ * 
+ * }
+ * 
+ * if (searchTerm.startsWith("-")) {
+ * 
+ * System.out.println("empty search"); query2 = new StringQueryImpl("(\\" + searchTerm +
+ * ") AND (entryClassName:com.liferay.portlet.journal.model.JournalArticle AND type:" + ActorsConstants.TYPE_ACTOR
+ * + " AND status:0)");
+ * 
+ * }
+ * 
+ * if (searchTerm.startsWith("*")) {
+ * 
+ * System.out.println("empty search"); query2 = new StringQueryImpl("(\"" + searchTerm +
+ * "\") AND (entryClassName:com.liferay.portlet.journal.model.JournalArticle AND type:" +
+ * ActorsConstants.TYPE_ACTOR + " AND status:0)");
+ * 
+ * }
+ */
+
+// System.out.println("query2 " + query2);
+
+// Hits hits = SearchEngineUtil.search(companyId, query2, start, end);
+
+// SearchEngineUtil.search(companyId, groupIds, userId, className, query, start, end);
+// List<ActorArticle> actorArticles = new ArrayList<ActorArticle>();
+
+/*
+ * for (Document d : hits.getDocs()) { ActorArticle actorArticle = new ActorArticle();
+ * actorArticle.setArticleId(d.get(ActorsConstants.ACTORS_ARTICLE_PK));
+ * 
+ * long curGroupId = Long.valueOf(d.get(ActorsConstants.GROUP_ID));
+ * 
+ * actorArticle.setGroupId(curGroupId);
+ * 
+ * JournalArticle journalArticle = articleService.getArticle(actorArticle.getGroupId(),
+ * actorArticle.getArticleId()); actorArticle.setContent(articleService.getArticleContent(journalArticle,
+ * ActorsConstants.GLOBAL_LIST_TEMPLATEID, null, themeDisplay.getLanguageId(), themeDisplay));
+ * 
+ * String namePrefix = groupService.getGroup(curGroupId).getFriendlyURL();
+ * 
+ * actorArticle.setProfileURL(ActorsConstants.PROFILE_RIDERECT_URL + namePrefix.substring(1));
+ * 
+ * System.out.println("actorArticle.getCompanyName = " + actorArticle.getCompanyName());
+ * 
+ * actorArticles.add(actorArticle); }
+ */

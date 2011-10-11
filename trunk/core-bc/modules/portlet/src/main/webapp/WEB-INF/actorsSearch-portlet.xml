@@ -33,9 +33,11 @@
         http://www.springframework.org/schema/util/spring-util-3.0.xsd
         ">
 
+
   <context:component-scan base-package="se.gothiaforum.controller.actorssearch" />
 
   <import resource="classpath*:services-config.xml" />
+
 
   <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
     <property name="basename" value="classpath:i18n/actors-messages" />

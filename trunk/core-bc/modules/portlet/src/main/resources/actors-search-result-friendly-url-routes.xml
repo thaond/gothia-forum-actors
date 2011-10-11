@@ -24,7 +24,7 @@
 
 <routes>
      <route>
-        <pattern>/name={friendlyURL}</pattern>
+        <pattern>/{friendlyURL}</pattern>
          <generated-parameter name="friendlyURL">{friendlyURL}</generated-parameter>
         <implicit-parameter name="p_p_id">actorsSearchResult_WAR_gothia_actorscorebcmoduleportlet</implicit-parameter>
         <implicit-parameter name="p_p_lifecycle">0</implicit-parameter>
