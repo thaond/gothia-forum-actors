@@ -120,7 +120,7 @@ public class ActorsSearchController {
 			} else if (searchTerm != null) {
 				actroSolrQuery.actorQuery(searchTerm.toLowerCase());
 				actroSolrQuery.setStart(0);
-				actroSolrQuery.setRows(10);
+				actroSolrQuery.setRows(1000);
 			}
 
 			try {

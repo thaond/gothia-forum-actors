@@ -28,6 +28,8 @@
         <portlet id="actorsSearch"></portlet>
         <portlet id="actorsSearchResult"></portlet>
         <portlet id="actorsSearchThinClient"></portlet>
-        <portlet id="moreLikeThis"></portlet>        
+        <portlet id="moreLikeThis"></portlet> 
+        <portlet id="tagCloud"></portlet>        
 	</category>
 </display>
+

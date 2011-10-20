@@ -29,21 +29,19 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-  
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
 <%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %>
+
+<portlet:actionURL name="search" var="searchActorURL"/>
+
 <div class="search-box">
     <div class="search-box-hd">      
     	${bannerArticleContent}
     </div>
-    <div class="search-box-bd">      
-      	${searchclientArticleContent}
-        <portlet:actionURL name="search" var="searchActorURL">
-          <portlet:param name="action" value="search" />
-        </portlet:actionURL>
-            
+    <div class="search-box-bd">            
         <div class="search-wrap">
-            <aui:form name="searchForm" action="<%=searchActorURL%>" method="post">
+            <p>${searchclientArticleContent}</p>
+            <aui:form name="searchForm" action="${searchActorURL}" method="post">
                 <div id="<portlet:namespace />searchInputWrap" class="search-input-wrap clearfix">  
                     <aui:input name="searchTerm" type="text" cssClass="gothia-search-input" />
                     <button class="gothia-search-btn" type="submit">
@@ -58,7 +56,6 @@
 <div style="display: none">
     ${hostName}
 </div>
-
 
 <liferay-util:html-bottom>
     <script type="text/javascript" charset="utf-8">

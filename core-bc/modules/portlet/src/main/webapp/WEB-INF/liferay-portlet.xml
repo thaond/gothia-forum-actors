@@ -55,5 +55,11 @@
          <portlet>
                 <portlet-name>moreLikeThis</portlet-name>   
                 <css-class-wrapper>gothia-morelikethis-portlet</css-class-wrapper>    
-        </portlet>               
+        </portlet>     
+         <portlet>
+                <portlet-name>tagCloud</portlet-name>   
+                <css-class-wrapper>gothia-tagcloud-portlet</css-class-wrapper>    
+        </portlet>             
 </liferay-portlet-app>
+
+
