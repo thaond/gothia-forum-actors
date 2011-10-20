@@ -145,6 +145,24 @@
     <supported-public-render-parameter>friendlyURL</supported-public-render-parameter>
   </portlet>
   
+    <portlet>
+    <portlet-name>tagCloud</portlet-name>
+    <display-name>Gothia Actors Tag Cloud</display-name>
+    <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+    <expiration-cache>0</expiration-cache>
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>VIEW</portlet-mode>
+    </supports>   
+    <supported-locale>sv</supported-locale>
+    <resource-bundle>i18n.actors-messages</resource-bundle>
+    <portlet-info>
+      <title>Gothia Actors Tag Cloud</title>
+      <short-title>Tag Cloud</short-title>
+      <keywords></keywords>
+    </portlet-info>
+  </portlet>
+  
 
    <!-- Used to get remote user. See more info in JSR-286 Section 21.1. -->
   <user-attribute>

@@ -126,7 +126,7 @@ public class ActorsSearchThinClientController {
 		return "searchActorView";
 	}
 
-	@ActionMapping(params = "action=search")
+	@ActionMapping("search")
 	public void search(ActionRequest request, ActionResponse response) {
 
 		String searchTerm = request.getParameter("searchTerm");
