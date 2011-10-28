@@ -35,8 +35,6 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import se.gothiaforum.actorsarticle.util.ExpandoConstants;
 import se.gothiaforum.settings.service.SettingsService;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.service.GroupLocalService;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.WebKeys;
@@ -61,16 +59,7 @@ public class settingsController {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		long companyId = themeDisplay.getCompanyId();
-		long groupId = 0;
-		try {
-			groupId = groupService.getGroup(companyId, "Guest").getGroupId();
-		} catch (PortalException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		long groupId = themeDisplay.getScopeGroup().getGroupId();
 
 		String footerId1 = settingsService.getSetting(ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID1, companyId,
 		        groupId);
@@ -116,16 +105,7 @@ public class settingsController {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		long companyId = themeDisplay.getCompanyId();
-		long groupId = 0;
-		try {
-			groupId = groupService.getGroup(companyId, "Guest").getGroupId();
-		} catch (PortalException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		long groupId = themeDisplay.getScopeGroup().getGroupId();
 
 		String footerId1 = request.getParameter("footerId1");
 		String footerId2 = request.getParameter("footerId2");
