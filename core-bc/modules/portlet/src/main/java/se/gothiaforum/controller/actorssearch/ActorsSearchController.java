@@ -143,8 +143,14 @@ public class ActorsSearchController {
 							ActorArticle actorArticle = new ActorArticle();
 							actorArticle.setArticleId((String) doc
 							        .getFieldValue(ActorsConstants.ACTORS_ARTICLE_PK));
-							actorArticle.setGroupId(Long.valueOf((String) doc
-							        .getFieldValue(ActorsConstants.GROUP_ID)));
+
+							System.out.println("==================" + doc.getFieldValue(ActorsConstants.GROUP_ID)
+							        + "====================");
+
+							if (doc.getFieldValue(ActorsConstants.GROUP_ID) != null) {
+								actorArticle.setGroupId(Long.valueOf((String) doc
+								        .getFieldValue(ActorsConstants.GROUP_ID)));
+							}
 
 							// In case of faulty solr index take care of not adding incorrect articles.
 							try {

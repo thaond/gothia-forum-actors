@@ -25,18 +25,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
-import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import se.gothiaforum.actorsarticle.util.ActorsConstants;
 import se.gothiaforum.model.tagcloud.TagVO;
@@ -86,15 +80,10 @@ public class TagCloudController {
 	@RenderMapping
 	public String renderView(RenderRequest request, Model model) {
 
-		System.out.println("render");
-
 		try {
-
-			// AssetEntryUtil.getAssetTagsSize(0);
 
 			List<JournalArticle> articles = JournalArticleLocalServiceUtil.getJournalArticles(0,
 			        JournalArticleLocalServiceUtil.getJournalArticlesCount());
-			// List<AssetEntry> entrys = new ArrayList<AssetEntry>();
 
 			Set<AssetEntry> entrys = new HashSet<AssetEntry>();
 
@@ -150,9 +139,9 @@ public class TagCloudController {
 
 			}
 
-			if (tagVOList.size() > 12) {
+			if (tagVOList.size() > 20) {
 
-				for (int i = 1; tagVOList.size() > 12; i++) {
+				for (int i = 1; tagVOList.size() > 20; i++) {
 
 					List<TagVO> removeList = new ArrayList<TagVO>();
 
@@ -166,36 +155,16 @@ public class TagCloudController {
 				}
 			}
 
-			// List<AssetTag> assetTagList = new
-			// ArrayList<AssetTag>(Collections.unmodifiableCollection(assetTags));
-
 			Collections.shuffle(tagVOList);
 
 			model.addAttribute("tagVOList", tagVOList);
 
 		} catch (SystemException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (PortalException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return "tagCloudView";
 	}
-
-	@ActionMapping("action")
-	public void action(ActionRequest request, ActionResponse response) {
-
-		System.out.println("action");
-
-	}
-
-	@ResourceMapping
-	public void resource(ResourceRequest request, ResourceResponse response) {
-
-		System.out.println("resource");
-
-	}
-
 }
