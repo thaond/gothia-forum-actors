@@ -27,7 +27,7 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multiset.Entry;
 
-public class testHashMultiSet {
+public class TempTestHashMultiSet {
 
 	@Test
 	public void test1() throws Exception {
