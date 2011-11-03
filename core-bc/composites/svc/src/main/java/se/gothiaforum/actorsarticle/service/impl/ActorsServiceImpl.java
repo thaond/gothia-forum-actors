@@ -61,7 +61,6 @@ import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalArticleResource;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 import com.liferay.portlet.journal.service.JournalArticleResourceLocalService;
-import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialRequestLocalService;
 
@@ -329,8 +328,8 @@ public class ActorsServiceImpl implements ActorsService {
             addArticleTags(userId, groupId, article, tagsEntries, serviceContext, assetEntry);
 
             // Message Boards
-            MBMessage mBMessage = MBMessageLocalServiceUtil.addDiscussionMessage(userId, article.getUserName(),
-                    org.getGroup().getGroupId(), JournalArticle.class.getName(), article.getResourcePrimKey(),
+            MBMessageLocalServiceUtil.addDiscussionMessage(userId, article.getUserName(), org.getGroup()
+                    .getGroupId(), JournalArticle.class.getName(), article.getResourcePrimKey(),
                     WorkflowConstants.STATUS_PENDING);
 
         } catch (SystemException e) {
@@ -406,7 +405,12 @@ public class ActorsServiceImpl implements ActorsService {
             Role role = roleService.getRole(companyId, "Organization Administrator");
             long groupId = organizationService.getOrganization(organizationId).getGroup().getGroupId();
             LinkedHashMap<String, Object> userParams = new LinkedHashMap<String, Object>();
-            userParams.put("userGroupRole", new Long[] { new Long(groupId), new Long(role.getRoleId()) });
+
+            long roleId = Long.valueOf(role.getRoleId());
+            long longGroupId = Long.valueOf(groupId);
+            Long[] userGroupRole = new Long[] { longGroupId, roleId };
+
+            userParams.put("userGroupRole", userGroupRole);
             List<User> users = userService.search(companyId, null, true, userParams, QueryUtil.ALL_POS,
                     QueryUtil.ALL_POS, (OrderByComparator) null);
 

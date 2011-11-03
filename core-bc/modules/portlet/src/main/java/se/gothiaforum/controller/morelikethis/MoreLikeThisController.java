@@ -125,9 +125,9 @@ public class MoreLikeThisController {
 
                     List<AssetTag> tags = getTags(Long.valueOf(group.getGroupId()), journalArticle.getArticleId());
 
-                    String searchTags = "";
+                    StringBuffer searchTags = new StringBuffer("");
                     for (AssetTag t : tags) {
-                        searchTags = searchTags + t.getName() + " ";
+                        searchTags.append(t.getName() + " ");
                     }
 
                     query = new StringQueryImpl("(assetTagNames:" + searchTags
