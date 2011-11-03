@@ -22,6 +22,7 @@ package se.gothiaforum.actorsarticle.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import se.gothiaforum.util.Constants;
 import se.gothiaforum.util.FriendlyURLNormalizer;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -51,7 +52,7 @@ public class ActorsArticleUtil {
      *             the system exception
      */
     public String generateUrlTitle(long articelId, String title) throws PortalException, SystemException {
-        title = title.trim().toLowerCase();
+        title = title.trim().toLowerCase(Constants.LOCALE);
 
         if (Validator.isNull(title) || Validator.isNumber(title) || title.equals(StringPool.BLANK)) {
             return String.valueOf(articelId);

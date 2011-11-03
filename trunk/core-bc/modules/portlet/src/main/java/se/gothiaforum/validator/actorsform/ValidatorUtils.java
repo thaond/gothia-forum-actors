@@ -25,6 +25,8 @@ import java.lang.reflect.Type;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import se.gothiaforum.util.Constants;
+
 /**
  * Generic methods to support validation.
  * 
@@ -55,8 +57,8 @@ public final class ValidatorUtils {
             Type[] getParameterTypes = method.getGenericParameterTypes();
 
             // Loop through all get methods that returns String and has no parameters
-            if (methodName.toLowerCase().startsWith("get") && returnType.isAssignableFrom(String.class)
-                    && (getParameterTypes.length == 0)) {
+            if (methodName.toLowerCase(Constants.LOCALE).startsWith("get")
+                    && returnType.isAssignableFrom(String.class) && (getParameterTypes.length == 0)) {
 
                 // this method is a get method
                 try {
@@ -79,8 +81,8 @@ public final class ValidatorUtils {
                         String setValue = "" + returnObject;
                         setValue = setValue.trim();
 
-                        Object setArguments[] = new Object[1];
-                        setArguments[0] = setValue;
+                        Object setArguments[] = { setValue };
+                        // setArguments[0] = setValue;
                         returnObject = setMethod.invoke(article, setArguments); // set trimmed value
 
                         // Let´s check what we got when we read it

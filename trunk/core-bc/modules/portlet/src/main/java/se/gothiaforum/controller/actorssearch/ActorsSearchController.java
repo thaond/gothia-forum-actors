@@ -52,6 +52,7 @@ import se.gothiaforum.actorsarticle.util.ActorsConstants;
 import se.gothiaforum.settings.service.SettingsService;
 import se.gothiaforum.settings.util.ExpandoConstants;
 import se.gothiaforum.solr.ActroSolrQuery;
+import se.gothiaforum.util.Constants;
 
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -128,7 +129,7 @@ public class ActorsSearchController {
                 actroSolrQuery.findAllActorQuery();
                 actroSolrQuery.setRows(SEARCH_ROWS);
             } else if (searchTerm != null) {
-                actroSolrQuery.actorQuery(searchTerm.toLowerCase());
+                actroSolrQuery.actorQuery(searchTerm.toLowerCase(Constants.LOCALE));
                 actroSolrQuery.setStart(0);
                 actroSolrQuery.setRows(SEARCH_ROWS);
             }

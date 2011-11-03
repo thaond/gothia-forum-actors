@@ -40,7 +40,7 @@
   <portlet:param name="tabs1" value="form-tab" />
 </portlet:renderURL>
 
-<aui:form action="<%= addActorsArticleURL%>" commandName="uploadBean" method="post" name="addActorsArticleFM" cssClass="actors-form"
+<aui:form action="<%= addActorsArticleURL%>" method="post" name="addActorsArticleFM" cssClass="actors-form"
   enctype="multipart/form-data" useNamespace="false">
   <aui:layout>
     <aui:column columnWidth="100" first="true" last="true">
