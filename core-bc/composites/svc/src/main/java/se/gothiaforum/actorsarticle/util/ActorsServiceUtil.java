@@ -34,6 +34,7 @@ import org.apache.commons.logging.LogFactory;
 
 import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
 import se.gothiaforum.util.ArticleContentXml;
+import se.gothiaforum.util.Constants;
 
 import com.liferay.counter.service.CounterLocalService;
 import com.liferay.counter.service.CounterLocalServiceUtil;
@@ -360,7 +361,7 @@ public class ActorsServiceUtil {
             list = listTypeService.getListTypes(ActorsConstants.LISTTYPE_TYPE);
             for (ListType type : list) {
 
-                String typeNameLowerCase = type.getName().toLowerCase();
+                String typeNameLowerCase = type.getName().toLowerCase(Constants.LOCALE);
                 if (typeNameLowerCase.indexOf("full") > -1 && typeNameLowerCase.indexOf("member") > -1) {
                     // most probably we have found the Full Member type. To solve differences between service packs
                     // we get the value like this
