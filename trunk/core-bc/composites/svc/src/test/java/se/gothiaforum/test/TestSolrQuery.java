@@ -47,7 +47,7 @@ public class TestSolrQuery {
     }
 
     @Test
-    public void testOfSolrQueryMoreLikeThia() throws Exception {
+    public void testOfSolrQueryMoreLikeThis() throws Exception {
 
         ActroSolrQuery actroSolrQuery = new ActroSolrQuery();
 
