@@ -134,7 +134,7 @@ public class ActorsSearchController {
             }
 
             try {
-                actroSolrQuery.filterActors("");
+                actroSolrQuery.filterActors();
 
                 QueryResponse queryResponse = actroSolrQuery.query();
 
