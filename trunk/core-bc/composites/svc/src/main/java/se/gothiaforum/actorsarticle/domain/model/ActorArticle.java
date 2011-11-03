@@ -23,7 +23,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * The Class ActorArticle.
+ * This Class is a model for the ActorArticle. This is the objects that is posted in from det the form to the
+ * controller and then send to the service.
  * 
  * @author Hans Gyllensten, vgrid=hangy2
  * @author Simon Göransson vgrid=simgo3
@@ -31,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
 public class ActorArticle {
 
     /** The Constant log. */
-    private static final Log log = LogFactory.getLog(ActorArticle.class);
+    private static final Log LOG = LogFactory.getLog(ActorArticle.class);
 
     /** The company name. */
     private String companyName = "";
@@ -39,8 +40,8 @@ public class ActorArticle {
     /** The organization name. */
     private String organizationName = "";
 
-    /** The ingress. */
-    private String ingress = "";
+    /** The intro. */
+    private String intro = "";
 
     /** The detailed description. */
     private String detailedDescription = "";
@@ -74,8 +75,6 @@ public class ActorArticle {
     /** The logo. */
     private String logo;
 
-    // private List<AssetTag> tags = new ArrayList<AssetTag>();
-
     private String tagsStr = "";
 
     private String articleId = "";
@@ -90,253 +89,110 @@ public class ActorArticle {
 
     private String content = "no content";
 
-    private String ImageUuid = "";
+    private String imageUuid = "";
 
     private String profileURL = "";
 
-    /**
-     * Sets the company name.
-     * 
-     * @param companyName
-     *            the companyName to set
-     */
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
 
-    /**
-     * Gets the company name.
-     * 
-     * @return the companyName
-     */
     public String getCompanyName() {
         return companyName;
     }
 
-    /**
-     * Gets the organization name.
-     * 
-     * @return the organization name
-     */
     public String getOrganizationName() {
         return organizationName;
     }
 
-    /**
-     * Sets the organization name.
-     * 
-     * @param organizationName
-     *            the new organization name
-     */
     public void setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
     }
 
-    /**
-     * Gets the ingress.
-     * 
-     * @return the ingress
-     */
-    public String getIngress() {
-        return ingress;
+    public String getIntro() {
+        return intro;
     }
 
-    /**
-     * Sets the ingress.
-     * 
-     * @param ingress
-     *            the new ingress
-     */
-    public void setIngress(String ingress) {
-        this.ingress = ingress;
+    public void setIntro(String intro) {
+        this.intro = intro;
     }
 
-    /**
-     * Gets the detailed description.
-     * 
-     * @return the detailed description
-     */
     public String getDetailedDescription() {
         return detailedDescription;
     }
 
-    /**
-     * Sets the detailed description.
-     * 
-     * @param detailedDescription
-     *            the new detailed description
-     */
     public void setDetailedDescription(String detailedDescription) {
         this.detailedDescription = detailedDescription;
     }
 
-    /**
-     * Gets the external homepage.
-     * 
-     * @return the external homepage
-     */
     public String getExternalHomepage() {
         return externalHomepage;
     }
 
-    /**
-     * Sets the external homepage.
-     * 
-     * @param externalHomepage
-     *            the new external homepage
-     */
     public void setExternalHomepage(String externalHomepage) {
         this.externalHomepage = externalHomepage;
     }
 
-    /**
-     * Gets the name.
-     * 
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Sets the name.
-     * 
-     * @param name
-     *            the new name
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * Gets the title.
-     * 
-     * @return the title
-     */
     public String getTitle() {
         return title;
     }
 
-    /**
-     * Sets the title.
-     * 
-     * @param title
-     *            the new title
-     */
     public void setTitle(String title) {
         this.title = title;
     }
 
-    /**
-     * Gets the address.
-     * 
-     * @return the address
-     */
     public String getAddress() {
         return address;
     }
 
-    /**
-     * Sets the address.
-     * 
-     * @param address
-     *            the new address
-     */
     public void setAddress(String address) {
         this.address = address;
     }
 
-    /**
-     * Gets the phone.
-     * 
-     * @return the phone
-     */
     public String getPhone() {
         return phone;
     }
 
-    /**
-     * Sets the phone.
-     * 
-     * @param phone
-     *            the new phone
-     */
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    /**
-     * Gets the mobile phone.
-     * 
-     * @return the mobile phone
-     */
     public String getMobilePhone() {
         return mobilePhone;
     }
 
-    /**
-     * Sets the mobile phone.
-     * 
-     * @param mobilePhone
-     *            the new mobile phone
-     */
     public void setMobilePhone(String mobilePhone) {
         this.mobilePhone = mobilePhone;
     }
 
-    /**
-     * Gets the fax.
-     * 
-     * @return the fax
-     */
     public String getFax() {
         return fax;
     }
 
-    /**
-     * Sets the fax.
-     * 
-     * @param fax
-     *            the new fax
-     */
     public void setFax(String fax) {
         this.fax = fax;
     }
 
-    /**
-     * Gets the mail.
-     * 
-     * @return the mail
-     */
     public String getMail() {
         return mail;
     }
 
-    /**
-     * Sets the mail.
-     * 
-     * @param mail
-     *            the new mail
-     */
     public void setMail(String mail) {
         this.mail = mail;
     }
 
-    /**
-     * Gets the logo.
-     * 
-     * @return the logo
-     */
     public String getLogo() {
         return logo;
     }
 
-    /**
-     * Sets the logo.
-     * 
-     * @param logo
-     *            the new logo
-     */
     public void setLogo(String logo) {
         this.logo = logo;
     }
@@ -406,11 +262,11 @@ public class ActorArticle {
     }
 
     public String getImageUuid() {
-        return ImageUuid;
+        return imageUuid;
     }
 
     public void setImageUuid(String imageUuid) {
-        ImageUuid = imageUuid;
+        this.imageUuid = imageUuid;
     }
 
     public String getProfileURL() {

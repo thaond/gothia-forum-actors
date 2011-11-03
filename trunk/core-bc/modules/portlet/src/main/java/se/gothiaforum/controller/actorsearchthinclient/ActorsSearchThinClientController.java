@@ -20,7 +20,6 @@
 package se.gothiaforum.controller.actorsearchthinclient;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
@@ -46,8 +45,8 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import se.gothiaforum.actorsarticle.util.ActorsConstants;
-import se.gothiaforum.actorsarticle.util.ExpandoConstants;
 import se.gothiaforum.settings.service.SettingsService;
+import se.gothiaforum.settings.util.ExpandoConstants;
 
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -67,128 +66,165 @@ import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 
 /**
+ * This Controller class is used as a client to call the "main" search component (ActorSearchController).
+ * 
  * @author simgo3
- * 
- *         This Controller class is used as a client to call the "main" search component (ActorSearchController).
- * 
  */
 
 @Controller
 @RequestMapping(value = "VIEW")
 public class ActorsSearchThinClientController {
-	private static final Log log = LogFactory.getLog(ActorsSearchThinClientController.class);
+    private static final Log LOG = LogFactory.getLog(ActorsSearchThinClientController.class);
 
-	@Autowired
-	private SettingsService settingsService;
+    @Autowired
+    private SettingsService settingsService;
 
-	@Autowired
-	private JournalArticleLocalService articleService;
+    @Autowired
+    private JournalArticleLocalService articleService;
 
-	@RenderMapping
-	public String showEditIFeedForm(RenderRequest request, Model model) {
+    /**
+     * Render for showing the search for actor view.
+     * 
+     * @param request
+     *            the request
+     * @param model
+     *            the model
+     * @return the search actor page
+     */
+    @RenderMapping
+    public String showSearchActorView(RenderRequest request, Model model) {
 
-		// This is for pinking up the articles in the portlet.
-		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-		long companyId = themeDisplay.getCompanyId();
-		long groupId = themeDisplay.getScopeGroupId();
+        // This is for pinking up the articles in the portlet.
+        ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+        long companyId = themeDisplay.getCompanyId();
+        long groupId = themeDisplay.getScopeGroupId();
 
-		try {
-			String bannerArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_BANNER_ARTICLE, companyId,
-			        groupId);
-			String bannerArticleContent = articleService.getArticleContent(groupId, bannerArticleId, null,
-			        themeDisplay.getLanguageId(), themeDisplay);
-			model.addAttribute("bannerArticleContent", bannerArticleContent);
-		} catch (PortalException e) {
-			log.info("no article for thin client search portlet found");
-		} catch (SystemException e) {
-			log.info("no article for thin client search portlet found");
-		}
+        try {
+            String bannerArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_BANNER_ARTICLE, companyId,
+                    groupId);
+            String bannerArticleContent = articleService.getArticleContent(groupId, bannerArticleId, null,
+                    themeDisplay.getLanguageId(), themeDisplay);
+            model.addAttribute("bannerArticleContent", bannerArticleContent);
+        } catch (PortalException e) {
+            LOG.info("no article for thin client search portlet found");
+        } catch (SystemException e) {
+            LOG.info("no article for thin client search portlet found");
+        }
 
-		try {
-			String searchclientArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_THIN_SEARCH_ARTICLE,
-			        companyId, groupId);
-			String searchclientArticleContent = articleService.getArticleContent(groupId, searchclientArticleId,
-			        null, themeDisplay.getLanguageId(), themeDisplay);
-			model.addAttribute("searchclientArticleContent", searchclientArticleContent);
-		} catch (PortalException e) {
-			log.info("no article for thin client search portlet found");
-		} catch (SystemException e) {
-			log.info("no article for thin client search portlet found");
-		}
+        try {
+            String searchclientArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_THIN_SEARCH_ARTICLE,
+                    companyId, groupId);
+            String searchclientArticleContent = articleService.getArticleContent(groupId, searchclientArticleId,
+                    null, themeDisplay.getLanguageId(), themeDisplay);
+            model.addAttribute("searchclientArticleContent", searchclientArticleContent);
+        } catch (PortalException e) {
+            LOG.info("no article for thin client search portlet found");
+        } catch (SystemException e) {
+            LOG.info("no article for thin client search portlet found");
+        }
 
-		try {
-			model.addAttribute("hostName", InetAddress.getLocalHost().getHostName());
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            model.addAttribute("hostName", InetAddress.getLocalHost().getHostName());
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-		return "searchActorView";
-	}
+        return "searchActorView";
+    }
 
-	@ActionMapping("search")
-	public void search(ActionRequest request, ActionResponse response) {
+    /**
+     * The method that search for an actor.
+     * 
+     * @param request
+     *            the request
+     * @param response
+     *            the response
+     */
+    @ActionMapping("search")
+    public void search(ActionRequest request, ActionResponse response) {
 
-		String searchTerm = request.getParameter("searchTerm");
+        String searchTerm = request.getParameter("searchTerm");
 
-		try {
-			String redirect = ActorsConstants.SEARCH_RIDERECT_URL
-			        + URLEncoder.encode(searchTerm, ActorsConstants.UTF_8);
-			response.sendRedirect(redirect);
-		} catch (IOException e) {
-			throw new RuntimeException("TODO: Handle this exception better", e);
-		}
-	}
+        try {
+            String redirect = ActorsConstants.SEARCH_RIDERECT_URL
+                    + URLEncoder.encode(searchTerm, ActorsConstants.UTF_8);
+            response.sendRedirect(redirect);
+        } catch (IOException e) {
+            throw new RuntimeException("TODO: Handle this exception better", e);
+        }
+    }
 
-	@ResourceMapping
-	public void serveResource(@RequestParam("searchTerm") String searchFor, ResourceRequest request,
-	        ResourceResponse response) throws IOException, PortletException {
-		try {
+    /**
+     * Serve resource.
+     * 
+     * @param searchFor
+     *            the string searching for.
+     * @param request
+     *            the request
+     * @param response
+     *            the response
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws PortletException
+     *             the portlet exception
+     */
+    @ResourceMapping
+    public void serveResource(@RequestParam("searchTerm") String searchFor, ResourceRequest request,
+            ResourceResponse response) throws IOException, PortletException {
+        try {
 
-			List<AssetTag> matchingTags = getMatchingTags(searchFor);
+            List<AssetTag> matchingTags = getMatchingTags(searchFor);
 
-			JSONArray jsonResult = com.liferay.portal.kernel.json.JSONFactoryUtil.createJSONArray();
+            System.out.println("searchFor = " + searchFor);
 
-			for (AssetTag tag : matchingTags) {
-				JSONObject jsonRow = JSONFactoryUtil.createJSONObject();
-				jsonRow.put("key", tag.getTagId());
-				jsonRow.put("name", tag.getName());
-				jsonResult.put(jsonRow);
-			}
+            JSONArray jsonResult = com.liferay.portal.kernel.json.JSONFactoryUtil.createJSONArray();
 
-			JSONObject jsonResponse = JSONFactoryUtil.createJSONObject();
-			jsonResponse.put("results", jsonResult);
+            for (AssetTag tag : matchingTags) {
+                JSONObject jsonRow = JSONFactoryUtil.createJSONObject();
+                jsonRow.put("key", tag.getTagId());
+                jsonRow.put("name", tag.getName());
+                jsonResult.put(jsonRow);
+            }
 
-			PrintWriter printWriter = response.getWriter().append(jsonResponse.toString());
+            JSONObject jsonResponse = JSONFactoryUtil.createJSONObject();
+            jsonResponse.put("results", jsonResult);
 
-			response.setContentType("application/json");
+            // Must be here in order to make the java script for auto complete work.
+            response.getWriter().append(jsonResponse.toString());
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            response.setContentType("application/json");
 
-	private List<AssetTag> getMatchingTags(String searchWord) {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-		ArrayList<AssetTag> emptyList = new ArrayList<AssetTag>();
-		List<AssetTag> tagsList = ListUtil.fromCollection(emptyList);
+    private List<AssetTag> getMatchingTags(String searchWord) {
 
-		DynamicQuery dq = DynamicQueryFactoryUtil.forClass(AssetTag.class, PortalClassLoaderUtil.getClassLoader());
+        ArrayList<AssetTag> emptyList = new ArrayList<AssetTag>();
+        List<AssetTag> tagsList = ListUtil.fromCollection(emptyList);
 
-		Criterion searchTermCriterion = RestrictionsFactoryUtil.ilike("name", searchWord + "%");
+        DynamicQuery dq = DynamicQueryFactoryUtil.forClass(AssetTag.class, PortalClassLoaderUtil.getClassLoader());
 
-		dq.add(searchTermCriterion);
+        Criterion searchTermCriterion = RestrictionsFactoryUtil.ilike("name", searchWord + "%");
 
-		try {
-			tagsList = AssetTagLocalServiceUtil.dynamicQuery(dq);
+        dq.add(searchTermCriterion);
 
-			log.info("Number of matching tags: " + tagsList.size());
+        try {
+            tagsList = AssetTagLocalServiceUtil.dynamicQuery(dq);
 
-		} catch (SystemException e) {
-			log.error(e, e);
-		}
+            for (AssetTag assetTag : tagsList) {
+                System.out.println("assetTag = " + assetTag.getName());
+            }
 
-		return tagsList;
-	}
+            LOG.info("Number of matching tags: " + tagsList.size());
+
+        } catch (SystemException e) {
+            LOG.error(e, e);
+        }
+
+        return tagsList;
+    }
 
 }

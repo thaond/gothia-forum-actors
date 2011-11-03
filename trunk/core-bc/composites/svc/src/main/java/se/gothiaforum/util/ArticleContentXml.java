@@ -23,21 +23,40 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * @author simgo3
+ * This class is a help class that helps to create the XML for the content field on an journal article that
+ * describes the content of an article. The class it self has a StringBuffer that you can append dynamic elements
+ * to in different combinations to create your representation of an article. When finish whit the XML use the end
+ * method to receive a string representation of the XML.
  * 
+ * @author simgo3
  */
-public class ArticleContent2Xml {
-    private static final Log log = LogFactory.getLog(ArticleContent2Xml.class);
+public class ArticleContentXml {
+    private static final Log LOG = LogFactory.getLog(ArticleContentXml.class);
     private StringBuffer content = null;
-    private final static String STARTTEXT = "<?xml version=\"1.0\"?><root>";
-    private final static String ENDTEXT = "</root>";
+    private static final String STARTTEXT = "<?xml version=\"1.0\"?><root>";
+    private static final String ENDTEXT = "</root>";
 
-    public ArticleContent2Xml() {
+    /**
+     * Instantiates a new ArticleContentXml.
+     */
+    public ArticleContentXml() {
         super();
         content = new StringBuffer();
         content.append(STARTTEXT);
     }
 
+    /**
+     * This method appends an entire dynamic element to the xml.
+     * 
+     * @param id
+     *            the id
+     * @param name
+     *            the name
+     * @param type
+     *            the type
+     * @param value
+     *            the value
+     */
     public void dynamicElemnet(String id, String name, String type, String value) {
         StringBuffer tempBuffer = new StringBuffer();
 
@@ -56,6 +75,17 @@ public class ArticleContent2Xml {
 
     }
 
+    /**
+     * This method appends an first part of an dynamic element to the xml. Use together with the dynamicElemnetEnd
+     * method.
+     * 
+     * @param id
+     *            the id
+     * @param name
+     *            the name
+     * @param type
+     *            the type
+     */
     public void dynamicElemnetStart(String id, String name, String type) {
         StringBuffer tempBuffer = new StringBuffer();
 
@@ -71,6 +101,13 @@ public class ArticleContent2Xml {
 
     }
 
+    /**
+     * This method appends an end part of an dynamic element to the xml. Use together with the dynamicElemnetStart
+     * method.
+     * 
+     * @param value
+     *            the value
+     */
     public void dynamicElemnetEnd(String value) {
         StringBuffer tempBuffer = new StringBuffer();
 
@@ -82,13 +119,13 @@ public class ArticleContent2Xml {
 
     }
 
+    /**
+     * This method ends the xml and returns it as an string.
+     * 
+     * @return the string representation of the xml.
+     */
     public String end() {
 
-        /*
-         * if (content.indexOf(STARTTEXT) < 0) { // This should never happen. throw new
-         * RuntimeException("illegal state in " + this.getClass().getName() + " expected string to contain " +
-         * STARTTEXT); }
-         */
         String result = content.append(ENDTEXT).toString();
         content = new StringBuffer(); // Clear content. <this prevent wrong use of end
 

@@ -19,31 +19,32 @@
 
 package se.gothiaforum.util.actorsform;
 
-import javax.portlet.PortletURL;
-
 import com.liferay.portlet.social.model.SocialRequest;
 import com.liferay.portlet.social.model.SocialRequestFeedEntry;
 
+/**
+ * The Class Social Request Value Object.
+ */
 public class SocialRequestVO {
-		
-	private SocialRequest socialRequest;
 
-	private SocialRequestFeedEntry requestFeedEntry;
-	
-	public SocialRequest getSocialRequest() {
-		return socialRequest;
-	}
+    private SocialRequest socialRequest;
 
-	public void setSocialRequest(SocialRequest socialRequest) {
-		this.socialRequest = socialRequest;
-	}
+    private SocialRequestFeedEntry requestFeedEntry;
 
-	public SocialRequestFeedEntry getRequestFeedEntry() {
-		return requestFeedEntry;
-	}
+    public SocialRequest getSocialRequest() {
+        return socialRequest;
+    }
 
-	public void setRequestFeedEntry(SocialRequestFeedEntry requestFeedEntry) {
-		this.requestFeedEntry = requestFeedEntry;
-	}	
-		
+    public void setSocialRequest(SocialRequest socialRequest) {
+        this.socialRequest = socialRequest;
+    }
+
+    public SocialRequestFeedEntry getRequestFeedEntry() {
+        return requestFeedEntry;
+    }
+
+    public void setRequestFeedEntry(SocialRequestFeedEntry requestFeedEntry) {
+        this.requestFeedEntry = requestFeedEntry;
+    }
+
 }

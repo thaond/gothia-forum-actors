@@ -22,30 +22,45 @@ package se.gothiaforum.actorsarticle.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import se.gothiaforum.util.FriendlyURLNormalizer;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.util.FriendlyURLNormalizer;
 
 /**
- * @author simgo3
+ * This is a util class for actoraricles.
  * 
+ * @author simgo3
  */
 public class ActorsArticleUtil {
-    private static final Log log = LogFactory.getLog(ActorsArticleUtil.class);
+    private static final Log LOG = LogFactory.getLog(ActorsArticleUtil.class);
 
+    /**
+     * Generate an url title.
+     * 
+     * @param articelId
+     *            the articel id
+     * @param title
+     *            the title
+     * @return URL safe title
+     * @throws PortalException
+     *             the portal exception
+     * @throws SystemException
+     *             the system exception
+     */
     public String generateUrlTitle(long articelId, String title) throws PortalException, SystemException {
         title = title.trim().toLowerCase();
 
         if (Validator.isNull(title) || Validator.isNumber(title) || title.equals(StringPool.BLANK)) {
             return String.valueOf(articelId);
         } else {
-            String urlTitle = FriendlyURLNormalizer.normalize(title, _URL_TITLE_REPLACE_CHARS);
+            String urlTitle = FriendlyURLNormalizer.normalize(title, URL_TITLE_REPLACE_CHARS);
             return urlTitle;
         }
     }
 
-    private static final char[] _URL_TITLE_REPLACE_CHARS = new char[] { '.', '/' };
+    private static final char[] URL_TITLE_REPLACE_CHARS = new char[] { '.', '/' };
 
 }

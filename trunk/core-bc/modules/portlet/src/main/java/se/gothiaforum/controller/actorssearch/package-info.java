@@ -17,23 +17,7 @@
  *
  */
 
-package se.gothiaforum.validator.actorsform;
-
 /**
- * This class is a constant file for the validation classes.
- * 
- * @author simgo3
+ * Provides the controllers for the Actor search portlet. 
  */
-public final class ValidationConstants {
-
-    private ValidationConstants() {
-        throw new UnsupportedOperationException();
-    }
-
-    public static final int LENGHT_VALIDATION_DEFAULT = 70;
-    public static final int LENGHT_VALIDATION_ADDRESS = 150;
-    public static final int LENGHT_VALIDATION_URL = 250;
-    public static final int LENGHT_VALIDATION_INTRO = 800;
-    public static final int LENGHT_VALIDATION_DESCRIPTION = 2000;
-
-}
+package se.gothiaforum.controller.actorssearch;

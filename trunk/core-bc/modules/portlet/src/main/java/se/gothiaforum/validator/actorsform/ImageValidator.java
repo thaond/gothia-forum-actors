@@ -24,19 +24,23 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @author simgo3
+ * This is a validation class for images.
  * 
+ * @author simgo3
  */
 public class ImageValidator {
-    private static final Log log = LogFactory.getLog(ImageValidator.class);
+    private static final Log LOG = LogFactory.getLog(ImageValidator.class);
+    private static final int IMAGE_MIN_SIZE = 0;
+    private static final int IMAGE_MAX_SIZE = 5 * 1024 * 1024;
 
+    /**
+     * Validate if the image have valid size, file suffix and mime.
+     * 
+     * @param multipartFile
+     *            the multipart file
+     * @return true, if is valid
+     */
     public boolean isValidate(MultipartFile multipartFile) {
-
-        final int IMAGE_MIN_SIZE = 0;
-        final int IMAGE_MAX_SIZE = 5 * 1024 * 1024;
-
-        //image Validator size, file suffix, mime.
-        //TODO send appropriate validation message to the user
 
         boolean valid = true;
 

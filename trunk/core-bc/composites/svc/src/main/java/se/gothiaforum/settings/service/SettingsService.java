@@ -19,8 +19,6 @@
 
 package se.gothiaforum.settings.service;
 
-import com.liferay.portal.model.Group;
-
 /**
  * The Interface settingsService.
  * 
@@ -30,11 +28,32 @@ import com.liferay.portal.model.Group;
  */
 
 public interface SettingsService {
-	
-	public void setSetting(String data, String columnName, long companyId, long groupId);
-	
-	public String getSetting(String columnName, long companyId, long groupId);
-	
-	
+
+    /**
+     * Sets the setting.
+     * 
+     * @param data
+     *            the data
+     * @param columnName
+     *            the column name
+     * @param companyId
+     *            the company id
+     * @param groupId
+     *            the group id
+     */
+    void setSetting(String data, String columnName, long companyId, long groupId);
+
+    /**
+     * Gets the setting.
+     * 
+     * @param columnName
+     *            the column name
+     * @param companyId
+     *            the company id
+     * @param groupId
+     *            the group id
+     * @return the setting
+     */
+    String getSetting(String columnName, long companyId, long groupId);
 
 }

@@ -44,62 +44,76 @@ import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 
 /**
+ * This controller class performs a search for actors.
+ * 
  * @author simgo3
- * 
- *         This controller class performs a search for actors.
- * 
  */
 
 @Controller
 @RequestMapping(value = "VIEW")
 public class ActorsSearchResultController {
-	private static final Log log = LogFactory.getLog(ActorsSearchResultController.class);
+    private static final Log LOG = LogFactory.getLog(ActorsSearchResultController.class);
 
-	@Autowired
-	private JournalArticleLocalService articleService;
+    @Autowired
+    private JournalArticleLocalService articleService;
 
-	@RenderMapping
-	public String showActorArticleView(RenderRequest request, RenderResponse response, Model model) {
+    /**
+     * This method shows actor article view.
+     * 
+     * @param request
+     *            the request
+     * @param response
+     *            the response
+     * @param model
+     *            the model
+     * @return the profile view
+     */
+    @RenderMapping
+    public String showActorArticleView(RenderRequest request, RenderResponse response, Model model) {
 
-		String friendlyURL = request.getParameter("friendlyURL");
+        String friendlyURL = request.getParameter("friendlyURL");
 
-		if (friendlyURL != null) {
+        if (friendlyURL != null) {
 
-			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+            ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 
-			try {
-				Group group = GroupLocalServiceUtil.getFriendlyURLGroup(themeDisplay.getCompanyId(), "/"
-				        + friendlyURL);
+            try {
+                Group group = GroupLocalServiceUtil.getFriendlyURLGroup(themeDisplay.getCompanyId(), "/"
+                        + friendlyURL);
 
-				JournalArticle journalArticle = null;
-				List<JournalArticle> articles;
+                JournalArticle journalArticle = null;
+                List<JournalArticle> articles;
 
-				articles = articleService.getArticles();
+                articles = articleService.getArticles();
 
-				// Find the Journal Article for the current group.
-				for (JournalArticle jA : articles) {
-					if (jA.getGroupId() == group.getGroupId() && jA.getType().equals(ActorsConstants.TYPE_ACTOR)) {
-						journalArticle = articleService.getLatestArticle(jA.getResourcePrimKey());
-					}
-				}
+                // Find the Journal Article for the current group.
+                for (JournalArticle jA : articles) {
+                    if (jA.getGroupId() == group.getGroupId() && jA.getType().equals(ActorsConstants.TYPE_ACTOR)) {
+                        journalArticle = articleService.getLatestArticle(jA.getResourcePrimKey());
+                    }
+                }
 
-				String content = articleService.getArticleContent(journalArticle,
-				        ActorsConstants.GLOBAL_TEMPLATEID, null, themeDisplay.getLanguageId(), themeDisplay);
+                String content = articleService.getArticleContent(journalArticle,
+                        ActorsConstants.GLOBAL_TEMPLATEID, null, themeDisplay.getLanguageId(), themeDisplay);
 
-				model.addAttribute("content", content);
-			} catch (PortalException e1) {
-				throw new RuntimeException("TODO: Handle this exception better", e1);
-			} catch (SystemException e1) {
-				throw new RuntimeException("TODO: Handle this exception better", e1);
-			}
-		}
+                model.addAttribute("content", content);
+            } catch (PortalException e1) {
+                throw new RuntimeException("TODO: Handle this exception better", e1);
+            } catch (SystemException e1) {
+                throw new RuntimeException("TODO: Handle this exception better", e1);
+            }
+        }
 
-		return "profileView";
-	}
+        return "profileView";
+    }
 
-	// @ExceptionHandler({ Exception.class })
-	public String handleException() {
-		return "errorPage";
-	}
+    /**
+     * Handles the exceptions.
+     * 
+     * @return the string
+     */
+    public String handleException() {
+        return "errorPage";
+    }
 
 }

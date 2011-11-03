@@ -48,123 +48,121 @@ import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 
 /**
- * Copyright 2010 Västra Götalandsregionen
- *
- *   This library is free software; you can redistribute it and/or modify
- *   it under the terms of version 2.1 of the GNU Lesser General Public
- *   License as published by the Free Software Foundation.
- *
- *   This library is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public
- *   License along with this library; if not, write to the
- *   Free Software Foundation, Inc., 59 Temple Place, Suite 330,
- *   Boston, MA 02111-1307  USA
- *
- */
-
-/**
+ * The controller class for the tag cloud portlet.
+ * 
  * @author simgo3
- * 
- *         This Controller class is used for the tag cloud.
- * 
  */
-
 @Controller
 @RequestMapping(value = "VIEW")
 public class TagCloudController {
 
-	@RenderMapping
-	public String renderView(RenderRequest request, Model model) {
+    /**
+     * Renders the view for the tag cloud.
+     * 
+     * @param request
+     *            the request
+     * @param model
+     *            the model
+     * @return a view
+     */
+    @RenderMapping
+    public String renderView(RenderRequest request, Model model) {
 
-		try {
+        try {
 
-			List<JournalArticle> articles = JournalArticleLocalServiceUtil.getJournalArticles(0,
-			        JournalArticleLocalServiceUtil.getJournalArticlesCount());
+            List<JournalArticle> articles = JournalArticleLocalServiceUtil.getJournalArticles(0,
+                    JournalArticleLocalServiceUtil.getJournalArticlesCount());
 
-			Set<AssetEntry> entrys = new HashSet<AssetEntry>();
+            Set<AssetEntry> entrys = new HashSet<AssetEntry>();
 
-			for (JournalArticle ja : articles) {
-				if (ja.getType().equals(ActorsConstants.TYPE_ACTOR)) {
-					entrys.add(AssetEntryLocalServiceUtil.getEntry(JournalArticle.class.getName(),
-					        ja.getResourcePrimKey()));
-				}
-			}
+            for (JournalArticle ja : articles) {
+                if (ja.getType().equals(ActorsConstants.TYPE_ACTOR)) {
+                    entrys.add(AssetEntryLocalServiceUtil.getEntry(JournalArticle.class.getName(),
+                            ja.getResourcePrimKey()));
+                }
+            }
 
-			Multiset<AssetTag> tagMultiSet = HashMultiset.create();
+            Multiset<AssetTag> tagMultiSet = HashMultiset.create();
 
-			for (AssetEntry entry : entrys) {
+            for (AssetEntry entry : entrys) {
 
-				List<AssetTag> tags = AssetTagLocalServiceUtil.getEntryTags(entry.getEntryId());
+                List<AssetTag> tags = AssetTagLocalServiceUtil.getEntryTags(entry.getEntryId());
 
-				for (AssetTag tag : tags) {
-					tagMultiSet.add(tag);
-				}
-			}
+                for (AssetTag tag : tags) {
+                    tagMultiSet.add(tag);
+                }
+            }
 
-			List<TagVO> tagVOList = new ArrayList<TagVO>();
+            List<TagVO> tagVOList = new ArrayList<TagVO>();
 
-			for (Entry<AssetTag> entry : tagMultiSet.entrySet()) {
+            for (Entry<AssetTag> entry : tagMultiSet.entrySet()) {
 
-				String cssClass;
+                String cssClass;
 
-				if (entry.getCount() > 8) {
-					cssClass = "tag-weight-10";
-				} else if (entry.getCount() > 7) {
-					cssClass = "tag-weight-9";
-				} else if (entry.getCount() > 6) {
-					cssClass = "tag-weight-8";
-				} else if (entry.getCount() > 5) {
-					cssClass = "tag-weight-7";
-				} else if (entry.getCount() > 4) {
-					cssClass = "tag-weight-6";
-				} else if (entry.getCount() > 3) {
-					cssClass = "tag-weight-5";
-				} else if (entry.getCount() > 2) {
-					cssClass = "tag-weight-4";
-				} else {
-					cssClass = "tag-weight-2";
-				}
+                final int number8 = 8;
+                final int number7 = 7;
+                final int number6 = 6;
+                final int number5 = 5;
+                final int number4 = 4;
+                final int number3 = 3;
+                final int number2 = 2;
 
-				TagVO tagVO = new TagVO(cssClass, entry.getElement().getName(),
-				        ActorsConstants.SEARCH_RIDERECT_URL + entry.getElement().getName(), entry.getElement()
-				                .getTagId());
+                if (entry.getCount() > number8) {
+                    cssClass = "tag-weight-10";
+                } else if (entry.getCount() > number7) {
+                    cssClass = "tag-weight-9";
+                } else if (entry.getCount() > number6) {
+                    cssClass = "tag-weight-8";
+                } else if (entry.getCount() > number5) {
+                    cssClass = "tag-weight-7";
+                } else if (entry.getCount() > number4) {
+                    cssClass = "tag-weight-6";
+                } else if (entry.getCount() > number3) {
+                    cssClass = "tag-weight-5";
+                } else if (entry.getCount() > number2) {
+                    cssClass = "tag-weight-4";
+                } else {
+                    cssClass = "tag-weight-2";
+                }
 
-				tagVO.setCount(entry.getCount());
+                TagVO tagVO = new TagVO(cssClass, entry.getElement().getName(),
+                        ActorsConstants.SEARCH_RIDERECT_URL + entry.getElement().getName(), entry.getElement()
+                                .getTagId());
 
-				tagVOList.add(tagVO);
+                tagVO.setCount(entry.getCount());
 
-			}
+                tagVOList.add(tagVO);
 
-			if (tagVOList.size() > 20) {
+            }
 
-				for (int i = 1; tagVOList.size() > 20; i++) {
+            final int size = 20;
 
-					List<TagVO> removeList = new ArrayList<TagVO>();
+            if (tagVOList.size() > size) {
 
-					for (TagVO tagVO : tagVOList) {
+                for (int i = 1; tagVOList.size() > size; i++) {
 
-						if (tagVO.getCount() == i) {
-							removeList.add(tagVO);
-						}
-					}
-					tagVOList.removeAll(removeList);
-				}
-			}
+                    List<TagVO> removeList = new ArrayList<TagVO>();
 
-			Collections.shuffle(tagVOList);
+                    for (TagVO tagVO : tagVOList) {
 
-			model.addAttribute("tagVOList", tagVOList);
+                        if (tagVO.getCount() == i) {
+                            removeList.add(tagVO);
+                        }
+                    }
+                    tagVOList.removeAll(removeList);
+                }
+            }
 
-		} catch (SystemException e) {
-			e.printStackTrace();
-		} catch (PortalException e) {
-			e.printStackTrace();
-		}
+            Collections.shuffle(tagVOList);
 
-		return "tagCloudView";
-	}
+            model.addAttribute("tagVOList", tagVOList);
+
+        } catch (SystemException e) {
+            e.printStackTrace();
+        } catch (PortalException e) {
+            e.printStackTrace();
+        }
+
+        return "tagCloudView";
+    }
 }

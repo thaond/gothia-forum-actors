@@ -52,14 +52,14 @@ import com.liferay.portlet.imagegallery.model.IGImage;
 import com.liferay.portlet.journal.model.JournalArticle;
 
 /**
- * @author simgo3
+ * The controller that handles the logo (image) related functionality.
  * 
+ * @author simgo3
  */
-
 @Controller
 @RequestMapping(value = "VIEW")
 public class AddImageController {
-    private static final Log log = LogFactory.getLog(AddImageController.class);
+    private static final Log LOG = LogFactory.getLog(AddImageController.class);
 
     @Autowired
     private ActorsService actorsService;
@@ -67,10 +67,19 @@ public class AddImageController {
     @Autowired
     private ImageValidator validator;
 
+    /**
+     * Show image form view.
+     * 
+     * @param model
+     *            the model
+     * @param request
+     *            the request
+     * @return the string
+     */
     @RenderMapping(params = "view=showImageActorsForm")
     public String showImageFormView(Model model, RenderRequest request) {
 
-        // Workaround to get the errors form-validation from actionrequest
+        // Workaround to get the errors form-validation from action request
         Errors errors = (Errors) model.asMap().get("errors");
         if (errors != null) {
             model.addAttribute("org.springframework.validation.BindingResult.actorArticle", errors);
@@ -80,6 +89,16 @@ public class AddImageController {
         return "blocks/imageView";
     }
 
+    /**
+     * Adds the logo to the image gallery for the actors organization.
+     * 
+     * @param request
+     *            the request
+     * @param response
+     *            the response
+     * @throws Exception
+     *             the exception
+     */
     @RequestMapping(params = "action=addActorImage")
     public void addActorImage(ActionRequest request, ActionResponse response) throws Exception {
 
@@ -97,14 +116,14 @@ public class AddImageController {
                 System.out.println("Addimage - multipartFile.getSize() != 0");
 
                 String originalFileName = multipartFile.getOriginalFilename();
-                String mime_type = multipartFile.getContentType();
+                String mimeType = multipartFile.getContentType();
 
                 if (validator.isValidate(multipartFile)) {
 
                     byte[] logoInByte = multipartFile.getBytes();
 
                     IGImage image = actorsService.addImage(userId, actorGroupId, originalFileName, logoInByte,
-                            mime_type);
+                            mimeType);
 
                     ServiceContext serviceContext = ServiceContextFactory.getInstance(
                             JournalArticle.class.getName(), request);
@@ -142,11 +161,17 @@ public class AddImageController {
 
     protected void initBinder(PortletRequest request, PortletRequestDataBinder binder) throws Exception {
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
-        //binder.registerCustomEditor(String.class, new StringMultipartFileEditor());
     }
 
+    /**
+     * Gets the image url.
+     * 
+     * @param request
+     *            the request
+     * @return the image url.
+     */
     @ModelAttribute(value = "actorLogo")
-    public String getActors(PortletRequest request) {
+    public String getActorsLogo(PortletRequest request) {
         return actorsService.getIGImageURL((ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY));
     }
 

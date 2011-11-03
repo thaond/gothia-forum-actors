@@ -22,8 +22,9 @@ package se.gothiaforum.util.actorsform;
 import java.io.Serializable;
 
 /**
- * @author simgo3
+ * This class is used for loding up a file in a form.
  * 
+ * @author simgo3
  */
 
 public class UploadBean implements Serializable {
@@ -32,10 +33,19 @@ public class UploadBean implements Serializable {
 
     private byte[] file;
 
+    /**
+     * Instantiates a new upload bean.
+     */
     public UploadBean() {
         super();
     }
 
+    /**
+     * Instantiates a new upload bean.
+     * 
+     * @param file
+     *            the file
+     */
     public UploadBean(byte[] file) {
         super();
         setFile(file);

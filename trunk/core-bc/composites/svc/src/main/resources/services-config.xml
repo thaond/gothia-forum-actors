@@ -47,8 +47,8 @@
     <constructor-arg name="actorsServiceUtil" ref="actorsServiceUtil" />
     <constructor-arg name="assetEntryService" ref="assetEntryService" />
     <constructor-arg name="counterService" ref="counterService" />
-    <constructor-arg name="IGImageService" ref="IGImageService" />
-    <constructor-arg name="IGFolderService" ref="IGFolderService" />
+    <constructor-arg name="iGImageService" ref="iGImageService" />
+    <constructor-arg name="iGFolderService" ref="iGFolderService" />
     <constructor-arg name="articleService" ref="articleService" />
     <constructor-arg name="articleResourceService" ref="articleResourceService" />
     <constructor-arg name="organizationService" ref="organizationService" />
@@ -96,9 +96,9 @@
     factory-method="getService" />
 
   <bean id="roleService" class="com.liferay.portal.service.RoleLocalServiceUtil" factory-method="getService" />
-  <bean id="IGImageService" class="com.liferay.portlet.imagegallery.service.IGImageLocalServiceUtil"
+  <bean id="iGImageService" class="com.liferay.portlet.imagegallery.service.IGImageLocalServiceUtil"
     factory-method="getService" />
-  <bean id="IGFolderService" class="com.liferay.portlet.imagegallery.service.IGFolderLocalServiceUtil"
+  <bean id="iGFolderService" class="com.liferay.portlet.imagegallery.service.IGFolderLocalServiceUtil"
     factory-method="getService" />
   <bean id="userGroupRoleService" class="com.liferay.portal.service.UserGroupRoleLocalServiceUtil"
     factory-method="getService" />
