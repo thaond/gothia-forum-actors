@@ -24,7 +24,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * This Class is a model for the ActorArticle. This is the objects that is posted in from det the form to the
- * controller and then send to the service.
+ * controller and then send to the service...
  * 
  * @author Hans Gyllensten, vgrid=hangy2
  * @author Simon Göransson vgrid=simgo3
