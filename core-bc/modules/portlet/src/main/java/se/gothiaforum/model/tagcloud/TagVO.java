@@ -21,62 +21,74 @@ package se.gothiaforum.model.tagcloud;
 
 public class TagVO {
 
-	private String cssClass;
+    private String cssClass;
 
-	private String name;
+    private String name;
 
-	private String href;
+    private String href;
 
-	private long id;
+    private long id;
 
-	private int count;
+    private int count;
 
-	public TagVO(String cssClass, String name, String href, long id) {
-		super();
-		this.cssClass = cssClass;
-		this.name = name;
-		this.href = href;
-		this.id = id;
-	}
+    /**
+     * Instantiates a new tag value object.
+     * 
+     * @param cssClass
+     *            the css class
+     * @param name
+     *            the name
+     * @param href
+     *            the href
+     * @param id
+     *            the id
+     */
+    public TagVO(String cssClass, String name, String href, long id) {
+        super();
+        this.cssClass = cssClass;
+        this.name = name;
+        this.href = href;
+        this.id = id;
+    }
 
-	public String getCssClass() {
-		return cssClass;
-	}
+    public String getCssClass() {
+        return cssClass;
+    }
 
-	public void setCssClass(String cssClass) {
-		this.cssClass = cssClass;
-	}
+    public void setCssClass(String cssClass) {
+        this.cssClass = cssClass;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getHref() {
-		return href;
-	}
+    public String getHref() {
+        return href;
+    }
 
-	public void setHref(String href) {
-		this.href = href;
-	}
+    public void setHref(String href) {
+        this.href = href;
+    }
 
-	public long getId() {
-		return id;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public int getCount() {
-		return count;
-	}
+    public int getCount() {
+        return count;
+    }
 
-	public void setCount(int count) {
-		this.count = count;
-	}
+    public void setCount(int count) {
+        this.count = count;
+    }
 
 }

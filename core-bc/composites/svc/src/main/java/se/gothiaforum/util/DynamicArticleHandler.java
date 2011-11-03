@@ -30,11 +30,19 @@ import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 
 /**
- * @author simgo3
+ * This class generate the dynamic element representation from the XML string.
  * 
+ * @author simgo3
  */
 public class DynamicArticleHandler {
 
+    /**
+     * Generate dynamic elements from an XML string.
+     * 
+     * @param content
+     *            the content
+     * @return the dynamic element
+     */
     public DynamicElement generateDynamicElements(String content) {
 
         DynamicElement rootDynamicElement = null;
@@ -50,7 +58,7 @@ public class DynamicArticleHandler {
                 // Språk
                 // kolla att det finns en struktur
 
-                //   SAXReaderUtil.selectNodes("[/@name=title]", document.content());
+                // SAXReaderUtil.selectNodes("[/@name=title]", document.content());
 
                 List<Element> elements = element.elements(ActorsConstants.ARTICLE_XML_DYNAMIC_ELEMENT);
                 String elementContent = element.elementText(ActorsConstants.ARTICLE_XML_DYNAMIC_ELEMENT);

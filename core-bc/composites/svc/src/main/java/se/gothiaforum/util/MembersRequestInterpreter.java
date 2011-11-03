@@ -36,6 +36,9 @@ import com.liferay.portlet.social.model.SocialRequestFeedEntry;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 
 /**
+ * This class is a Liferay class that is needed to be available in order to make Liferays social request services
+ * to work. For more info about the MembersRequestInterpreter class see www.liferay.com
+ * 
  * @author Brian Wing Shun Chan
  * @author M Murali Krishna Reddy
  */

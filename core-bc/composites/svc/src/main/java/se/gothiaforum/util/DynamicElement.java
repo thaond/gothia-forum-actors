@@ -25,16 +25,29 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * This class is an representation of a dynamic element that is the type of element that the content of an article
+ * is stored as.
+ * 
  * @author simgo3
  * 
  */
 public class DynamicElement {
-    private static final Log log = LogFactory.getLog(DynamicElement.class);
+    private static final Log LOG = LogFactory.getLog(DynamicElement.class);
 
     private String name;
     private String content;
     private List<DynamicElement> childNodes;
 
+    /**
+     * Instantiates a new dynamic element.
+     * 
+     * @param name
+     *            the name
+     * @param content
+     *            the content
+     * @param childNodes
+     *            the child nodes
+     */
     public DynamicElement(String name, String content, List<DynamicElement> childNodes) {
         super();
         this.name = name;
@@ -66,13 +79,20 @@ public class DynamicElement {
         this.name = name;
     }
 
-    public DynamicElement getElementByName(String name) {
-        if (this.name.equals(name)) {
+    /**
+     * Gets the element by the name.
+     * 
+     * @param nameToFind
+     *            the name to find
+     * @return the element by name
+     */
+    public DynamicElement getElementByName(String nameToFind) {
+        if (this.name.equals(nameToFind)) {
             return this;
         }
 
         for (DynamicElement e : childNodes) {
-            if (e.getName().equals(name)) {
+            if (e.getName().equals(nameToFind)) {
                 return e;
             }
         }
@@ -83,13 +103,12 @@ public class DynamicElement {
     @Override
     public String toString() {
 
-        String str = "Content: " + content + "\n";
+        StringBuffer str = new StringBuffer("Content: " + content + "\n");
 
         for (DynamicElement n : childNodes) {
-            str += n.toString();
+            str.append(n.toString());
         }
 
-        return str;
+        return str.toString();
     }
-
 }

@@ -57,10 +57,10 @@
               <aui:input name="companyName"         type="text"     label="name-on-unit-company"    value="${actorArcticle.companyName}"        helpMessage="help-name-on-unit-company" cssClass="mandatory" />
               <form:errors path="actorArcticle.organizationName" cssClass="portlet-msg-error"/>
               <aui:input name="organizationName"    type="text"     label="organization-name"       value="${actorArcticle.organizationName}"   helpMessage="help-organization-name" cssClass="optional"/>
-              <form:errors path="actorArcticle.ingress" cssClass="portlet-msg-error"/>
-              <aui:input name="ingress"             type="textarea" label="ingress"                 value="${actorArcticle.ingress}"            helpMessage="help-ingress" cssClass="optional" />
+              <form:errors path="actorArcticle.intro" cssClass="portlet-msg-error"/>
+              <aui:input name="intro"             type="textarea" label="intro"                 value="${actorArcticle.intro}"            helpMessage="help-intro" cssClass="mandatory" />
               <form:errors path="actorArcticle.detailedDescription" cssClass="portlet-msg-error"/>
-              <aui:input name="detailedDescription" type="textarea" label="detailed-description"    value="${actorArcticle.detailedDescription}" helpMessage="help-detailed-description" cssClass="mandatory"/>  
+              <aui:input name="detailedDescription" type="textarea" label="detailed-description"    value="${actorArcticle.detailedDescription}" helpMessage="help-detailed-description" cssClass="optional"/>  
               <form:errors path="actorArcticle.externalHomepage" cssClass="portlet-msg-error"/>
               <aui:input name="externalHomepage"    type="text"     label="external-homepage"        value="${actorArcticle.externalHomepage}"   helpMessage="this-is-a-help-message" cssClass="optional"/>  
               <aui:input name="id"                  type="hidden"   value="${actorArcticle.articleId}" />

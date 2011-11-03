@@ -19,90 +19,172 @@
 
 package se.gothiaforum.solr;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import se.gothiaforum.actorsarticle.util.ActorsArticleUtil;
 
 import com.liferay.portal.kernel.search.Field;
 
+/**
+ * The Class ActroSolrQuery is a extension of SolrQuery, so it is a query. ActroSolrQuery holds an connection to
+ * the solr server and therefore it can preform a search in it self and return the search result.
+ * 
+ * @author Simon Göransson vgrid=simgo3
+ */
 public class ActroSolrQuery extends SolrQuery {
 
-	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = LoggerFactory.getLogger(ActroSolrQuery.class);
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = 1L;
 
-	private SolrServer solrServer;
+    /** The Constant LOG. */
+    private static final Log LOG = LogFactory.getLog(ActorsArticleUtil.class);
 
-	public ActroSolrQuery(SolrServer solrServer) {
-		this.solrServer = solrServer;
-	}
+    private SolrServer solrServer;
 
-	public ActroSolrQuery() {
-		super();
-	}
+    /**
+     * Instantiates a new ActroSolrQuery.
+     * 
+     * @param solrServer
+     *            the solr server
+     */
+    public ActroSolrQuery(SolrServer solrServer) {
+        this.solrServer = solrServer;
+    }
 
-	public ActroSolrQuery(String s) {
-		super(s);
-	}
+    /**
+     * Instantiates a new ActroSolrQuery.
+     */
+    public ActroSolrQuery() {
+        super();
+    }
 
-	public ActroSolrQuery findAllActorQuery() {
-		this.setQuery("entryClassName:com.liferay.portlet.journal.model.JournalArticle");
-		return this;
-	}
+    /**
+     * Instantiates a new ActroSolrQuery.
+     * 
+     * @param s
+     *            a search query.
+     */
+    public ActroSolrQuery(String s) {
+        super(s);
+    }
 
-	public ActroSolrQuery actorQuery(String q) {
-		this.setQuery(q);
-		this.setQueryType("dismax");
-		this.set("qf", "assetTagNames^10 title^5 content^1");
-		this.set("mm", "50%");
-		return this;
-	}
+    /**
+     * This method finds all the journal articles.
+     * 
+     * @return it self.
+     */
+    public ActroSolrQuery findAllActorQuery() {
+        this.setQuery("entryClassName:com.liferay.portlet.journal.model.JournalArticle");
+        return this;
+    }
 
-	public ActroSolrQuery moreLikeThis() {
-		this.setQueryType("mlt");
-		this.set("mlt.fl", "assetTagNames,content");
-		this.set("mlt.bf", "assetTagNames^10 content^1");
-		this.set("mlt.interestingTerms", "none");
-		this.set("mlt.mintf", 0);
-		this.set("fl", "title,urlTitle,entryClassPK,status,type,created,content");
-		this.set("rows", "5");
-		return this;
-	}
+    /**
+     * Use this method to perform a weighted search for an actor.
+     * 
+     * @param q
+     *            the search term.
+     * @return it self.
+     */
+    public ActroSolrQuery actorQuery(String q) {
+        this.setQuery(q);
+        this.setQueryType("dismax");
+        this.set("qf", "assetTagNames^10 title^5 content^1");
+        this.set("mm", "50%");
+        this.set("fl", "*");
+        return this;
+    }
 
-	public ActroSolrQuery filterActors(String category) {
-		String filterBase = "entryClassName:com.liferay.portlet.journal.model.JournalArticle";
+    /**
+     * Use this method to perform a More like this search. Finds documents that are similar to an already indexed
+     * document or a posted text.
+     * 
+     * @param text
+     *            the text
+     * @return the actro solr query
+     */
+    public ActroSolrQuery moreLikeThis(String text) {
+        this.setQuery("entryClassPK:" + text);
+        this.filterActors();
+        this.moreLikeThis();
+        return this;
+    }
 
-		String filterType = "";
+    /**
+     * Use this method to perform a More like this search. Finds documents that are similar to an already indexed
+     * document or a posted text.
+     * 
+     * @return the actro solr query
+     */
+    public ActroSolrQuery moreLikeThis() {
+        this.setQueryType("mlt");
+        this.set("mlt.fl", "assetTagNames content");
+        this.set("mlt.bf", "assetTagNames^10 content^1");
+        this.set("mlt.interestingTerms", "none");
+        this.set("mlt.mintf", 0);
+        this.set("fl", "assetTagNames content");
+        this.set("rows", "5");
+        return this;
+    }
 
-		filterType += " AND " + Field.TYPE + ":actor";
+    /**
+     * Filters on a category.
+     * 
+     * @param category
+     *            the category
+     * 
+     * @return the actro solr query
+     */
+    public ActroSolrQuery filterActorsOnCategory(String category) {
 
-		this.addFilterQuery(filterBase + filterType);
+        String filter = "Category" + ":" + category;
+        this.addFilterQuery(filter);
 
-		return this;
-	}
+        return this;
+    }
 
-	public QueryResponse query() {
+    /**
+     * Filters on entryClassName = com.liferay.portlet.journal.model.JournalArticle and type = actor.
+     * 
+     * @return the actro solr query
+     */
+    public ActroSolrQuery filterActors() {
+        String filterBase = "entryClassName:com.liferay.portlet.journal.model.JournalArticle";
 
-		// this.setSortField(sortField,
-		// ORDER.valueOf(sortDirection.name().toLowerCase(CommonUtils.SWEDISH_LOCALE)));
+        String filterType = "";
 
-		System.out.println("Query = " + this);
+        filterType += " AND " + Field.TYPE + ":actor";
 
-		QueryResponse response = null;
+        this.addFilterQuery(filterBase + filterType);
 
-		try {
-			response = solrServer.query(this);
-		} catch (SolrServerException e) {
-			LOGGER.error("Serverfel: {}", e.getCause());
-		}
+        return this;
+    }
 
-		// Clear query for next query
-		clear();
+    /**
+     * This method performs the search using the class itself as the search query. It also clear it self after
+     * completing the search.
+     * 
+     * @return the query response as a result of the performed search.
+     */
+    public QueryResponse query() {
 
-		return response;
+        QueryResponse response = null;
 
-	}
+        try {
+            response = solrServer.query(this);
+        } catch (SolrServerException e) {
+            LOG.error("Server error: {}", e.getCause());
+        }
+
+        // Clear query for next query
+        clear();
+
+        return response;
+
+    }
 
 }

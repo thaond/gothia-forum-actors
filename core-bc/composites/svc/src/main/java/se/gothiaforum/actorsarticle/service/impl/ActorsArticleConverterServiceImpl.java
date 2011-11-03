@@ -29,26 +29,28 @@ import se.gothiaforum.util.DynamicArticleHandler;
 import se.gothiaforum.util.DynamicElement;
 
 /**
- * @author Hans Gyllensten, vgrid=hangy2
+ * This service is used for converting the XML representation of an actor article presentation to an ActroArticle
+ * object.
  * 
+ * @author Simon Göransson vgrid=simgo3 and Hans Gyllensten, vgrid=hangy2
  */
 public class ActorsArticleConverterServiceImpl implements ActorsArticleConverterService {
 
-    private static final Log log = LogFactory.getLog(ActorsArticleConverterServiceImpl.class);
+    private static final Log LOG = LogFactory.getLog(ActorsArticleConverterServiceImpl.class);
 
+    /**
+     * Instantiates a new actors article converter service impl.
+     */
     public ActorsArticleConverterServiceImpl() {
         init();
     }
 
-    /**
-	 * 
-	 */
     protected void init() {
 
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public ActorArticle getActorsArticle(String actorsArticleAsXML) {
@@ -62,7 +64,7 @@ public class ActorsArticleConverterServiceImpl implements ActorsArticleConverter
                     + ActorsConstants.NUMBER_OF_NODES_ARTICLE_XML + " number of nodes but it contains "
                     + dynamicElement.getChildNodes().size() + " number of nodes.";
             RuntimeException e = new RuntimeException(msg);
-            log.error(msg, e);
+            LOG.error(msg, e);
             throw e;
         }
 
@@ -70,7 +72,7 @@ public class ActorsArticleConverterServiceImpl implements ActorsArticleConverter
                 .getContent());
         actorArticle.setOrganizationName(dynamicElement.getElementByName(
                 ActorsConstants.ARTICLE_XML_ORGANIZATION_NAME).getContent());
-        actorArticle.setIngress(dynamicElement.getElementByName(ActorsConstants.ARTICLE_XML_INGRESS).getContent());
+        actorArticle.setIntro(dynamicElement.getElementByName(ActorsConstants.ARTICLE_XML_INTRO).getContent());
         actorArticle.setDetailedDescription(dynamicElement.getElementByName(
                 ActorsConstants.ARTICLE_XML_DETAILED_DISCRIPTION).getContent());
         actorArticle.setExternalHomepage(dynamicElement.getElementByName(ActorsConstants.ARTICLE_XML_HOMEPAGE)

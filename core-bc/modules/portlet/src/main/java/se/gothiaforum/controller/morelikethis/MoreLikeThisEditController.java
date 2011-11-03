@@ -21,6 +21,13 @@ package se.gothiaforum.controller.morelikethis;
 
 import java.io.IOException;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.PortletPreferences;
+import javax.portlet.ReadOnlyException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import javax.portlet.ValidatorException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
@@ -30,54 +37,57 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.PortletPreferences;
-import javax.portlet.ReadOnlyException;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.ValidatorException;
-
-
+/**
+ * The Class MoreLikeThisEditController.
+ */
 @Controller
 @RequestMapping("EDIT")
 public class MoreLikeThisEditController {
-    private static final Log log = LogFactory.getLog(MoreLikeThisController.class);
+    private static final Log LOG = LogFactory.getLog(MoreLikeThisController.class);
 
-
+    /**
+     * Rendering the edit view.
+     * 
+     * @param model
+     *            the model
+     * @param request
+     *            the request
+     * @param response
+     *            the response
+     * @return edit view
+     */
     @RenderMapping
     public String edit(Model model, RenderRequest request, RenderResponse response) {
-    	
-    	PortletPreferences prefs = request.getPreferences();
-    	String tags = prefs.getValue("tags", "tags");
-    	System.out.println("tags = " + tags);
-    	model.addAttribute("tagsEntries", tags);
-    	
+
+        PortletPreferences prefs = request.getPreferences();
+        String tags = prefs.getValue("tags", "tags");
+        System.out.println("tags = " + tags);
+        model.addAttribute("tagsEntries", tags);
+
         return "edit";
     }
-    
 
-    
     /**
+     * Store the tags from the posted form.
      * 
      * @param request
-     *            - action request
+     *            the request
+     * @param tagsEntries
+     *            the tags entries
      */
     @ActionMapping(params = "action=save")
     public void savePreferences(ActionRequest request, @RequestParam("tagsEntries") String tagsEntries) {
-    		    	
-    	try {
-    		PortletPreferences prefs = request.getPreferences();
-			prefs.setValue("tags", tagsEntries);
-			prefs.store();
-		} catch (ReadOnlyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ValidatorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+        try {
+            PortletPreferences prefs = request.getPreferences();
+            prefs.setValue("tags", tagsEntries);
+            prefs.store();
+        } catch (ReadOnlyException e) {
+            LOG.error("could not store tags in more like this edit mode.", e);
+        } catch (ValidatorException e) {
+            LOG.error("could not store tags in more like this edit mode.", e);
+        } catch (IOException e) {
+            LOG.error("could not store tags in more like this edit mode.", e);
+        }
     }
 }
