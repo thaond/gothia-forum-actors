@@ -52,11 +52,11 @@ public class ActorsArticleUtil {
      *             the system exception
      */
     public String generateUrlTitle(long articelId, String title) throws PortalException, SystemException {
-        title = title.trim().toLowerCase(Constants.LOCALE);
 
         if (Validator.isNull(title) || Validator.isNumber(title) || title.equals(StringPool.BLANK)) {
             return String.valueOf(articelId);
         } else {
+            title = title.trim().toLowerCase(Constants.LOCALE);
             String urlTitle = FriendlyURLNormalizer.normalize(title, URL_TITLE_REPLACE_CHARS);
             return urlTitle;
         }
