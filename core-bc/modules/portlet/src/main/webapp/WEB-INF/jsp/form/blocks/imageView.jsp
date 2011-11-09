@@ -49,32 +49,43 @@
       </h1>
     </aui:column>
     <aui:column columnWidth="100" first="true">
-      <aui:fieldset>  
-         <c:choose>
-              <c:when test="${fn:contains(actorLogo,'noLogo')}" >    
-                    <liferay-ui:message key="no-logo" />
-              </c:when>
-              <c:otherwise>
-                 <img src="${actorLogo} ">     
-              </c:otherwise>
-          </c:choose>    
+      <aui:fieldset>
+        <c:choose>
+          <c:when test="${fn:contains(actorLogo,'noLogo')}">
+            <liferay-ui:message key="no-logo" />
+          </c:when>
+          <c:otherwise>
+            <div>
+              <img src="${actorLogo} ">
+            </div>
+          </c:otherwise>
+        </c:choose>
+        <div>
           <liferay-ui:message key="logo-message" />
+        </div>
       </aui:fieldset>
     </aui:column>
     <aui:column columnWidth="100" first="true">
       <aui:fieldset>
-        <form:errors path="actorArcticle.logo" cssClass="portlet-msg-error" />
+        <c:if test="${not empty errorList}">
+          <div class="portlet-msg-error">
+            <c:forEach items="${errorList}" var="error">
+              <div>
+                <liferay-ui:message key="${error}" />
+              </div>
+            </c:forEach>
+          </div>
+        </c:if>
         <aui:input name="file" type="file" label="logo" helpMessage="help-logo" />
       </aui:fieldset>
     </aui:column>
     <aui:column columnWidth="100" first="true" last="true">
-          <aui:button-row>
-            <aui:button onClick="${cancelURL}" type="cancel" value="back"/>
-            <aui:button type="submit" value="save-and-preview" />            
-          </aui:button-row>                  
-        </aui:column>
+      <aui:button-row>
+        <aui:button onClick="${cancelURL}" type="cancel" value="back" />
+        <aui:button type="submit" value="save-and-preview" />
+      </aui:button-row>
+    </aui:column>
   </aui:layout>
 </aui:form>
 
 
- 

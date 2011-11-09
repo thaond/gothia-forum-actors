@@ -176,8 +176,6 @@ public class ActorsSearchThinClientController {
 
             List<AssetTag> matchingTags = getMatchingTags(searchFor);
 
-            System.out.println("searchFor = " + searchFor);
-
             JSONArray jsonResult = com.liferay.portal.kernel.json.JSONFactoryUtil.createJSONArray();
 
             for (AssetTag tag : matchingTags) {
@@ -214,9 +212,9 @@ public class ActorsSearchThinClientController {
         try {
             tagsList = AssetTagLocalServiceUtil.dynamicQuery(dq);
 
-            for (AssetTag assetTag : tagsList) {
-                System.out.println("assetTag = " + assetTag.getName());
-            }
+            // for (AssetTag assetTag : tagsList) {
+            // System.out.println("assetTag = " + assetTag.getName());
+            // }
 
             LOG.info("Number of matching tags: " + tagsList.size());
 

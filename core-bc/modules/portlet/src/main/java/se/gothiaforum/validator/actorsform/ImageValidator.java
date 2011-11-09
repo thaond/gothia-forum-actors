@@ -19,6 +19,8 @@
 
 package se.gothiaforum.validator.actorsform;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,45 +40,29 @@ public class ImageValidator {
      * 
      * @param multipartFile
      *            the multipart file
-     * @return true, if is valid
+     * @param errors
+     *            the errors
      */
-    public boolean isValidate(MultipartFile multipartFile) {
-
-        boolean valid = true;
+    public void isValidate(MultipartFile multipartFile, List<String> errors) {
 
         if (multipartFile.getSize() > IMAGE_MIN_SIZE && multipartFile.getSize() < IMAGE_MAX_SIZE) {
             String originalFileName = multipartFile.getOriginalFilename();
 
             String contentType = multipartFile.getContentType();
 
-            System.out.println("validation - contentType = " + contentType);
-
             if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)
                     && !"image/x-png".equals(contentType) && !"image/pjpeg".equals(contentType)
                     && !"image/gif".equals(contentType)) {
-
-                valid = false;
-                System.out.println("validation - wrong type of content type - contentType = " + contentType);
+                errors.add("wrong-type-of-content-type");
             }
 
             int fileExtensionIndex = originalFileName.lastIndexOf(".");
             String fileExtension = originalFileName.substring((fileExtensionIndex + 1), originalFileName.length());
 
             if (!fileExtension.equals("png") && !fileExtension.equals("jpg") && !fileExtension.equals("gif")) {
-                valid = false;
-                System.out.println("validation - wrong type of fileExtension - fileExtension is = "
-                        + fileExtension);
+                errors.add("wrong-type-of-file-extension");
             }
 
-        } else {
-            valid = false;
-            System.out.println("validation - wrong size - size is = " + multipartFile.getSize()
-                    + ", size must be greater than " + IMAGE_MIN_SIZE + " and less than " + IMAGE_MAX_SIZE
-                    + " Bytes.");
-
         }
-
-        return valid;
-
     }
 }

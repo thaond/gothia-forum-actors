@@ -34,6 +34,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import se.gothiaforum.actorsarticle.util.ActorsConstants;
 
+import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.Group;
@@ -73,7 +74,7 @@ public class ActorsSearchResultController {
 
         String friendlyURL = request.getParameter("friendlyURL");
 
-        if (friendlyURL != null) {
+        if ((friendlyURL != null) && (!friendlyURL.contains("nologo"))) {
 
             ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 
@@ -97,6 +98,8 @@ public class ActorsSearchResultController {
                         ActorsConstants.GLOBAL_TEMPLATEID, null, themeDisplay.getLanguageId(), themeDisplay);
 
                 model.addAttribute("content", content);
+            } catch (NoSuchGroupException e1) {
+                LOG.warn("No such group found");
             } catch (PortalException e1) {
                 throw new RuntimeException("TODO: Handle this exception better", e1);
             } catch (SystemException e1) {
