@@ -36,6 +36,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
 import se.gothiaforum.actorsarticle.util.ActorsConstants;
 
+import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.Document;
@@ -94,9 +95,10 @@ public class MoreLikeThisController {
         StringQueryImpl query = new StringQueryImpl("");
 
         if (!tagsStr.equals("")) {
+
             System.out.println("tagsStr = " + tagsStr);
+
             String searchTags = tagsStr.replaceAll(",", " ");
-            System.out.println("searchTags = " + searchTags);
 
             query = new StringQueryImpl("(assetTagNames:" + searchTags
                     + ") AND (entryClassName:com.liferay.portlet.journal.model.JournalArticle AND type:"
@@ -125,25 +127,34 @@ public class MoreLikeThisController {
 
                     List<AssetTag> tags = getTags(Long.valueOf(group.getGroupId()), journalArticle.getArticleId());
 
-                    StringBuffer searchTags = new StringBuffer("");
-                    for (AssetTag t : tags) {
-                        searchTags.append(t.getName() + " ");
+                    if (!tags.isEmpty()) {
+
+                        StringBuffer searchTags = new StringBuffer("");
+                        for (AssetTag t : tags) {
+                            searchTags.append(t.getName() + " ");
+                        }
+
+                        query = new StringQueryImpl(
+                                "(assetTagNames:"
+                                        + searchTags
+                                        + ") AND (entryClassName:com.liferay.portlet.journal.model.JournalArticle AND type:"
+                                        + ActorsConstants.TYPE_ACTOR + ") AND !(articleId:"
+                                        + journalArticle.getArticleId() + ") sort=title asc");
+
                     }
 
-                    query = new StringQueryImpl("(assetTagNames:" + searchTags
-                            + ") AND (entryClassName:com.liferay.portlet.journal.model.JournalArticle AND type:"
-                            + ActorsConstants.TYPE_ACTOR + ") AND !(articleId:" + journalArticle.getArticleId()
-                            + ") sort=title asc");
-
+                } catch (NoSuchGroupException e1) {
+                    LOG.warn("No such group found");
                 } catch (PortalException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (SystemException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
+
             }
+
         }
+
         // Search for more like this.
         List<ActorArticle> actorArticles = search(themeDisplay, query);
 
@@ -210,12 +221,13 @@ public class MoreLikeThisController {
             tags = assetEntry.getTags();
 
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            e.printStackTrace();
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            e.printStackTrace();
         }
 
         return tags;
 
     }
+
 }

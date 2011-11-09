@@ -171,8 +171,6 @@ public class ActorsSearchController {
                                 actorArticle.setProfileURL(ActorsConstants.PROFILE_RIDERECT_URL
                                         + namePrefix.substring(1));
 
-                                System.out.println("actorArticle.getArticleId = " + actorArticle.getArticleId());
-
                                 actorArticles.add(actorArticle);
                             } catch (NoSuchArticleException e) {
                                 log.warn("Warning: " + e.getMessage() + "may reindex.");
@@ -258,8 +256,6 @@ public class ActorsSearchController {
     @ActionMapping(params = "action=search")
     public void search(ActionRequest request, ActionResponse response, SessionStatus sessionStatus,
             @RequestParam("searchTerm") String searchTerm, Model model) {
-
-        System.out.println("searchTerm = " + searchTerm);
 
         try {
             String redirect = ActorsConstants.SEARCH_RIDERECT_URL

@@ -494,8 +494,6 @@ public class ViewActorsArticleController {
     @ModelAttribute(value = "actorArcticle")
     public ActorArticle getActorsArticle(PortletRequest request) {
 
-        // System.out.println("get modelattribute - actorArticle ");
-
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         ActorArticle actorArticle = actorsService.getActorsArticle(themeDisplay);
         return actorArticle;

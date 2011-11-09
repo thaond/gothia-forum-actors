@@ -19,6 +19,9 @@
 
 package se.gothiaforum.controller.actorsform;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
@@ -76,6 +79,12 @@ public class AddImageController {
      *            the request
      * @return the string
      */
+    @RenderMapping(params = "view=showImageError")
+    public String showImageErrorView(Model model, RenderRequest request) {
+
+        return "blocks/imageErrorView";
+    }
+
     @RenderMapping(params = "view=showImageActorsForm")
     public String showImageFormView(Model model, RenderRequest request) {
 
@@ -100,25 +109,46 @@ public class AddImageController {
      *             the exception
      */
     @RequestMapping(params = "action=addActorImage")
-    public void addActorImage(ActionRequest request, ActionResponse response) throws Exception {
+    public void addActorImage(ActionRequest request, ActionResponse response, Model model) throws Exception {
 
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         ActorArticle actorArticle = actorsService.getActorsArticle(themeDisplay);
         long actorGroupId = actorArticle.getGroupId();
         long userId = themeDisplay.getUserId();
 
+        List<String> errors = new ArrayList<String>();
+
         if (request instanceof MultipartActionRequest) {
             MultipartActionRequest multipartRequest = (MultipartActionRequest) request;
             MultipartFile multipartFile = multipartRequest.getFile("file");
 
-            if (multipartFile.getSize() != 0) {
+            if (multipartFile.getSize() == 0) {
 
-                System.out.println("Addimage - multipartFile.getSize() != 0");
+                ServiceContext serviceContext = ServiceContextFactory.getInstance(JournalArticle.class.getName(),
+                        request);
+
+                String imageURL = actorsService.getIGImageURL((ThemeDisplay) request
+                        .getAttribute(WebKeys.THEME_DISPLAY));
+
+                actorArticle.setImageUuid(imageURL);
+
+                JournalArticle article = actorsService.updateActors(actorArticle, userId, serviceContext,
+                        actorArticle.getTagsStr(), themeDisplay.getScopeGroupId());
+
+                Indexer indexer = IndexerRegistryUtil.getIndexer(JournalArticle.class.getName());
+                indexer.reindex(article);
+
+            } else {
 
                 String originalFileName = multipartFile.getOriginalFilename();
                 String mimeType = multipartFile.getContentType();
 
-                if (validator.isValidate(multipartFile)) {
+                validator.isValidate(multipartFile, errors);
+
+                if (!errors.isEmpty()) {
+                    model.addAttribute("errorList", errors);
+                    response.setRenderParameter("view", "showImageActorsForm");
+                } else {
 
                     byte[] logoInByte = multipartFile.getBytes();
 
@@ -138,23 +168,8 @@ public class AddImageController {
 
                     Indexer indexer = IndexerRegistryUtil.getIndexer(JournalArticle.class.getName());
                     indexer.reindex(article);
+
                 }
-            } else {
-
-                ServiceContext serviceContext = ServiceContextFactory.getInstance(JournalArticle.class.getName(),
-                        request);
-
-                String imageURL = actorsService.getIGImageURL((ThemeDisplay) request
-                        .getAttribute(WebKeys.THEME_DISPLAY));
-
-                actorArticle.setImageUuid(imageURL);
-
-                JournalArticle article = actorsService.updateActors(actorArticle, userId, serviceContext,
-                        actorArticle.getTagsStr(), themeDisplay.getScopeGroupId());
-
-                Indexer indexer = IndexerRegistryUtil.getIndexer(JournalArticle.class.getName());
-                indexer.reindex(article);
-
             }
         }
     }
