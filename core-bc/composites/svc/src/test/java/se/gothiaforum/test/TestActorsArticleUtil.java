@@ -95,17 +95,4 @@ public class TestActorsArticleUtil {
         assertEquals(String.valueOf(articelId), result);
     }
 
-    @Test
-    public void test5() throws Exception {
-
-        long articelId = 1;
-        String title = "åäö";
-
-        ActorsArticleUtil AAU = new ActorsArticleUtil();
-
-        String result = AAU.generateUrlTitle(articelId, title);
-
-        assertEquals(title, result);
-    }
-
 }
