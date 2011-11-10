@@ -318,7 +318,7 @@ public class ActorsServiceUtil {
             List<Organization> parentOrgs = new ArrayList<Organization>();
             for (Organization o : allOrgs) {
 
-                if (o.getType().equals("gothia-actor-parent")) {
+                if (o.getType().equals(ActorsConstants.ACTOR_PARENT)) {
                     parentOrgs.add(o);
                 }
             }
@@ -327,7 +327,7 @@ public class ActorsServiceUtil {
 
                 long parentOrganizationId = 0;
                 String name = "Gothia Parent Organization";
-                String type = "gothia-actor-parent";
+                String type = ActorsConstants.ACTOR_PARENT;
                 boolean recursable = true;
                 long regionId = 0;
                 long countryId = 0;

@@ -90,5 +90,5 @@ public final class ActorsConstants {
     public static final String GROUP_ID = "groupId";
 
     public static final String LANG_PREFIX = "_SV";
-
+    public static final String ACTOR_PARENT = "gothia-actor-parent";
 }
