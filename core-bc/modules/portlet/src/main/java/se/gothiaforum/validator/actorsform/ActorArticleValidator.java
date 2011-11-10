@@ -61,7 +61,7 @@ public class ActorArticleValidator implements Validator {
         ValidatorUtils.removeLeadingAndTrailingWhitespacesOnAllStringFields(actorArticle); // Remove leading and
                                                                                            // trailing spaces on
                                                                                            // all String fields
-
+        System.out.println("-----" + actorArticle.getCompanyName());
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "companyName", "code.missing", "invalid-companyName");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "intro", "code.missing", "invalid-intro");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "code.missing", "invalid-name");
@@ -89,6 +89,7 @@ public class ActorArticleValidator implements Validator {
 
         if (actorArticle.getExternalHomepage().length() > ValidationConstants.LENGHT_VALIDATION_URL) {
             errors.rejectValue("externalHomepage", "code.to.long", "to-long-externalHomepage");
+            System.out.println("error");
         }
 
         if (actorArticle.getName().length() > ValidationConstants.LENGHT_VALIDATION_DEFAULT) {
