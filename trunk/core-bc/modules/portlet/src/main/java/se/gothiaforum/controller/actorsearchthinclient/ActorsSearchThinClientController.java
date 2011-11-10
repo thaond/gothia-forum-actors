@@ -126,7 +126,6 @@ public class ActorsSearchThinClientController {
         try {
             model.addAttribute("hostName", InetAddress.getLocalHost().getHostName());
         } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
