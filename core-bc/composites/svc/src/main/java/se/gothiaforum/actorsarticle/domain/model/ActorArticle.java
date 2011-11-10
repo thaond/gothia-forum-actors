@@ -31,7 +31,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ActorArticle {
 
-    /** The Constant log. */
     private static final Log LOG = LogFactory.getLog(ActorArticle.class);
 
     /** The company name. */
