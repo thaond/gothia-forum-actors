@@ -143,7 +143,7 @@ public class AddImageController {
                 String originalFileName = multipartFile.getOriginalFilename();
                 String mimeType = multipartFile.getContentType();
 
-                validator.isValidate(multipartFile, errors);
+                validator.validate(multipartFile, errors);
 
                 if (!errors.isEmpty()) {
                     model.addAttribute("errorList", errors);

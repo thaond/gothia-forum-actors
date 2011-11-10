@@ -43,7 +43,7 @@ public class ImageValidator {
      * @param errors
      *            the errors
      */
-    public void isValidate(MultipartFile multipartFile, List<String> errors) {
+    public void validate(MultipartFile multipartFile, List<String> errors) {
 
         if (multipartFile.getSize() > IMAGE_MIN_SIZE && multipartFile.getSize() < IMAGE_MAX_SIZE) {
             String originalFileName = multipartFile.getOriginalFilename();
@@ -63,6 +63,8 @@ public class ImageValidator {
                 errors.add("wrong-type-of-file-extension");
             }
 
+        } else {
+            errors.add("wrong-size-on-file");
         }
     }
 }
