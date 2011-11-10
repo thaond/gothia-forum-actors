@@ -400,6 +400,7 @@ public class ActorsServiceUtil {
             workflowContext.put(WorkflowConstants.CONTEXT_GROUP_ID, String.valueOf(article.getGroupId()));
             workflowContext.put(WorkflowConstants.CONTEXT_USER_ID, String.valueOf(article.getUserId()));
             workflowContext.put(WorkflowConstants.CONTEXT_SERVICE_CONTEXT, serviceContext);
+
             workflowHandler.startWorkflowInstance(article.getCompanyId(), groupId, user.getUserId(),
                     article.getPrimaryKey(), article.getClass().getName(), workflowContext);
         } catch (PortalException e) {
