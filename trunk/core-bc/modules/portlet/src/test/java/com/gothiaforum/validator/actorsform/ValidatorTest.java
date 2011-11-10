@@ -28,6 +28,8 @@ import static org.mockito.Matchers.anyString;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -43,6 +45,7 @@ import se.gothiaforum.validator.actorsform.ImageValidator;
  * 
  */
 public class ValidatorTest {
+    private static final Log LOG = LogFactory.getLog(ValidatorTest.class);
 
     ActorArticle actorArticle;
 
@@ -91,9 +94,47 @@ public class ValidatorTest {
         List<String> errors = new ArrayList<String>();
         MultipartFile multipartFile = Mockito.mock(MultipartFile.class);
 
-        imageValidator.isValidate(multipartFile, errors);
+        Mockito.when(multipartFile.getSize()).thenReturn((long) (1 * 1024 * 1024));
+        Mockito.when(multipartFile.getOriginalFilename()).thenReturn("my-image.jpg");
+        Mockito.when(multipartFile.getContentType()).thenReturn("image/jpeg");
 
-        assertEquals(errors.size(), 0);
+        imageValidator.validate(multipartFile, errors);
+
+        assertEquals(0, errors.size());
+
+    }
+
+    @Test
+    public void test3() throws Exception {
+
+        ImageValidator imageValidator = new ImageValidator();
+
+        List<String> errors = new ArrayList<String>();
+        MultipartFile multipartFile = Mockito.mock(MultipartFile.class);
+
+        Mockito.when(multipartFile.getSize()).thenReturn((long) (1 * 1024 * 1024));
+        Mockito.when(multipartFile.getOriginalFilename()).thenReturn("my-image.pizza");
+        Mockito.when(multipartFile.getContentType()).thenReturn("image/pizza");
+
+        imageValidator.validate(multipartFile, errors);
+
+        assertEquals(2, errors.size());
+
+    }
+
+    @Test
+    public void test4() throws Exception {
+
+        ImageValidator imageValidator = new ImageValidator();
+
+        List<String> errors = new ArrayList<String>();
+        MultipartFile multipartFile = Mockito.mock(MultipartFile.class);
+
+        Mockito.when(multipartFile.getSize()).thenReturn((long) (8 * 1024 * 1024));
+
+        imageValidator.validate(multipartFile, errors);
+
+        assertEquals(1, errors.size());
 
     }
 }
