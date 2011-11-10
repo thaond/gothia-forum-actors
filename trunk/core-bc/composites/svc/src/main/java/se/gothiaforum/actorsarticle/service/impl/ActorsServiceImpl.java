@@ -61,7 +61,7 @@ import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalArticleResource;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 import com.liferay.portlet.journal.service.JournalArticleResourceLocalService;
-import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
+import com.liferay.portlet.messageboards.service.MBMessageLocalService;
 import com.liferay.portlet.social.service.SocialRequestLocalService;
 
 /**
@@ -85,6 +85,7 @@ public class ActorsServiceImpl implements ActorsService {
     private final SocialRequestLocalService socialRequestService;
     private final RoleLocalService roleService;
     private final UserLocalService userService;
+    private final MBMessageLocalService mBMessageLocalService;
 
     private static final int ADD_MEMBER = 1;
     private static final int FILE_SUFIX_LENGHT = 3;
@@ -123,7 +124,7 @@ public class ActorsServiceImpl implements ActorsService {
             IGFolderLocalService iGFolderService, JournalArticleLocalService articleService,
             JournalArticleResourceLocalService articleResourceService,
             OrganizationLocalService organizationService, SocialRequestLocalService socialRequestService,
-            RoleLocalService roleService, UserLocalService userService) {
+            RoleLocalService roleService, UserLocalService userService, MBMessageLocalService mBMessageLocalService) {
         super();
         this.actorsArticleConverterService = actorsArticleConverterService;
         this.actorsServiceUtil = actorsServiceUtil;
@@ -137,6 +138,7 @@ public class ActorsServiceImpl implements ActorsService {
         this.socialRequestService = socialRequestService;
         this.roleService = roleService;
         this.userService = userService;
+        this.mBMessageLocalService = mBMessageLocalService;
     }
 
     /*
@@ -328,9 +330,10 @@ public class ActorsServiceImpl implements ActorsService {
             addArticleTags(userId, groupId, article, tagsEntries, serviceContext, assetEntry);
 
             // Message Boards
-            MBMessageLocalServiceUtil.addDiscussionMessage(userId, article.getUserName(), org.getGroup()
-                    .getGroupId(), JournalArticle.class.getName(), article.getResourcePrimKey(),
-                    WorkflowConstants.STATUS_PENDING);
+            mBMessageLocalService
+                    .addDiscussionMessage(userId, article.getUserName(), org.getGroup().getGroupId(),
+                            JournalArticle.class.getName(), article.getResourcePrimKey(),
+                            WorkflowConstants.STATUS_PENDING);
 
         } catch (SystemException e) {
             throw new RuntimeException("TODO: Handle this exception better", e);

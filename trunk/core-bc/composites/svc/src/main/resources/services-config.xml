@@ -55,6 +55,7 @@
     <constructor-arg name="socialRequestService" ref="socialRequestService" />
     <constructor-arg name="roleService" ref="roleService" />
     <constructor-arg name="userService" ref="userService" />
+    <constructor-arg name="mBMessageLocalService" ref="mBMessageLocalService" />
   </bean>
 
   <bean id="actorsServiceUtil" class="se.gothiaforum.actorsarticle.util.ActorsServiceUtil">
@@ -110,6 +111,10 @@
     factory-method="getService" />
   <bean id="expandoValueService" class="com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil"
     factory-method="getService" />
+
+  <bean id="mBMessageLocalService" class="com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil"
+    factory-method="getService" />
+
 
 
   <bean id="workflowHandlerRegistry" class="com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil" />
