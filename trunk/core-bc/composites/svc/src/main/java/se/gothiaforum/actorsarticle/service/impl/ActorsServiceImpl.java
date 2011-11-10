@@ -168,7 +168,6 @@ public class ActorsServiceImpl implements ActorsService {
         }
         // Creates a model of actors article by the journal article.
         catch (PortalException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

@@ -44,6 +44,8 @@ import se.gothiaforum.actorsarticle.util.ActorsServiceUtil;
 import com.liferay.counter.service.CounterLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.xml.SAXReader;
+import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.ListType;
 import com.liferay.portal.model.Organization;
@@ -59,6 +61,8 @@ import com.liferay.portal.service.RoleLocalService;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserGroupRoleLocalService;
 import com.liferay.portal.service.UserLocalService;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.xml.SAXReaderImpl;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.impl.AssetEntryImpl;
 import com.liferay.portlet.asset.service.AssetEntryLocalService;
@@ -106,6 +110,12 @@ public class TestActroArticleService {
 
     @Before
     public void before() throws SystemException, PortalException {
+
+        SAXReaderUtil sax = new SAXReaderUtil();
+
+        SAXReader saxRead = new SAXReaderImpl();
+
+        sax.setSAXReader(saxRead);
 
         actorsArticleConverterService = new ActorsArticleConverterServiceImpl();
 
@@ -203,6 +213,48 @@ public class TestActroArticleService {
         ActorArticle actorArticle = new ActorArticle();
         actorsService.addActor(actorArticle, 10, 1, 100, null, "", 1000);
         assertEquals(contentResult, journalArticle.getContent());
+
+    }
+
+    @Test
+    public void test2() throws Exception {
+
+        ThemeDisplay themeDisplay = Mockito.mock(ThemeDisplay.class);
+
+        User user = Mockito.mock(User.class);
+
+        Mockito.when(themeDisplay.getUser()).thenReturn(user);
+
+        List<Organization> allOrgs = new ArrayList<Organization>();
+        Organization organizationMock = Mockito.mock(Organization.class);
+        allOrgs.add(organizationMock);
+        Mockito.when(user.getOrganizations()).thenReturn(allOrgs);
+
+        Mockito.when(organizationMock.getType()).thenReturn(ActorsConstants.ORGNIZATION_ACTOR_TYPE);
+        Mockito.when(organizationMock.getOrganizationId()).thenReturn((long) 1);
+        Group group = Mockito.mock(Group.class);
+        Mockito.when(group.getGroupId()).thenReturn((long) 1);
+        Mockito.when(organizationMock.getGroup()).thenReturn(group);
+
+        List<JournalArticle> articles = new ArrayList<JournalArticle>();
+
+        JournalArticle journalArticle2 = new JournalArticleImpl();
+
+        journalArticle2.setArticleId("11111");
+        journalArticle2.setType(ActorsConstants.TYPE_ACTOR);
+
+        journalArticle2.setContent(contentResult);
+
+        articles.add(journalArticle2);
+
+        Mockito.when(articleService.getArticles(Mockito.anyLong())).thenReturn(articles);
+
+        Mockito.when(articleService.getArticles()).thenReturn(articles);
+        Mockito.when(articleService.getLatestArticle(Mockito.anyLong())).thenReturn(journalArticle2);
+
+        ActorArticle actorArticle = actorsService.getActorsArticle(themeDisplay);
+
+        assertEquals("11111", actorArticle.getArticleId());
 
     }
 
