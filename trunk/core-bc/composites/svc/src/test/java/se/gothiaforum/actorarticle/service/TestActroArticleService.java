@@ -32,6 +32,7 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
 
 import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
 import se.gothiaforum.actorsarticle.service.ActorsArticleConverterService;
@@ -44,6 +45,9 @@ import se.gothiaforum.actorsarticle.util.ActorsServiceUtil;
 import com.liferay.counter.service.CounterLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.workflow.WorkflowHandler;
+import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistry;
+import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.kernel.xml.SAXReader;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.model.Group;
@@ -255,6 +259,38 @@ public class TestActroArticleService {
         ActorArticle actorArticle = actorsService.getActorsArticle(themeDisplay);
 
         assertEquals("11111", actorArticle.getArticleId());
+
+    }
+
+    @Test
+    public void test3() throws Exception {
+
+        JournalArticle journalArticle3 = new JournalArticleImpl();
+
+        journalArticle3.setUserId(33333);
+        journalArticle3.setCompanyId(44444);
+        journalArticle3.setType("hehehj");
+        journalArticle3.setGroupId(4331);
+
+        journalArticle3.setPrimaryKey(1234);
+
+        WorkflowHandlerRegistryUtil workflowHandlerRegistryUtil = new WorkflowHandlerRegistryUtil();
+
+        WorkflowHandlerRegistry workflowHandlerRegistry = PowerMockito.mock(WorkflowHandlerRegistry.class);
+
+        workflowHandlerRegistryUtil.setWorkflowHandlerRegistry(workflowHandlerRegistry);
+
+        WorkflowHandler workflowHandler = PowerMockito.mock(WorkflowHandler.class);
+
+        PowerMockito.when(WorkflowHandlerRegistryUtil.getWorkflowHandler(Mockito.anyString())).thenReturn(
+                workflowHandler);
+
+        ServiceContext serviceContext = Mockito.mock(ServiceContext.class);
+
+        actorsService.sendActors(10, journalArticle3, 100, serviceContext);
+
+        Mockito.verify(workflowHandler).startWorkflowInstance(Mockito.anyLong(), Mockito.anyLong(),
+                Mockito.anyLong(), Mockito.anyLong(), Mockito.isNotNull(), Mockito.anyMap());
 
     }
 
