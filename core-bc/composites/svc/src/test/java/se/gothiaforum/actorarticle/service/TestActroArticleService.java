@@ -39,6 +39,7 @@ import se.gothiaforum.actorsarticle.service.ActorsArticleConverterService;
 import se.gothiaforum.actorsarticle.service.ActorsService;
 import se.gothiaforum.actorsarticle.service.impl.ActorsArticleConverterServiceImpl;
 import se.gothiaforum.actorsarticle.service.impl.ActorsServiceImpl;
+import se.gothiaforum.actorsarticle.util.ActorAssetEntryUtil;
 import se.gothiaforum.actorsarticle.util.ActorsConstants;
 import se.gothiaforum.actorsarticle.util.ActorsServiceUtil;
 
@@ -68,8 +69,12 @@ import com.liferay.portal.service.UserLocalService;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.xml.SAXReaderImpl;
 import com.liferay.portlet.asset.model.AssetEntry;
+import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.model.impl.AssetEntryImpl;
+import com.liferay.portlet.asset.model.impl.AssetTagImpl;
 import com.liferay.portlet.asset.service.AssetEntryLocalService;
+import com.liferay.portlet.asset.service.AssetTagLocalService;
+import com.liferay.portlet.asset.service.AssetTagPropertyLocalService;
 import com.liferay.portlet.imagegallery.service.IGFolderLocalService;
 import com.liferay.portlet.imagegallery.service.IGImageLocalService;
 import com.liferay.portlet.journal.model.JournalArticle;
@@ -87,6 +92,7 @@ import com.liferay.portlet.social.service.SocialRequestLocalService;
  * @author simongoransson
  * 
  */
+
 public class TestActroArticleService {
     private static final Log LOG = LogFactory.getLog(TestActroArticleService.class);
 
@@ -94,6 +100,8 @@ public class TestActroArticleService {
     private ActorsServiceUtil actorsServiceUtil;
     private ActorsService actorsService;
     private AssetEntryLocalService assetEntryService;
+    private AssetTagLocalService assetTagService;
+    private AssetTagPropertyLocalService assetTagPropertyService;
     private ClassNameLocalService classNameService;
     private CounterLocalService counterService;
     private JournalStructureLocalService structureService;
@@ -109,6 +117,7 @@ public class TestActroArticleService {
     private JournalArticleResourceLocalService articleResourceService;
     private SocialRequestLocalService socialRequestService;
     private MBMessageLocalService mBMessageLocalService;
+    private ActorAssetEntryUtil actorAssetEntryUtil;
 
     private JournalArticle journalArticle;
 
@@ -124,6 +133,8 @@ public class TestActroArticleService {
         actorsArticleConverterService = new ActorsArticleConverterServiceImpl();
 
         assetEntryService = Mockito.mock(AssetEntryLocalService.class);
+        assetTagService = Mockito.mock(AssetTagLocalService.class);
+        assetTagPropertyService = Mockito.mock(AssetTagPropertyLocalService.class);
         classNameService = Mockito.mock(ClassNameLocalService.class);
         counterService = Mockito.mock(CounterLocalService.class);
         structureService = Mockito.mock(JournalStructureLocalService.class);
@@ -139,13 +150,15 @@ public class TestActroArticleService {
         articleResourceService = Mockito.mock(JournalArticleResourceLocalService.class);
         socialRequestService = Mockito.mock(SocialRequestLocalService.class);
         mBMessageLocalService = Mockito.mock(MBMessageLocalService.class);
+        actorAssetEntryUtil = new ActorAssetEntryUtilMock();
 
         actorsServiceUtil = new ActorsServiceUtil(assetEntryService, classNameService, counterService,
                 structureService, templateService, listTypeService, organizationService, roleService,
                 userGroupRoleService, userService);
         actorsService = new ActorsServiceImpl(actorsArticleConverterService, actorsServiceUtil, assetEntryService,
-                counterService, iGImageService, iGFolderService, articleService, articleResourceService,
-                organizationService, socialRequestService, roleService, userService, mBMessageLocalService);
+                assetTagService, assetTagPropertyService, counterService, iGImageService, iGFolderService,
+                articleService, articleResourceService, organizationService, socialRequestService, roleService,
+                userService, mBMessageLocalService, actorAssetEntryUtil);
 
         List<ListType> listTypes = new ArrayList<ListType>();
         ListType listType = new ListTypeImpl();
@@ -291,6 +304,59 @@ public class TestActroArticleService {
 
         Mockito.verify(workflowHandler).startWorkflowInstance(Mockito.anyLong(), Mockito.anyLong(),
                 Mockito.anyLong(), Mockito.anyLong(), Mockito.isNotNull(), Mockito.anyMap());
+
+    }
+
+    @Test
+    public void test4() throws Exception {
+
+        ActorArticle actorArticle = new ActorArticle();
+        ServiceContext serviceContext = Mockito.mock(ServiceContext.class);
+
+        actorArticle.setAddress("Cheesecake sweet street 24 Marshmallow City");
+        actorArticle.setArticleId("10003");
+        actorArticle.setArticleStatus(1);
+        actorArticle.setCompanyName("Tiramisu caramels");
+        actorArticle.setContactWeb("Candy canes bonbon");
+        actorArticle.setDetailedDescription("Cake pie sugar plum liquorice gingerbread marshmallow."
+                + " Chocolate cake cake cheesecake halvah fruitcake gingerbread topping. Biscuit "
+                + "jelly beans applicake. Jelly beans soufflé sweet candy croissant ice cream "
+                + "candy. Sweet biscuit chupa chups jujubes cotton candy cake chocolate cake");
+        actorArticle.setExternalHomepage("www.fruitcake.com");
+        actorArticle.setFax("+4631 345 64 24");
+        actorArticle.setMail("sweet@fruitcake.com");
+        actorArticle.setMobilePhone("+4631 345 64 25");
+        actorArticle.setName("Mr Cake Jelly");
+        actorArticle.setOrganizationName("Applicake pie");
+        actorArticle.setPhone("+4631 345 64 25");
+        actorArticle.setTagsStr("chups,carrot,cake,soufflé");
+        actorArticle.setTitle("Powder chocolate cake pie");
+        actorArticle.setIntro("Cake pie sugar plum liquorice gingerbread marshmallow."
+                + " Chocolate cake cake cheesecake halvah fruitcake gingerbread topping. Biscuit ");
+
+        JournalArticle journalArticle4 = new JournalArticleImpl();
+        journalArticle4.setResourcePrimKey(2222);
+
+        Mockito.when(articleService.getArticle(Mockito.anyLong())).thenReturn(journalArticle4);
+
+        AssetEntry assetEntry = new AssetEntryImpl();
+        assetEntry.setPrimaryKey(1111);
+
+        Mockito.when(assetEntryService.getEntry(Mockito.anyString(), Mockito.anyLong())).thenReturn(assetEntry);
+
+        Mockito.when(assetTagService.hasTag(Mockito.anyLong(), Mockito.anyString())).thenReturn(true);
+
+        actorsService.updateActors(actorArticle, 11, serviceContext, "apa,bepa,cepa", 10000);
+
+        Mockito.when(assetTagService.hasTag(Mockito.anyLong(), Mockito.anyString())).thenReturn(false);
+
+        AssetTag assetTag = new AssetTagImpl();
+
+        Mockito.when(
+                assetTagService.addTag(Mockito.anyLong(), Mockito.anyString(), Mockito.any(String[].class),
+                        Mockito.eq(serviceContext))).thenReturn(assetTag);
+
+        actorsService.updateActors(actorArticle, 11, serviceContext, "apa,bepa,cepa", 10000);
 
     }
 

@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
 import se.gothiaforum.actorsarticle.service.ActorsArticleConverterService;
 import se.gothiaforum.actorsarticle.service.ActorsService;
+import se.gothiaforum.actorsarticle.util.ActorAssetEntryUtil;
 import se.gothiaforum.actorsarticle.util.ActorsConstants;
 import se.gothiaforum.actorsarticle.util.ActorsServiceUtil;
 
@@ -49,9 +50,8 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.service.AssetEntryLocalService;
-import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
-import com.liferay.portlet.asset.service.AssetTagPropertyLocalServiceUtil;
-import com.liferay.portlet.asset.service.persistence.AssetEntryUtil;
+import com.liferay.portlet.asset.service.AssetTagLocalService;
+import com.liferay.portlet.asset.service.AssetTagPropertyLocalService;
 import com.liferay.portlet.imagegallery.NoSuchFolderException;
 import com.liferay.portlet.imagegallery.model.IGFolder;
 import com.liferay.portlet.imagegallery.model.IGImage;
@@ -76,6 +76,8 @@ public class ActorsServiceImpl implements ActorsService {
     private final ActorsArticleConverterService actorsArticleConverterService;
     private final ActorsServiceUtil actorsServiceUtil;
     private final AssetEntryLocalService assetEntryService;
+    private final AssetTagLocalService assetTagService;
+    private final AssetTagPropertyLocalService assetTagPropertyService;
     private final CounterLocalService counterService;
     private final IGImageLocalService iGImageService;
     private final IGFolderLocalService iGFolderService;
@@ -86,6 +88,7 @@ public class ActorsServiceImpl implements ActorsService {
     private final RoleLocalService roleService;
     private final UserLocalService userService;
     private final MBMessageLocalService mBMessageLocalService;
+    private final ActorAssetEntryUtil actorAssetEntryUtil;
 
     private static final int ADD_MEMBER = 1;
     private static final int FILE_SUFIX_LENGHT = 3;
@@ -120,15 +123,21 @@ public class ActorsServiceImpl implements ActorsService {
      */
     public ActorsServiceImpl(ActorsArticleConverterService actorsArticleConverterService,
             ActorsServiceUtil actorsServiceUtil, AssetEntryLocalService assetEntryService,
+            AssetTagLocalService assetTagService, AssetTagPropertyLocalService assetTagPropertyService,
             CounterLocalService counterService, IGImageLocalService iGImageService,
             IGFolderLocalService iGFolderService, JournalArticleLocalService articleService,
             JournalArticleResourceLocalService articleResourceService,
             OrganizationLocalService organizationService, SocialRequestLocalService socialRequestService,
-            RoleLocalService roleService, UserLocalService userService, MBMessageLocalService mBMessageLocalService) {
+            RoleLocalService roleService, UserLocalService userService,
+            MBMessageLocalService mBMessageLocalService, ActorAssetEntryUtil actorAssetEntryUtil) {
+
         super();
+
         this.actorsArticleConverterService = actorsArticleConverterService;
         this.actorsServiceUtil = actorsServiceUtil;
         this.assetEntryService = assetEntryService;
+        this.assetTagService = assetTagService;
+        this.assetTagPropertyService = assetTagPropertyService;
         this.counterService = counterService;
         this.iGImageService = iGImageService;
         this.iGFolderService = iGFolderService;
@@ -139,6 +148,8 @@ public class ActorsServiceImpl implements ActorsService {
         this.roleService = roleService;
         this.userService = userService;
         this.mBMessageLocalService = mBMessageLocalService;
+        this.actorAssetEntryUtil = actorAssetEntryUtil;
+
     }
 
     /*
@@ -545,17 +556,18 @@ public class ActorsServiceImpl implements ActorsService {
         }
 
         if (tagsArray != null) {
-            AssetEntryUtil.clearAssetTags(assetEntry.getPrimaryKey());
+            actorAssetEntryUtil.clearAssetTags(assetEntry.getPrimaryKey());
+
             for (String tagName : tagsArray) {
 
-                if (AssetTagLocalServiceUtil.hasTag(groupId, tagName)) { // add an existing tag to the article
-                    AssetTag assetTag = AssetTagLocalServiceUtil.getTag(groupId, tagName);
-                    AssetEntryUtil.addAssetTag(assetEntry.getPrimaryKey(), assetTag);
+                if (assetTagService.hasTag(groupId, tagName)) { // add an existing tag to the article
+                    AssetTag assetTag = assetTagService.getTag(groupId, tagName);
+                    actorAssetEntryUtil.addAssetTag(assetEntry.getPrimaryKey(), assetTag);
                 } else { // Creating a new tag and adding it to the article
-                    AssetTag assetTag = AssetTagLocalServiceUtil.addTag(userId, tagName, null, serviceContext);
-                    AssetTagPropertyLocalServiceUtil.addTagProperty(userId, assetTag.getTagId(), "lang", "sv");
-                    AssetTagPropertyLocalServiceUtil.addTagProperty(userId, assetTag.getTagId(), "type", "actor");
-                    AssetEntryUtil.addAssetTag(assetEntry.getPrimaryKey(), assetTag);
+                    AssetTag assetTag = assetTagService.addTag(userId, tagName, null, serviceContext);
+                    assetTagPropertyService.addTagProperty(userId, assetTag.getTagId(), "lang", "sv");
+                    assetTagPropertyService.addTagProperty(userId, assetTag.getTagId(), "type", "actor");
+                    actorAssetEntryUtil.addAssetTag(assetEntry.getPrimaryKey(), assetTag);
                 }
             }
         }

@@ -56,6 +56,7 @@
     <constructor-arg name="roleService" ref="roleService" />
     <constructor-arg name="userService" ref="userService" />
     <constructor-arg name="mBMessageLocalService" ref="mBMessageLocalService" />
+    <constructor-arg name="actorAssetEntryUtil" ref="actorAssetEntryUtil" />
   </bean>
 
   <bean id="actorsServiceUtil" class="se.gothiaforum.actorsarticle.util.ActorsServiceUtil">
@@ -71,6 +72,8 @@
     <constructor-arg name="userService" ref="userService" />
   </bean>
 
+  <bean id="actorAssetEntryUtil" class="se.gothiaforum.actorsarticle.util.ActorAssetEntryUtil" />
+
 
 
   <bean id="articleService" class="com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil"
@@ -85,6 +88,10 @@
     factory-method="getService" />
   <bean id="assetEntryService" class="com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil"
     factory-method="getService" />
+  <bean id="assetTagService" class="com.liferay.portlet.asset.service.AssetTagLocalServiceUtil"
+    factory-method="getService" />
+  <bean id="assetTagPropertyService" class="com.liferay.portlet.asset.service.AssetTagPropertyLocalServiceUtil"
+    factory-method="getService" />
   <bean id="classNameService" class="com.liferay.portal.service.ClassNameLocalServiceUtil" factory-method="getService" />
   <bean id="organizationService" class="com.liferay.portal.service.OrganizationLocalServiceUtil"
     factory-method="getService" />
@@ -95,7 +102,6 @@
     factory-method="getService" />
   <bean id="socialRequestInterpreterService" class="com.liferay.portlet.social.service.SocialRequestInterpreterLocalServiceUtil"
     factory-method="getService" />
-
   <bean id="roleService" class="com.liferay.portal.service.RoleLocalServiceUtil" factory-method="getService" />
   <bean id="iGImageService" class="com.liferay.portlet.imagegallery.service.IGImageLocalServiceUtil"
     factory-method="getService" />
@@ -104,7 +110,6 @@
   <bean id="userGroupRoleService" class="com.liferay.portal.service.UserGroupRoleLocalServiceUtil"
     factory-method="getService" />
   <bean id="groupService" class="com.liferay.portal.service.GroupLocalServiceUtil" factory-method="getService" />
-
   <bean id="expandoColumnService" class="com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil"
     factory-method="getService" />
   <bean id="expandoTableService" class="com.liferay.portlet.expando.service.ExpandoTableLocalServiceUtil"
