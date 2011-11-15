@@ -102,6 +102,7 @@ public class ActorsSearchThinClientController {
         try {
             String bannerArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_BANNER_ARTICLE, companyId,
                     groupId);
+
             String bannerArticleContent = articleService.getArticleContent(groupId, bannerArticleId, null,
                     themeDisplay.getLanguageId(), themeDisplay);
             model.addAttribute("bannerArticleContent", bannerArticleContent);
