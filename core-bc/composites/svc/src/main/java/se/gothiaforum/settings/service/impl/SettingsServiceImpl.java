@@ -83,6 +83,7 @@ public class SettingsServiceImpl implements SettingsService {
 
         String value = "0";
         try {
+
             value = expandoValueService.getData(companyId, GROUP_CLASSNAME,
                     ExpandoTableConstants.DEFAULT_TABLE_NAME, columnName, groupId, "0");
 

@@ -45,7 +45,9 @@
   <bean id="actorsService" class="se.gothiaforum.actorsarticle.service.impl.ActorsServiceImpl">
     <constructor-arg name="actorsArticleConverterService" ref="actorsArticleConverterService" />
     <constructor-arg name="actorsServiceUtil" ref="actorsServiceUtil" />
-    <constructor-arg name="assetEntryService" ref="assetEntryService" />
+    <constructor-arg name="assetEntryService" ref="assetEntryService" />    
+    <constructor-arg name="assetTagService" ref="assetTagService" />
+    <constructor-arg name="assetTagPropertyService" ref="assetTagPropertyService" />   
     <constructor-arg name="counterService" ref="counterService" />
     <constructor-arg name="iGImageService" ref="iGImageService" />
     <constructor-arg name="iGFolderService" ref="iGFolderService" />
@@ -74,8 +76,6 @@
 
   <bean id="actorAssetEntryUtil" class="se.gothiaforum.actorsarticle.util.ActorAssetEntryUtil" />
 
-
-
   <bean id="articleService" class="com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil"
     factory-method="getService" />
   <bean id="counterService" class="com.liferay.counter.service.CounterLocalServiceUtil" factory-method="getService" />
@@ -94,8 +94,6 @@
     factory-method="getService" />
   <bean id="classNameService" class="com.liferay.portal.service.ClassNameLocalServiceUtil" factory-method="getService" />
   <bean id="organizationService" class="com.liferay.portal.service.OrganizationLocalServiceUtil"
-    factory-method="getService" />
-  <bean id="assetTagService" class="com.liferay.portlet.asset.service.AssetTagLocalServiceUtil"
     factory-method="getService" />
   <bean id="listTypeService" class="com.liferay.portal.service.ListTypeServiceUtil" factory-method="getService" />
   <bean id="socialRequestService" class="com.liferay.portlet.social.service.SocialRequestLocalServiceUtil"
