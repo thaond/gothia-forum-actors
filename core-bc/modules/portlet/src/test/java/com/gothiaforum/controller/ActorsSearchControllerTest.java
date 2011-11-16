@@ -27,6 +27,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import se.gothiaforum.controller.actorssearch.ActorsSearchController;
 import se.gothiaforum.settings.service.SettingsService;
+import se.gothiaforum.solr.ActroSolrQuery;
 
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -52,6 +53,9 @@ public class ActorsSearchControllerTest {
     @Mock
     private SettingsService settingsService;
 
+    @Mock
+    private ActroSolrQuery actroSolrQuery;
+
     @InjectMocks
     private final ActorsSearchController actorsSearchController = new ActorsSearchController();
 
@@ -61,6 +65,7 @@ public class ActorsSearchControllerTest {
 
         settingsService = mock(SettingsService.class);
         articleService = mock(JournalArticleLocalService.class);
+        actroSolrQuery = mock(ActroSolrQuery.class);
 
         // mock creation
         actionRequest = mock(ActionRequest.class);
@@ -80,6 +85,10 @@ public class ActorsSearchControllerTest {
         fieldArcticle.setAccessible(true);
         fieldArcticle.set(actorsSearchController, articleService);
 
+        Field fieldActroSolrQuery = actorsSearchController.getClass().getDeclaredField("actroSolrQuery");
+        fieldActroSolrQuery.setAccessible(true);
+        fieldActroSolrQuery.set(actorsSearchController, actroSolrQuery);
+
     }
 
     @Test
@@ -96,9 +105,11 @@ public class ActorsSearchControllerTest {
                         (String) Mockito.isNull(), Mockito.anyString(), (ThemeDisplay) Mockito.anyObject()))
                 .thenReturn("Hello World");
 
+        when(renderRequest.getParameter(eq("searchTerm"))).thenReturn("apa");
+
         actorsSearchController.showFormView(renderRequest, renderResponse, model);
 
-        verify(model).addAttribute(eq("searchFirstTimeArticleContent"), eq("Hello World"));
+        verify(model).addAttribute(eq("searchNoHitsArticleContent"), eq("Hello World"));
 
     }
 

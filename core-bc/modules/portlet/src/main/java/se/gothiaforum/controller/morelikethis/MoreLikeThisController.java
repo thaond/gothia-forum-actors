@@ -96,8 +96,6 @@ public class MoreLikeThisController {
 
         if (!tagsStr.equals("")) {
 
-            System.out.println("tagsStr = " + tagsStr);
-
             String searchTags = tagsStr.replaceAll(",", " ");
 
             query = new StringQueryImpl("(assetTagNames:" + searchTags

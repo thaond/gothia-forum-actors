@@ -57,6 +57,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.UnicodeFormatter;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
@@ -330,6 +331,8 @@ public class ViewActorsArticleController {
                 }
             }
 
+            actorArticle.setDetailedDescription(request.getParameter("descriptionEditor"));
+
             validator.validate(actorArticle, result);
 
             if (result.hasErrors()) {
@@ -496,6 +499,11 @@ public class ViewActorsArticleController {
 
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         ActorArticle actorArticle = actorsService.getActorsArticle(themeDisplay);
+
+        String temp = actorArticle.getDetailedDescription();
+
+        actorArticle.setDetailedDescription(UnicodeFormatter.toString(temp));
+
         return actorArticle;
     }
 
