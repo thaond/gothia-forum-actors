@@ -30,6 +30,7 @@ import se.gothiaforum.settings.service.SettingsService;
 import se.gothiaforum.validator.actorsform.ActorArticleValidator;
 
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 import com.liferay.portlet.social.service.SocialRequestInterpreterLocalService;
@@ -78,6 +79,8 @@ public class ViewActorsArticleControllerTest {
         socialRequestService = mock(SocialRequestLocalService.class);
         settingsService = mock(SettingsService.class);
         actorsService = mock(ActorsService.class);
+        socialRequestService = mock(SocialRequestLocalService.class);
+        socialRequestInterpreterService = mock(SocialRequestInterpreterLocalService.class);
 
         // mock creation
         actionRequest = mock(ActionRequest.class);
@@ -133,9 +136,6 @@ public class ViewActorsArticleControllerTest {
         ThemeDisplay themeDisplay = mock(ThemeDisplay.class);
 
         when(renderRequest.getAttribute(eq(WebKeys.THEME_DISPLAY))).thenReturn(themeDisplay);
-        when(themeDisplay.getCompanyId()).thenReturn((long) 888);
-        when(themeDisplay.getScopeGroupId()).thenReturn((long) 999);
-        when(themeDisplay.getLanguageId()).thenReturn("222");
 
         PortletURL portletURL = mock(PortletURL.class);
 
@@ -144,6 +144,37 @@ public class ViewActorsArticleControllerTest {
         viewActorsArticleController.showConnectView(model, renderRequest, renderResponse);
 
         // verify(model).addAttribute(eq("searchFirstTimeArticleContent"), eq("Hello World"));
+
+    }
+
+    @Test
+    public void testshowUserView() throws Exception {
+
+        ThemeDisplay themeDisplay = mock(ThemeDisplay.class);
+
+        when(renderRequest.getAttribute(eq(WebKeys.THEME_DISPLAY))).thenReturn(themeDisplay);
+
+        User user = mock(User.class);
+
+        when(themeDisplay.getUser()).thenReturn(user);
+
+        PortletURL portletURL = mock(PortletURL.class);
+
+        when(renderResponse.createRenderURL()).thenReturn(portletURL);
+
+        viewActorsArticleController.showUserView(model, renderRequest, renderResponse);
+
+        // verify(model).addAttribute(eq("searchFirstTimeArticleContent"), eq("Hello World"));
+
+    }
+
+    @Test
+    public void testShowFormView() throws Exception {
+
+        PortletURL portletURL = mock(PortletURL.class);
+        when(renderResponse.createRenderURL()).thenReturn(portletURL);
+
+        viewActorsArticleController.showFormView(model, renderRequest, renderResponse);
 
     }
 }
