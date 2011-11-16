@@ -77,6 +77,7 @@ public class ViewActorsArticleControllerTest {
         articleService = mock(JournalArticleLocalService.class);
         socialRequestService = mock(SocialRequestLocalService.class);
         settingsService = mock(SettingsService.class);
+        actorsService = mock(ActorsService.class);
 
         // mock creation
         actionRequest = mock(ActionRequest.class);
@@ -100,6 +101,10 @@ public class ViewActorsArticleControllerTest {
         field3.setAccessible(true);
         field3.set(viewActorsArticleController, settingsService);
 
+        Field field4 = viewActorsArticleController.getClass().getDeclaredField("actorsService");
+        field4.setAccessible(true);
+        field4.set(viewActorsArticleController, actorsService);
+
     }
 
     @Test
@@ -117,6 +122,26 @@ public class ViewActorsArticleControllerTest {
         when(renderResponse.createRenderURL()).thenReturn(portletURL);
 
         viewActorsArticleController.showActorView(model, renderRequest, renderResponse);
+
+        // verify(model).addAttribute(eq("searchFirstTimeArticleContent"), eq("Hello World"));
+
+    }
+
+    @Test
+    public void testShowConnectView() throws Exception {
+
+        ThemeDisplay themeDisplay = mock(ThemeDisplay.class);
+
+        when(renderRequest.getAttribute(eq(WebKeys.THEME_DISPLAY))).thenReturn(themeDisplay);
+        when(themeDisplay.getCompanyId()).thenReturn((long) 888);
+        when(themeDisplay.getScopeGroupId()).thenReturn((long) 999);
+        when(themeDisplay.getLanguageId()).thenReturn("222");
+
+        PortletURL portletURL = mock(PortletURL.class);
+
+        when(renderResponse.createRenderURL()).thenReturn(portletURL);
+
+        viewActorsArticleController.showConnectView(model, renderRequest, renderResponse);
 
         // verify(model).addAttribute(eq("searchFirstTimeArticleContent"), eq("Hello World"));
 
