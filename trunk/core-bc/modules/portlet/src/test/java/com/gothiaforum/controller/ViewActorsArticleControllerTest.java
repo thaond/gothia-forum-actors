@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -111,10 +112,13 @@ public class ViewActorsArticleControllerTest {
         when(themeDisplay.getScopeGroupId()).thenReturn((long) 999);
         when(themeDisplay.getLanguageId()).thenReturn("222");
 
+        PortletURL portletURL = mock(PortletURL.class);
+
+        when(renderResponse.createRenderURL()).thenReturn(portletURL);
+
         viewActorsArticleController.showActorView(model, renderRequest, renderResponse);
 
         // verify(model).addAttribute(eq("searchFirstTimeArticleContent"), eq("Hello World"));
 
     }
-
 }
