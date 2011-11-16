@@ -17,6 +17,9 @@ import javax.portlet.RenderResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -30,6 +33,8 @@ import se.gothiaforum.settings.service.SettingsService;
 import se.gothiaforum.solr.ActroSolrQuery;
 
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.service.GroupLocalService;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 
@@ -56,6 +61,9 @@ public class ActorsSearchControllerTest {
     @Mock
     private ActroSolrQuery actroSolrQuery;
 
+    @Mock
+    private GroupLocalService groupService;
+
     @InjectMocks
     private final ActorsSearchController actorsSearchController = new ActorsSearchController();
 
@@ -66,6 +74,7 @@ public class ActorsSearchControllerTest {
         settingsService = mock(SettingsService.class);
         articleService = mock(JournalArticleLocalService.class);
         actroSolrQuery = mock(ActroSolrQuery.class);
+        groupService = mock(GroupLocalService.class);
 
         // mock creation
         actionRequest = mock(ActionRequest.class);
@@ -89,6 +98,10 @@ public class ActorsSearchControllerTest {
         fieldActroSolrQuery.setAccessible(true);
         fieldActroSolrQuery.set(actorsSearchController, actroSolrQuery);
 
+        Field fieldGroupLocalService = actorsSearchController.getClass().getDeclaredField("groupService");
+        fieldGroupLocalService.setAccessible(true);
+        fieldGroupLocalService.set(actorsSearchController, groupService);
+
     }
 
     @Test
@@ -107,9 +120,20 @@ public class ActorsSearchControllerTest {
 
         when(renderRequest.getParameter(eq("searchTerm"))).thenReturn("apa");
 
-        actorsSearchController.showFormView(renderRequest, renderResponse, model);
+        QueryResponse queryResponse = mock(QueryResponse.class);
+        when(actroSolrQuery.query()).thenReturn(queryResponse);
 
-        verify(model).addAttribute(eq("searchNoHitsArticleContent"), eq("Hello World"));
+        SolrDocumentList documentList = new SolrDocumentList();
+        SolrDocument document = new SolrDocument();
+        documentList.add(document);
+
+        when(queryResponse.getResults()).thenReturn(documentList);
+
+        Group group = mock(Group.class);
+        when(groupService.getGroup(Mockito.anyLong())).thenReturn(group);
+        when(group.getFriendlyURL()).thenReturn("test");
+
+        actorsSearchController.showFormView(renderRequest, renderResponse, model);
 
     }
 
