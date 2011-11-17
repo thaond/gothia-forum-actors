@@ -61,7 +61,6 @@ public class ActorArticleValidator implements Validator {
         ValidatorUtils.removeLeadingAndTrailingWhitespacesOnAllStringFields(actorArticle); // Remove leading and
                                                                                            // trailing spaces on
                                                                                            // all String fields
-        System.out.println("-----" + actorArticle.getCompanyName());
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "companyName", "code.missing", "invalid-companyName");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "intro", "code.missing", "invalid-intro");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "code.missing", "invalid-name");

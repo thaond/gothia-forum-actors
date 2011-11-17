@@ -205,9 +205,16 @@ public class ViewActorsArticleController {
         // Workaround to get the errors form-validation from action request
         Errors errors = (Errors) model.asMap().get("errors");
         if (errors != null) {
+
+            ActorArticle actorArticle = (ActorArticle) model.asMap().get("actorArticle");
+
+            System.out.println(" error = " + actorArticle.getDetailedDescription());
+
             model.addAttribute("org.springframework.validation.BindingResult.actorArticle", errors);
             return "imageFormView";
         }
+
+        ActorArticle actorArticle = (ActorArticle) model.asMap().get("actorArticle");
 
         generateTabURL(request, response, model);
         return "blocks/formView";
@@ -223,8 +230,8 @@ public class ViewActorsArticleController {
      *            the request
      * @param response
      *            the response
-     * @return the profile page by default. If thir exists an social request whit status pending it will return the
-     *         "connectRequestSentView"
+     * @return the profile page by default. If their exists an social request whit status pending it will return
+     *         the "connectRequestSentView"
      */
     @RenderMapping
     public String showActorView(Model model, RenderRequest request, RenderResponse response) {
@@ -287,9 +294,9 @@ public class ViewActorsArticleController {
      * @param binder
      *            a web data binder.
      */
-    @InitBinder("actorArcticle")
+    @InitBinder("actorArticle")
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(validator);
+        // binder.setValidator(validator);
     }
 
     /**
@@ -310,7 +317,7 @@ public class ViewActorsArticleController {
      *            the model
      */
     @ActionMapping(params = "action=addActor")
-    public void addActor(@ModelAttribute("actorArcticle") ActorArticle actorArticle, BindingResult result,
+    public void addActor(@ModelAttribute("actorArticle") ActorArticle actorArticle, BindingResult result,
             @RequestParam("tagsEntries") String tagsEntries, ActionRequest request, ActionResponse response,
             Model model) {
 
@@ -332,6 +339,8 @@ public class ViewActorsArticleController {
             }
 
             actorArticle.setDetailedDescription(request.getParameter("descriptionEditor"));
+            actorArticle.setDetailedDescriptionUnicoded(UnicodeFormatter.toString(actorArticle
+                    .getDetailedDescription()));
 
             validator.validate(actorArticle, result);
 
@@ -355,7 +364,7 @@ public class ViewActorsArticleController {
             throw new RuntimeException("TODO: Handle this exception better", e);
         }
 
-        model.addAttribute("actorArcticle", actorArticle);
+        model.addAttribute("actorArticle", actorArticle);
         model.addAttribute("tagsEntries", tagsEntries);
 
         // This sets the view page for the render phase.
@@ -374,7 +383,7 @@ public class ViewActorsArticleController {
      *            the model
      */
     @ActionMapping(params = "action=sendActor")
-    public void sendActor(@ModelAttribute("actorArcticle") ActorArticle actorArticle, ActionRequest request,
+    public void sendActor(@ModelAttribute("actorArticle") ActorArticle actorArticle, ActionRequest request,
             Model model) {
 
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
@@ -391,12 +400,12 @@ public class ViewActorsArticleController {
                     themeDisplay.getScopeGroupId(), serviceContext);
 
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not send the workflow request", e);
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not send the workflow request", e);
         }
 
-        model.addAttribute("actorArcticle", getActorsArticle(request));
+        model.addAttribute("actorArticle", getActorsArticle(request));
 
     }
 
@@ -494,15 +503,14 @@ public class ViewActorsArticleController {
      * 
      * @return a Actors Article.
      */
-    @ModelAttribute(value = "actorArcticle")
+    @ModelAttribute(value = "actorArticle")
     public ActorArticle getActorsArticle(PortletRequest request) {
 
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         ActorArticle actorArticle = actorsService.getActorsArticle(themeDisplay);
 
-        String temp = actorArticle.getDetailedDescription();
-
-        actorArticle.setDetailedDescription(UnicodeFormatter.toString(temp));
+        actorArticle.setDetailedDescriptionUnicoded(UnicodeFormatter.toString(actorArticle
+                .getDetailedDescription()));
 
         return actorArticle;
     }
