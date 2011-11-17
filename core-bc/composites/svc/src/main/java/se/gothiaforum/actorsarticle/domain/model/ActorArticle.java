@@ -45,6 +45,9 @@ public class ActorArticle {
     /** The detailed description. */
     private String detailedDescription = "";
 
+    /** The unicoded detailed description. */
+    private String detailedDescriptionUnicoded = "";
+
     /** The external homepage. */
     private String externalHomepage = "";
 
@@ -122,6 +125,14 @@ public class ActorArticle {
 
     public void setDetailedDescription(String detailedDescription) {
         this.detailedDescription = detailedDescription;
+    }
+
+    public String getDetailedDescriptionUnicoded() {
+        return detailedDescriptionUnicoded;
+    }
+
+    public void setDetailedDescriptionUnicoded(String detailedDescriptionUnicoded) {
+        this.detailedDescriptionUnicoded = detailedDescriptionUnicoded;
     }
 
     public String getExternalHomepage() {

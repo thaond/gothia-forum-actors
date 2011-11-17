@@ -32,7 +32,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 
-<c:if test="${actorArcticle.articleStatus != -1}">
+<c:if test="${actorArticle.articleStatus != -1}">
   <liferay-ui:tabs names="${tabs}" url="${tabURL}" />
 </c:if>
 
@@ -59,32 +59,34 @@
         <h2>
           <liferay-ui:message key="actor-info" />
         </h2>
-        <form:errors path="actorArcticle.companyName" cssClass="portlet-msg-error" />
-        <aui:input name="companyName" type="text" label="name-on-unit-company" value="${actorArcticle.companyName}"
+        <form:errors path="actorArticle.companyName" cssClass="portlet-msg-error" />
+        <aui:input name="companyName" type="text" label="name-on-unit-company" value="${actorArticle.companyName}"
           helpMessage="help-name-on-unit-company" cssClass="mandatory" />
-        <form:errors path="actorArcticle.organizationName" cssClass="portlet-msg-error" />
+        <form:errors path="actorArticle.organizationName" cssClass="portlet-msg-error" />
         <aui:input name="organizationName" type="text" label="organization-name"
-          value="${actorArcticle.organizationName}" helpMessage="help-organization-name" cssClass="optional" />
-        <form:errors path="actorArcticle.intro" cssClass="portlet-msg-error" />
-        <aui:input name="intro" type="textarea" label="intro" value="${actorArcticle.intro}"
+          value="${actorArticle.organizationName}" helpMessage="help-organization-name" cssClass="optional" />
+        <form:errors path="actorArticle.intro" cssClass="portlet-msg-error" />
+        <aui:input name="intro" type="textarea" label="intro" value="${actorArticle.intro}"
           helpMessage="help-intro" cssClass="mandatory" />
-        <form:errors path="actorArcticle.detailedDescription" cssClass="portlet-msg-error" />
+        <form:errors path="actorArticle.detailedDescription" cssClass="portlet-msg-error" />
         <aui:field-wrapper label="detailed-description">
           <liferay-ui:input-editor name="descriptionEditor" toolbarSet="gothia" initMethod="initEditor" width="200" />
           <script type="text/javascript">
-            function <portlet:namespace />initEditor() { return "${actorArcticle.detailedDescription}"; }
+            function <portlet:namespace />initEditor() { return "${actorArticle.detailedDescriptionUnicoded}"; }
         </script>
         </aui:field-wrapper>
-        <form:errors path="actorArcticle.externalHomepage" cssClass="portlet-msg-error" />
+        <form:errors path="actorArticle.externalHomepage" cssClass="portlet-msg-error" />
         <aui:input name="externalHomepage" type="text" label="external-homepage"
-          value="${actorArcticle.externalHomepage}" helpMessage="this-is-a-help-message" cssClass="optional" />
-        <aui:input name="id" type="hidden" value="${actorArcticle.articleId}" />
+          value="${actorArticle.externalHomepage}" cssClass="optional" />
+        <aui:input name="id" type="hidden" value="${actorArticle.articleId}" />
 
-
+        <p>
+            <liferay-ui:message key="help-tag-message" />
+        </p>
         <liferay-ui:message key="tags" />
         <liferay-ui:asset-tags-selector
           className="<%= com.liferay.portlet.journal.model.JournalArticle.class.getName() %>"
-          classPK="${actorArcticle.resourcePrimKeyId}" hiddenInput="tagsEntries" curTags="${tagsEntries}" />
+          classPK="${actorArticle.resourcePrimKeyId}" hiddenInput="tagsEntries" curTags="${tagsEntries}" />
       </aui:fieldset>
     </aui:column>
     <aui:column columnWidth="50" last="true">
@@ -92,26 +94,26 @@
         <h2>
           <liferay-ui:message key="contact-person" />
         </h2>
-        <form:errors path="actorArcticle.name" cssClass="portlet-msg-error" />
-        <aui:input name="name" type="text" label="name" value="${actorArcticle.name}"
+        <form:errors path="actorArticle.name" cssClass="portlet-msg-error" />
+        <aui:input name="name" type="text" label="name" value="${actorArticle.name}"
           helpMessage="help-contact-person" cssClass="mandatory" />
-        <form:errors path="actorArcticle.title" cssClass="portlet-msg-error" />
-        <aui:input name="title" type="text" label="title" value="${actorArcticle.title}" helpMessage="help-title"
+        <form:errors path="actorArticle.title" cssClass="portlet-msg-error" />
+        <aui:input name="title" type="text" label="title" value="${actorArticle.title}" helpMessage="help-title"
           cssClass="optional" />
-        <form:errors path="actorArcticle.address" cssClass="portlet-msg-error" />
-        <aui:input name="address" type="text" label="address" value="${actorArcticle.address}"
+        <form:errors path="actorArticle.address" cssClass="portlet-msg-error" />
+        <aui:input name="address" type="text" label="address" value="${actorArticle.address}"
           helpMessage="help-address" cssClass="mandatory" />
-        <form:errors path="actorArcticle.phone" cssClass="portlet-msg-error" />
-        <aui:input name="phone" type="text" label="phone" value="${actorArcticle.phone}" helpMessage="help-phone"
+        <form:errors path="actorArticle.phone" cssClass="portlet-msg-error" />
+        <aui:input name="phone" type="text" label="phone" value="${actorArticle.phone}" helpMessage="help-phone"
           cssClass="mandatory" />
-        <form:errors path="actorArcticle.mobilePhone" cssClass="portlet-msg-error" />
-        <aui:input name="mobilePhone" type="text" label="mobile-phone" value="${actorArcticle.mobilePhone}"
+        <form:errors path="actorArticle.mobilePhone" cssClass="portlet-msg-error" />
+        <aui:input name="mobilePhone" type="text" label="mobile-phone" value="${actorArticle.mobilePhone}"
           helpMessage="help-mobile-phone" cssClass="optional" />
-        <form:errors path="actorArcticle.fax" cssClass="portlet-msg-error" />
-        <aui:input name="fax" type="text" label="fax" value="${actorArcticle.fax}" helpMessage="help-fax"
+        <form:errors path="actorArticle.fax" cssClass="portlet-msg-error" />
+        <aui:input name="fax" type="text" label="fax" value="${actorArticle.fax}" helpMessage="help-fax"
           cssClass="optional" />
-        <form:errors path="actorArcticle.mail" cssClass="portlet-msg-error" />
-        <aui:input name="mail" type="text" label="mail" value="${actorArcticle.mail}" helpMessage="help-mail"
+        <form:errors path="actorArticle.mail" cssClass="portlet-msg-error" />
+        <aui:input name="mail" type="text" label="mail" value="${actorArticle.mail}" helpMessage="help-mail"
           cssClass="mandatory" />
       </aui:fieldset>
     </aui:column>

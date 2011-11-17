@@ -32,7 +32,7 @@
 
 
 <c:choose>
-  <c:when test="${actorArcticle.articleStatus == -1}"><!-- not yet created   -->
+  <c:when test="${actorArticle.articleStatus == -1}"><!-- not yet created   -->
       <jsp:include page="../firstTimeView.jsp" />
   </c:when>
   <c:when test="${hasSocialRequest}"><!-- not yet created   -->
@@ -57,22 +57,22 @@
 
 
     <c:choose>
-      <c:when test="${actorArcticle.articleStatus == 0}">
+      <c:when test="${actorArticle.articleStatus == 0}">
         <!-- Approved  -->
         <div class="portlet-msg-success">
           <liferay-ui:message key="approved" />
         </div>
-      ${actorArcticle.content}   
+      ${actorArticle.content}   
       <aui:button-row>
           <aui:button value="edit" onClick="${editActorURL}" />
         </aui:button-row>
       </c:when>
-      <c:when test="${actorArcticle.articleStatus == 2}">
+      <c:when test="${actorArticle.articleStatus == 2}">
         <!-- Draft   -->
         <div class="portlet-msg-success">
           <liferay-ui:message key="draft" />
         </div>
-      ${actorArcticle.content}  
+      ${actorArticle.content}  
       <aui:button-row>
           <aui:button value="edit" onClick="${editActorURL}" />
           <aui:button value="send-for-approval" onClick="${sendActorURL}" />
@@ -83,7 +83,7 @@
         <div class="portlet-msg-success">
           <liferay-ui:message key="pending-approval" />
         </div>             
-        ${actorArcticle.content}         
+        ${actorArticle.content}         
     </c:otherwise>
     </c:choose>
   </c:otherwise>
