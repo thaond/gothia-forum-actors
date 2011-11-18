@@ -175,7 +175,7 @@ public class ActorsServiceImpl implements ActorsService {
                 }
             }
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to get actor's article.", e);
         }
         // Creates a model of actors article by the journal article.
         catch (PortalException e) {
@@ -199,11 +199,11 @@ public class ActorsServiceImpl implements ActorsService {
             } catch (PortalException e) {
                 // actorArticle.setContent("Fel");
                 // return actorArticle;
-                throw new RuntimeException("TODO: Handle this exception better", e);
+                throw new RuntimeException("Unable to get actor's article.", e);
             } catch (SystemException e) {
                 // actorArticle.setContent("Fel");
                 // return actorArticle;
-                throw new RuntimeException("TODO: Handle this exception better", e);
+                throw new RuntimeException("Unable to get actor's article.", e);
             }
         }
         return actorArticle;
@@ -225,9 +225,9 @@ public class ActorsServiceImpl implements ActorsService {
 
             orgs = parentOrganization.getSuborganizations();
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Failed to get organizations", e);
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Failed to get organizations", e);
         }
         return orgs;
     }
@@ -245,9 +245,9 @@ public class ActorsServiceImpl implements ActorsService {
         try {
             organizations = themeDisplay.getUser().getOrganizations();
         } catch (PortalException e1) {
-            throw new RuntimeException("TODO: Handle this exception better", e1);
+            throw new RuntimeException("Unable to get users", e1);
         } catch (SystemException e1) {
-            throw new RuntimeException("TODO: Handle this exception better", e1);
+            throw new RuntimeException("Unable to get users", e1);
         }
         for (Organization org : organizations) {
             if (org.getType().equals(ActorsConstants.ORGNIZATION_ACTOR_TYPE)) {
@@ -259,7 +259,7 @@ public class ActorsServiceImpl implements ActorsService {
             try {
                 users = userService.getOrganizationUsers(organization.getOrganizationId());
             } catch (SystemException e) {
-                throw new RuntimeException("TODO: Handle this exception better", e);
+                throw new RuntimeException("Unable to get users", e);
             }
         }
         return users;
@@ -294,9 +294,9 @@ public class ActorsServiceImpl implements ActorsService {
                     regionId, countryId, statusId, comments, null);
 
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to add a organization", e);
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to add a organization", e);
         }
 
         actorsServiceUtil.addUserToOrg(userId, org.getOrganizationId());
@@ -346,9 +346,9 @@ public class ActorsServiceImpl implements ActorsService {
                             WorkflowConstants.STATUS_PENDING);
 
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to add a actor", e);
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to add a actor", e);
         }
     }
 
@@ -379,9 +379,9 @@ public class ActorsServiceImpl implements ActorsService {
             addArticleTags(userId, groupId, article, tagsEntries, serviceContext, assetEntry);
 
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not update an actor", e);
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not update an actor", e);
         }
         return article;
     }
@@ -434,9 +434,9 @@ public class ActorsServiceImpl implements ActorsService {
             }
 
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to send a social request", e);
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to send a social request", e);
         }
     }
 
@@ -459,9 +459,9 @@ public class ActorsServiceImpl implements ActorsService {
         } catch (NoSuchFolderException nsfe) {
             // Do nothing
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to add a image folder for an actor", e);
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to add a image folder for an actor", e);
         }
 
         try {
@@ -482,9 +482,9 @@ public class ActorsServiceImpl implements ActorsService {
             return addImage;
 
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to add a image on an actor", e);
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to add a image on an actor", e);
         }
     }
 
@@ -529,9 +529,9 @@ public class ActorsServiceImpl implements ActorsService {
         try {
             organizations = user.getOrganizations();
         } catch (PortalException e1) {
-            throw new RuntimeException("TODO: Handle this exception better", e1);
+            throw new RuntimeException("Could not find any actor's organization", e1);
         } catch (SystemException e1) {
-            throw new RuntimeException("TODO: Handle this exception better", e1);
+            throw new RuntimeException("Could not find any actor's organization", e1);
         }
 
         long groupId = 0;
