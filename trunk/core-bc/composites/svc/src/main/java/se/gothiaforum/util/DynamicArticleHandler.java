@@ -68,7 +68,7 @@ public class DynamicArticleHandler {
             }
 
         } catch (DocumentException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to generate a dynamic element", e);
         }
 
         return rootDynamicElement;

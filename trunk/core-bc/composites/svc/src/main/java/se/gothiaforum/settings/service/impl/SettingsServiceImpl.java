@@ -86,10 +86,9 @@ public class SettingsServiceImpl implements SettingsService {
 
             value = expandoValueService.getData(companyId, GROUP_CLASSNAME,
                     ExpandoTableConstants.DEFAULT_TABLE_NAME, columnName, groupId, "0");
-
         } catch (PortalException e) {
             if (e instanceof com.liferay.portlet.expando.NoSuchTableException) { // If table don't exists we try to
-                                                                                 // create it.
+                System.out.println("here2"); // create it.
                 try {
                     expandoTableService.addDefaultTable(companyId, GROUP_CLASSNAME);
                     getSetting(columnName, companyId, groupId);

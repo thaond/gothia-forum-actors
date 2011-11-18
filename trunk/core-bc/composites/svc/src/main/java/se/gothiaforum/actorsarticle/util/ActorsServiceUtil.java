@@ -173,7 +173,7 @@ public class ActorsServiceUtil {
                     ActorsConstants.ELEMENT_TYPE_IMAGE_GALLERY, "");
 
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to parse the content of an actor article to XML", e);
         }
 
         return aC2X.end();
@@ -218,9 +218,9 @@ public class ActorsServiceUtil {
             assetEntry.setViewCount(0);
 
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not create an AssetEntry", e);
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not create an AssetEntry", e);
         }
 
         return assetEntry;
@@ -346,9 +346,9 @@ public class ActorsServiceUtil {
             }
 
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not find any parent organization", e);
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not find any parent organization", e);
         }
         return org;
     }
@@ -404,9 +404,9 @@ public class ActorsServiceUtil {
             workflowHandler.startWorkflowInstance(article.getCompanyId(), groupId, user.getUserId(),
                     article.getPrimaryKey(), article.getClass().getName(), workflowContext);
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to add workflow", e);
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to add workflow", e);
         }
     }
 
@@ -467,11 +467,11 @@ public class ActorsServiceUtil {
             article.setStatus(ActorsConstants.DRAFT); // Sets the status of the article to draft.
 
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not set the fields on the article", e);
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not set the fields on the article", e);
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not set the fields on the article", e);
         }
 
         article.setTemplateId(ActorsConstants.GLOBAL_TEMPLATEID);
@@ -498,9 +498,9 @@ public class ActorsServiceUtil {
         try {
             userService.addOrganizationUsers(organizationId, userIds);
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to add the user to an organization", e);
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Unable to add the user to an organization", e);
         }
 
     }
@@ -519,9 +519,9 @@ public class ActorsServiceUtil {
             Role role = roleService.getRole(companyId, ActorsConstants.ORGANIZATION_ADMIN);
             userGroupRoleService.addUserGroupRoles(userIds, groupId, role.getRoleId());
         } catch (PortalException e1) {
-            throw new RuntimeException("TODO: Handle this exception better", e1);
+            throw new RuntimeException("Unable to add user to a role", e1);
         } catch (SystemException e1) {
-            throw new RuntimeException("TODO: Handle this exception better", e1);
+            throw new RuntimeException("Unable to add user to a role", e1);
         }
 
     }
