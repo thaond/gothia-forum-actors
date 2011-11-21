@@ -132,12 +132,10 @@ public class MoreLikeThisController {
                             searchTags.append(t.getName() + " ");
                         }
 
-                        query = new StringQueryImpl(
-                                "(assetTagNames:"
-                                        + searchTags
-                                        + ") AND (entryClassName:com.liferay.portlet.journal.model.JournalArticle AND type:"
-                                        + ActorsConstants.TYPE_ACTOR + ") AND !(articleId:"
-                                        + journalArticle.getArticleId() + ") sort=title asc");
+                        query = new StringQueryImpl("(assetTagNames:" + searchTags
+                                + ") AND (entryClassName:com.liferay.portlet.journal.model.JournalArticle"
+                                + " AND type:" + ActorsConstants.TYPE_ACTOR + ") AND !(articleId:"
+                                + journalArticle.getArticleId() + ") sort=title asc");
 
                     }
 
