@@ -18,6 +18,6 @@
  */
 
 /**
- * Provide classes to perform searches against solr
+ * Provide classes to perform searches against solr.
  */
 package se.gothiaforum.solr;

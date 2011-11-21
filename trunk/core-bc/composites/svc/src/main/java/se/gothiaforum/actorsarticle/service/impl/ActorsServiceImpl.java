@@ -102,12 +102,16 @@ public class ActorsServiceImpl implements ActorsService {
      *            the actors service util
      * @param assetEntryService
      *            the asset entry service
+     * @param assetTagService
+     *            the asset tag service
+     * @param assetTagPropertyService
+     *            the asset tag property service
      * @param counterService
      *            the counter service
      * @param iGImageService
-     *            the iG image service
+     *            the i g image service
      * @param iGFolderService
-     *            the iG folder service
+     *            the i g folder service
      * @param articleService
      *            the article service
      * @param articleResourceService
@@ -120,6 +124,10 @@ public class ActorsServiceImpl implements ActorsService {
      *            the role service
      * @param userService
      *            the user service
+     * @param mBMessageLocalService
+     *            the m b message local service
+     * @param actorAssetEntryUtil
+     *            the actor asset entry util
      */
     public ActorsServiceImpl(ActorsArticleConverterService actorsArticleConverterService,
             ActorsServiceUtil actorsServiceUtil, AssetEntryLocalService assetEntryService,
@@ -457,7 +465,7 @@ public class ActorsServiceImpl implements ActorsService {
         try {
             logoFolder = iGFolderService.getFolder(actorGroupId, 0, ActorsConstants.LOGO_FOLDER_NAME);
         } catch (NoSuchFolderException nsfe) {
-            // Do nothing
+            LOG.warn("Unable to add a image folder for an actor, reason no such folder");
         } catch (PortalException e) {
             throw new RuntimeException("Unable to add a image folder for an actor", e);
         } catch (SystemException e) {

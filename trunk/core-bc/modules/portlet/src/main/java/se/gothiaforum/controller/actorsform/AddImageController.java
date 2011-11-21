@@ -71,7 +71,7 @@ public class AddImageController {
     private ImageValidator validator;
 
     /**
-     * Show image form view.
+     * Renders image form view.
      * 
      * @param model
      *            the model
@@ -85,6 +85,15 @@ public class AddImageController {
         return "blocks/imageErrorView";
     }
 
+    /**
+     * Renders the image form view.
+     * 
+     * @param model
+     *            the model
+     * @param request
+     *            the request
+     * @return the string
+     */
     @RenderMapping(params = "view=showImageActorsForm")
     public String showImageFormView(Model model, RenderRequest request) {
 

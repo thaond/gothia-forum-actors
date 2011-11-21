@@ -341,7 +341,6 @@ public class ActorsServiceUtil {
             } else if (parentOrgs.size() == 1) {
                 org = parentOrgs.get(0);
             } else {
-                org = parentOrgs.get(0);
                 throw new RuntimeException("It is to many Organization of type gothia-actor-parent");
             }
 
