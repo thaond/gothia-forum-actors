@@ -281,7 +281,7 @@ public class ViewActorsArticleController {
             }
 
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Error when rendering view.", e);
         }
 
         generateTabURL(request, response, model);
@@ -359,9 +359,9 @@ public class ViewActorsArticleController {
                 actorArticle = getActorsArticle(request);
             }
         } catch (PortalException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not save the user", e);
         } catch (SystemException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not save the user", e);
         }
 
         model.addAttribute("actorArticle", actorArticle);

@@ -151,7 +151,7 @@ public class ActorsSearchThinClientController {
                     + URLEncoder.encode(searchTerm, ActorsConstants.UTF_8);
             response.sendRedirect(redirect);
         } catch (IOException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("Could not execute the search.", e);
         }
     }
 
