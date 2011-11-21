@@ -199,11 +199,11 @@ public class ActorsSearchController {
                 model.addAttribute("hits", actorArticles);
 
             } catch (SearchException e) {
-                throw new RuntimeException("TODO: Handle this exception better", e);
+                throw new RuntimeException("An error occurred when the search was attempted to performed", e);
             } catch (PortalException e) {
-                throw new RuntimeException("TODO: Handle this exception better", e);
+                throw new RuntimeException("An error occurred when the search was attempted to performed", e);
             } catch (SystemException e) {
-                throw new RuntimeException("TODO: Handle this exception better", e);
+                throw new RuntimeException("An error occurred when the search was attempted to performed", e);
             }
         } else { // Fist time = no search made.
 
@@ -262,7 +262,7 @@ public class ActorsSearchController {
                     + URLEncoder.encode(searchTerm, ActorsConstants.UTF_8);
             response.sendRedirect(redirect);
         } catch (IOException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("An error occurred when the search was attempted to performed", e);
         }
 
     }
@@ -288,7 +288,7 @@ public class ActorsSearchController {
             String redirect = ActorsConstants.SEARCH_RIDERECT_URL + "view-all";
             response.sendRedirect(redirect);
         } catch (IOException e) {
-            throw new RuntimeException("TODO: Handle this exception better", e);
+            throw new RuntimeException("An error occurred when the search for all the actors was attempted.", e);
         }
 
     }

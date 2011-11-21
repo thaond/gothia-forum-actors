@@ -198,9 +198,9 @@ public class MoreLikeThisController {
                 }
             }
         } catch (PortalException e1) {
-            throw new RuntimeException("TODO: Handle this exception better", e1);
+            throw new RuntimeException("An error occurred when attempt to search was performed.", e1);
         } catch (SystemException e1) {
-            throw new RuntimeException("TODO: Handle this exception better", e1);
+            throw new RuntimeException("An error occurred when attempt to search was performed.", e1);
         }
         return actorArticles;
     }

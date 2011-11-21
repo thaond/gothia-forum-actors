@@ -101,9 +101,11 @@ public class ActorsSearchResultController {
             } catch (NoSuchGroupException e1) {
                 LOG.warn("No such group found");
             } catch (PortalException e1) {
-                throw new RuntimeException("TODO: Handle this exception better", e1);
+                throw new RuntimeException(
+                        "An error occurred when the attempt of the rendering of the view was performed.", e1);
             } catch (SystemException e1) {
-                throw new RuntimeException("TODO: Handle this exception better", e1);
+                throw new RuntimeException(
+                        "An error occurred when the attempt of the rendering of the view was performed.", e1);
             }
         }
 
