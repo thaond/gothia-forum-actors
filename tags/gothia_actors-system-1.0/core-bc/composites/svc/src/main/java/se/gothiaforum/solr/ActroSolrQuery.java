@@ -1,0 +1,190 @@
+/**
+ * Copyright 2010 Västra Götalandsregionen
+ *
+ *   This library is free software; you can redistribute it and/or modify
+ *   it under the terms of version 2.1 of the GNU Lesser General Public
+ *   License as published by the Free Software Foundation.
+ *
+ *   This library is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public
+ *   License along with this library; if not, write to the
+ *   Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+ *   Boston, MA 02111-1307  USA
+ *
+ */
+
+package se.gothiaforum.solr;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+
+import se.gothiaforum.actorsarticle.util.ActorsArticleUtil;
+
+import com.liferay.portal.kernel.search.Field;
+
+/**
+ * The Class ActroSolrQuery is a extension of SolrQuery, so it is a query. ActroSolrQuery holds an connection to
+ * the solr server and therefore it can preform a search in it self and return the search result.
+ * 
+ * @author Simon Göransson vgrid=simgo3
+ */
+public class ActroSolrQuery extends SolrQuery {
+
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = 1L;
+
+    /** The Constant LOG. */
+    private static final Log LOG = LogFactory.getLog(ActorsArticleUtil.class);
+
+    private SolrServer solrServer;
+
+    /**
+     * Instantiates a new ActroSolrQuery.
+     * 
+     * @param solrServer
+     *            the solr server
+     */
+    public ActroSolrQuery(SolrServer solrServer) {
+        this.solrServer = solrServer;
+    }
+
+    /**
+     * Instantiates a new ActroSolrQuery.
+     */
+    public ActroSolrQuery() {
+        super();
+    }
+
+    /**
+     * Instantiates a new ActroSolrQuery.
+     * 
+     * @param s
+     *            a search query.
+     */
+    public ActroSolrQuery(String s) {
+        super(s);
+    }
+
+    /**
+     * This method finds all the journal articles.
+     * 
+     * @return it self.
+     */
+    public ActroSolrQuery findAllActorQuery() {
+        this.setQuery("entryClassName:com.liferay.portlet.journal.model.JournalArticle");
+        return this;
+    }
+
+    /**
+     * Use this method to perform a weighted search for an actor.
+     * 
+     * @param q
+     *            the search term.
+     * @return it self.
+     */
+    public ActroSolrQuery actorQuery(String q) {
+        this.setQuery(q);
+        this.setQueryType("dismax");
+        this.set("qf", "assetTagNames^10 title^5 content^1");
+        this.set("mm", "50%");
+        this.set("fl", "*");
+        return this;
+    }
+
+    /**
+     * Use this method to perform a More like this search. Finds documents that are similar to an already indexed
+     * document or a posted text.
+     * 
+     * @param text
+     *            the text
+     * @return the actro solr query
+     */
+    public ActroSolrQuery moreLikeThis(String text) {
+        this.setQuery("entryClassPK:" + text);
+        this.filterActors();
+        this.moreLikeThis();
+        return this;
+    }
+
+    /**
+     * Use this method to perform a More like this search. Finds documents that are similar to an already indexed
+     * document or a posted text.
+     * 
+     * @return the actro solr query
+     */
+    public ActroSolrQuery moreLikeThis() {
+        this.setQueryType("mlt");
+        this.set("mlt.fl", "assetTagNames content");
+        this.set("mlt.bf", "assetTagNames^10 content^1");
+        this.set("mlt.interestingTerms", "none");
+        this.set("mlt.mintf", 0);
+        this.set("fl", "assetTagNames content");
+        this.set("rows", "5");
+        return this;
+    }
+
+    /**
+     * Filters on a category.
+     * 
+     * @param category
+     *            the category
+     * 
+     * @return the actro solr query
+     */
+    public ActroSolrQuery filterActorsOnCategory(String category) {
+
+        String filter = "Category" + ":" + category;
+        this.addFilterQuery(filter);
+
+        return this;
+    }
+
+    /**
+     * Filters on entryClassName = com.liferay.portlet.journal.model.JournalArticle and type = actor.
+     * 
+     * @return the actro solr query
+     */
+    public ActroSolrQuery filterActors() {
+        String filterBase = "entryClassName:com.liferay.portlet.journal.model.JournalArticle";
+
+        String filterType = "";
+
+        filterType += " AND " + Field.TYPE + ":actor";
+
+        this.addFilterQuery(filterBase + filterType);
+
+        return this;
+    }
+
+    /**
+     * This method performs the search using the class itself as the search query. It also clear it self after
+     * completing the search.
+     * 
+     * @return the query response as a result of the performed search.
+     */
+    public QueryResponse query() {
+
+        QueryResponse response = null;
+
+        try {
+            response = solrServer.query(this);
+        } catch (SolrServerException e) {
+            LOG.error("Server error: {}", e.getCause());
+        }
+
+        // Clear query for next query
+        clear();
+
+        return response;
+
+    }
+
+}
