@@ -40,7 +40,9 @@
     </div>
     <div class="search-box-bd">            
         <div class="search-wrap">
-            <p>${searchclientArticleContent}</p>
+			<div class="search-intro">
+				<p>${searchclientArticleContent}</p>
+			</div>
             <aui:form name="searchForm" action="${searchActorURL}" method="post">
                 <div id="<portlet:namespace />searchInputWrap" class="search-input-wrap clearfix">  
                     <aui:input name="searchTerm" type="text" cssClass="gothia-search-input" />
