@@ -59,10 +59,6 @@
       <artifactId>portlet-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.sun.portal</groupId>
-      <artifactId>portlet-container</artifactId>
-    </dependency>
-    <dependency>
       <groupId>se.vgregion.javg</groupId>
       <artifactId>javg-rt-support</artifactId>
       <version>${javg.version}</version>
@@ -108,19 +104,19 @@
     <dependency>
       <groupId>com.liferay.portal</groupId>
       <artifactId>util-taglib</artifactId>
-      <version>6.0.12</version>
+      <version>${liferay.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.liferay.portal</groupId>
       <artifactId>portal-impl</artifactId>
-      <version>6.0.12</version>
+      <version>${liferay.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.liferay.portal</groupId>
       <artifactId>portal-service</artifactId>
-      <version>6.0.12</version>
+      <version>${liferay.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
