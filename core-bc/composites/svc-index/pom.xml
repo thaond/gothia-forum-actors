@@ -30,7 +30,7 @@
     <dependency>
       <groupId>com.liferay.portal</groupId>
       <artifactId>portal-service</artifactId>
-      <version>${liferay.version}</version>
+      <version>6.0.12</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -52,9 +52,5 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <properties>
-    <liferay.version>6.0.12</liferay.version>
-  </properties>
 
 </project>
