@@ -88,6 +88,7 @@ public final class ActorsConstants {
     public static final String ACTORS_ARTICLE_PK = "articleId"; // "articleId" = sp2 "entryClassPK" = sp1
 
     public static final String GROUP_ID = "groupId";
+    public static final String UID = "uid";
 
     public static final String LANG_PREFIX = "_SV";
     public static final String ACTOR_PARENT = "gothia-actor-parent";

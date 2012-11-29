@@ -67,7 +67,12 @@ ${searchNoHitsArticleContent}
   <c:forEach items="${hits}" var="hit">
     <li>
         <a href="${hit.profileURL}">
-            ${hit.content}
+            <span class="result-item-title">
+                ${hit.title}
+            </span>
+            <span class="result-item-content">
+                ${hit.content}
+            </span>
         </a>
     </li>
   </c:forEach>

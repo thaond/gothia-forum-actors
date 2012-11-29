@@ -24,6 +24,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -159,11 +160,7 @@ public class ActorsSearchController {
 
                             // In case of faulty solr index take care of not adding incorrect articles.
                             try {
-                                JournalArticle journalArticle = articleService.getArticle(
-                                        actorArticle.getGroupId(), actorArticle.getArticleId());
-                                actorArticle.setContent(articleService.getArticleContent(journalArticle,
-                                        ActorsConstants.GLOBAL_LIST_TEMPLATEID, null,
-                                        themeDisplay.getLanguageId(), themeDisplay));
+                                setArticleContentAndTitle(themeDisplay, queryResponse, doc, actorArticle);
 
                                 String namePrefix = groupService.getGroup(actorArticle.getGroupId())
                                         .getFriendlyURL();
@@ -238,10 +235,68 @@ public class ActorsSearchController {
         return "searchView";
     }
 
+    private void setArticleContentAndTitle(ThemeDisplay themeDisplay, QueryResponse queryResponse, SolrDocument doc, ActorArticle actorArticle) throws PortalException, SystemException {
+        StringBuilder sb = new StringBuilder();
+
+        Map<String, Map<String, List<String>>> highlighting = queryResponse.getHighlighting();
+
+        List<String> highlightContentList = null;
+        String highlightTitle = null;
+
+        if (highlighting != null) {
+            Map<String, List<String>> highlightedFields = highlighting.get(doc.get("uid"));
+
+            // Content highlighting
+            highlightContentList = highlightedFields
+                    .get("content");
+
+            // Title highlighting
+            List<String> titles = highlightedFields.get("title");
+            if (titles != null && titles.size() > 0) {
+                highlightTitle = titles.get(0); // Probably rare with more than one but first should always be enough.
+            }
+
+            // Asset tag highlighting = todo
+        }
+
+        if (highlightContentList != null && highlightContentList.size() > 0) {
+            Iterator<String> iterator = highlightContentList.iterator();
+            while (true) {
+                String content = iterator.next();
+                sb.append(content);
+                if (iterator.hasNext()) {
+                    sb.append("<b>... </b> ");
+                } else {
+                    break;
+                }
+            }
+            actorArticle.setContent(sb.toString());
+        } else {
+            // No content highlighting. Set article content instead.
+//            JournalArticle journalArticle = articleService.getArticle(
+//                    actorArticle.getGroupId(), actorArticle.getArticleId());
+
+            actorArticle.setContent((String) doc.getFieldValue("content"));
+//            actorArticle.setContent(articleService.getArticleContent(journalArticle,
+//                    ActorsConstants.GLOBAL_LIST_TEMPLATEID, null,
+//                    themeDisplay.getLanguageId(), themeDisplay));
+        }
+
+        if (highlightTitle != null) {
+            highlightTitle = removeSuffix(highlightTitle);
+            actorArticle.setTitle(highlightTitle);
+        } else {
+            JournalArticle journalArticle = articleService.getArticle(actorArticle.getGroupId(),
+                    actorArticle.getArticleId());
+            String title = removeSuffix(journalArticle.getTitle());
+            actorArticle.setTitle(title);
+        }
+    }
+
     /**
      * This method receives an parameter (searchTerm) and just send it to the render using an public render
      * parameter. Where the render performs the search on that searchTerm.
-     * 
+     *
      * @param request
      *            the request
      * @param response
@@ -270,7 +325,7 @@ public class ActorsSearchController {
     /**
      * This method send a parameter to the render using an public render. That will performs a search that will
      * give back all actors in the search index.
-     * 
+     *
      * @param request
      *            the request
      * @param response
@@ -296,7 +351,7 @@ public class ActorsSearchController {
     /**
      * This method providing the actors search portlet whit matching tags while auto completing. Uses the parameter
      * searchTerm to find tags and paring them to json objects for the java script.
-     * 
+     *
      * @param searchFor
      *            the string the method is searching on.
      * @param request
@@ -363,5 +418,12 @@ public class ActorsSearchController {
         }
 
         return tagsList;
+    }
+
+    private String removeSuffix(String highlightTitle) {
+        if (highlightTitle.toLowerCase().endsWith("_sv") || highlightTitle.toLowerCase().endsWith("_en")) {
+            highlightTitle = highlightTitle.substring(0, highlightTitle.length() - 3);
+        }
+        return highlightTitle;
     }
 }

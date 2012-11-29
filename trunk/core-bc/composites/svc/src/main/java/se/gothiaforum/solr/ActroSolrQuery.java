@@ -80,6 +80,7 @@ public class ActroSolrQuery extends SolrQuery {
      */
     public ActroSolrQuery findAllActorQuery() {
         this.setQuery("entryClassName:com.liferay.portlet.journal.model.JournalArticle");
+        this.setSortField("title", ORDER.asc);
         return this;
     }
 
@@ -93,10 +94,18 @@ public class ActroSolrQuery extends SolrQuery {
     public ActroSolrQuery actorQuery(String q) {
         this.setQuery(q);
         this.setQueryType("dismax");
-        this.set("qf", "assetTagNames^10 title^5 content^1");
+        this.set("qf", "assetTagNames^1000 title^100 content^1");
         this.set("mm", "50%");
         this.set("fl", "*");
+        setHighlightingParameters();
         return this;
+    }
+
+    private void setHighlightingParameters() {
+        this.set("hl", true);
+        this.set("hl.fl", "*");
+        this.set("hl.snippets", 2);
+        this.set("hl.mergeContiguous", true);
     }
 
     /**
