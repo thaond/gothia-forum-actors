@@ -29,4 +29,8 @@
     <url>http://gothia-forum-actors.googlecode.com/svn/trunk</url>
   </scm>
 
+  <properties>
+    <liferay.version>6.0.12</liferay.version>
+  </properties>
+
 </project>

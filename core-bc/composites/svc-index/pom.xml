@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!-- This is the Service-composite Maven POM. Template version: 1.5-SNAPSHOT Generation time : 2011-04-29 14:01:22 CEST -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>se.gothiaforum.gothia_actors</groupId>
+    <artifactId>gothia_actors-core-bc</artifactId>
+    <version>1.1-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+  <groupId>se.gothiaforum.gothia_actors</groupId>
+  <artifactId>gothia_actors-core-bc-composite-svc-index</artifactId>
+  <packaging>jar</packaging>
+  <name>${project.artifactId}</name>
+
+  <repositories>
+    <repository>
+      <id>liferay-repository</id>
+      <name>Liferay's Maven repository</name>
+      <url>http://oss.sonatype.org/content/groups/public</url>
+    </repository>
+  </repositories>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+  </build>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>com.liferay.portal</groupId>
+      <artifactId>portal-service</artifactId>
+      <version>${liferay.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.portlet</groupId>
+      <artifactId>portlet-api</artifactId>
+      <version>2.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.8.5</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito</artifactId>
+      <version>1.4.8</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <properties>
+    <liferay.version>6.0.12</liferay.version>
+  </properties>
+
+</project>
