@@ -78,7 +78,7 @@ import com.liferay.portlet.journal.service.JournalArticleLocalService;
 
 /**
  * This controller class performs a search for actors.
- * 
+ *
  * @author simgo3
  */
 
@@ -104,13 +104,10 @@ public class ActorsSearchController {
     /**
      * This render renders the view of the portlet. It's also creates the search query and performs the search for
      * actors.
-     * 
-     * @param request
-     *            the request
-     * @param response
-     *            the response
-     * @param model
-     *            the model
+     *
+     * @param request  the request
+     * @param response the response
+     * @param model    the model
      * @return the search view.
      */
     @RenderMapping
@@ -286,10 +283,14 @@ public class ActorsSearchController {
             highlightTitle = removeSuffix(highlightTitle);
             actorArticle.setTitle(highlightTitle);
         } else {
-            JournalArticle journalArticle = articleService.getArticle(actorArticle.getGroupId(),
-                    actorArticle.getArticleId());
-            String title = removeSuffix(journalArticle.getTitle());
-            actorArticle.setTitle(title);
+//            try {
+                JournalArticle journalArticle = articleService.getArticle(actorArticle.getGroupId(),
+                        actorArticle.getArticleId());
+                String title = removeSuffix(journalArticle.getTitle());
+                actorArticle.setTitle(title);
+//            } catch (NoSuchArticleException e) {
+//                log.warn(e.getMessage());
+//            }
         }
     }
 
@@ -297,20 +298,15 @@ public class ActorsSearchController {
      * This method receives an parameter (searchTerm) and just send it to the render using an public render
      * parameter. Where the render performs the search on that searchTerm.
      *
-     * @param request
-     *            the request
-     * @param response
-     *            the response
-     * @param sessionStatus
-     *            the session status
-     * @param searchTerm
-     *            the search term
-     * @param model
-     *            the model
+     * @param request       the request
+     * @param response      the response
+     * @param sessionStatus the session status
+     * @param searchTerm    the search term
+     * @param model         the model
      */
     @ActionMapping(params = "action=search")
     public void search(ActionRequest request, ActionResponse response, SessionStatus sessionStatus,
-            @RequestParam("searchTerm") String searchTerm, Model model) {
+                       @RequestParam("searchTerm") String searchTerm, Model model) {
 
         try {
             String redirect = ActorsConstants.SEARCH_RIDERECT_URL
@@ -326,18 +322,14 @@ public class ActorsSearchController {
      * This method send a parameter to the render using an public render. That will performs a search that will
      * give back all actors in the search index.
      *
-     * @param request
-     *            the request
-     * @param response
-     *            the response
-     * @param sessionStatus
-     *            the session status
-     * @param model
-     *            the model
+     * @param request       the request
+     * @param response      the response
+     * @param sessionStatus the session status
+     * @param model         the model
      */
     @ActionMapping(params = "action=searchForAll")
     public void searchForAll(ActionRequest request, ActionResponse response, SessionStatus sessionStatus,
-            Model model) {
+                             Model model) {
 
         try {
             String redirect = ActorsConstants.SEARCH_RIDERECT_URL + "view-all";
@@ -352,20 +344,15 @@ public class ActorsSearchController {
      * This method providing the actors search portlet whit matching tags while auto completing. Uses the parameter
      * searchTerm to find tags and paring them to json objects for the java script.
      *
-     * @param searchFor
-     *            the string the method is searching on.
-     * @param request
-     *            the request
-     * @param response
-     *            the response
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     * @throws PortletException
-     *             the portlet exception
+     * @param searchFor the string the method is searching on.
+     * @param request   the request
+     * @param response  the response
+     * @throws IOException      Signals that an I/O exception has occurred.
+     * @throws PortletException the portlet exception
      */
     @ResourceMapping
     public void serveResource(@RequestParam("searchTerm") String searchFor, ResourceRequest request,
-            ResourceResponse response) throws IOException, PortletException {
+                              ResourceResponse response) throws IOException, PortletException {
 
         try {
 
