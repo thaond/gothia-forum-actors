@@ -1,6 +1,7 @@
 package se.gothiaforum.index;
 
 import com.liferay.portal.kernel.search.*;
+import com.liferay.portlet.journal.model.JournalArticle;
 
 import javax.portlet.PortletURL;
 import java.util.Locale;
@@ -16,8 +17,8 @@ public class CustomJournalIndexerPostProcessor implements IndexerPostProcessor {
 
     @Override
     public void postProcessDocument(Document document, Object o) throws Exception {
-//todo        document.addKeyword(Field.CONTENT, "aslkdfjasökljdf");
-
+        System.out.println(document + " " + o);
+        document.addKeyword(Field.CONTENT, ((JournalArticle) o).getContent());
     }
 
     @Override

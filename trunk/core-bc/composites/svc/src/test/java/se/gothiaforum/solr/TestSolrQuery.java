@@ -77,7 +77,7 @@ public class TestSolrQuery {
     }
 
     private static final String testResult1 = "q=apa&qt=dismax&qf=assetTagNames%5E1000+title%5E100+content%5E1&mm=50%25&fl=*&hl=true&hl.fl=*&hl.snippets=2&hl.mergeContiguous=true";
-    private static final String testResult2 = "q=entryClassName%3Acom.liferay.portlet.journal.model.JournalArticle&sort=title+asc";
+    private static final String testResult2 = "q=entryClassName%3Acom.liferay.portlet.journal.model.JournalArticle&sort=titleSort+asc";
     private static final String testResult3 = "q=entryClassPK%3A104107&fq=entryClassName%3Acom.liferay.portlet.journal.model.JournalArticle+AND+type%3Aactor&qt=mlt&mlt.fl=assetTagNames+content&mlt.bf=assetTagNames%5E10+content%5E1&mlt.interestingTerms=none&mlt.mintf=0&fl=assetTagNames+content&rows=5";
 
 }

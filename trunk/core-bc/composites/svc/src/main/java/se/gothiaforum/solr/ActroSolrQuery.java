@@ -80,7 +80,8 @@ public class ActroSolrQuery extends SolrQuery {
      */
     public ActroSolrQuery findAllActorQuery() {
         this.setQuery("entryClassName:com.liferay.portlet.journal.model.JournalArticle");
-        this.setSortField("title", ORDER.asc);
+//        this.addSortField("title", ORDER.asc);
+        this.addSortField("titleSort", ORDER.asc);
         return this;
     }
 
