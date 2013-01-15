@@ -35,6 +35,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import se.gothiaforum.settings.service.SettingsService;
 import se.gothiaforum.settings.util.ExpandoConstants;
 
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.WebKeys;
 
@@ -92,6 +93,10 @@ public class SettingsController {
         String fistTimeArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_FIRST_TIME, companyId,
                 groupId);
 
+        boolean showUserPages = settingsService.getSettingBoolean(ExpandoConstants.GOTHIA_SHOW_USER_PAGES, companyId,
+                groupId);
+        
+        
         model.addAttribute("footerId1", footerId1);
         model.addAttribute("footerId2", footerId2);
         model.addAttribute("footerId3", footerId3);
@@ -103,6 +108,7 @@ public class SettingsController {
         model.addAttribute("searchFirstTimeArticleId", searchFirstTimeArticleId);
         model.addAttribute("searchNoHitsArticleId", searchNoHitsArticleId);
         model.addAttribute("fistTimeArticleId", fistTimeArticleId);
+        model.addAttribute("showUserPages", showUserPages);
 
         return "settingsView";
 
@@ -135,6 +141,8 @@ public class SettingsController {
         String searchFirstTimeArticleId = request.getParameter("searchFirstTimeArticleId");
         String searchNoHitsArticleId = request.getParameter("searchNoHitsArticleId");
         String fistTimeArticleId = request.getParameter("fistTimeArticleId");
+        
+        boolean showUserPages = ParamUtil.getBoolean(request, "showUserPages", false);
 
         settingsService.setSetting(footerId1, ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID1, companyId, groupId);
         settingsService.setSetting(footerId2, ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID2, companyId, groupId);
@@ -151,6 +159,8 @@ public class SettingsController {
         settingsService.setSetting(searchNoHitsArticleId, ExpandoConstants.GOTHIA_SEARCH_NO_HITS_ARTICLE,
                 companyId, groupId);
         settingsService.setSetting(fistTimeArticleId, ExpandoConstants.GOTHIA_FIRST_TIME, companyId, groupId);
+        
+        settingsService.setSettingBoolean(showUserPages, ExpandoConstants.GOTHIA_SHOW_USER_PAGES, companyId, groupId);
 
     }
 

@@ -55,4 +55,6 @@ public final class ExpandoConstants {
     public static final String GOTHIA_SOCIAL_REQUEST_SENT = "socialRequestSentArticleId";
     public static final String GOTHIA_FIRST_TIME = "fistTimeArticleId";
 
+    //
+    public static final String GOTHIA_SHOW_USER_PAGES = "showUserPages";
 }

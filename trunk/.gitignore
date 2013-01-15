@@ -8,8 +8,10 @@
 
 core-bc/composites/schema/target/*
 core-bc/composites/svc/target/*
+core-bc/composites/svc-index/target/*
 core-bc/composites/types/target/*
 core-bc/composites/webcomp/target/*
+core-bc/modules/hook/target/*
 core-bc/modules/portlet/target/*
 
 core-bc/composites/schema/.settings/*
@@ -18,3 +20,4 @@ core-bc/composites/types/.settings/*
 core-bc/composites/webcomp/.settings/*
 core-bc/modules/portlet/.settings/*
 
+core-bc/modules/portlet/src/main/resources/secret.properties
