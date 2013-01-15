@@ -56,4 +56,32 @@ public interface SettingsService {
      */
     String getSetting(String columnName, long companyId, long groupId);
 
+    /**
+     * Sets the setting.
+     * 
+     * @param data
+     *            the data
+     * @param columnName
+     *            the column name
+     * @param companyId
+     *            the company id
+     * @param groupId
+     *            the group id
+     */
+    void setSettingBoolean(boolean data, String columnName, long companyId, long groupId);
+
+    /**
+     * Gets the setting.
+     * 
+     * @param columnName
+     *            the column name
+     * @param companyId
+     *            the company id
+     * @param groupId
+     *            the group id
+     * @return the setting
+     */
+    boolean getSettingBoolean(String columnName, long companyId, long groupId);
+    
+    
 }

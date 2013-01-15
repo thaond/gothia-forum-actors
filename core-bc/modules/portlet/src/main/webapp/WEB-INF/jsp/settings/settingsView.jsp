@@ -38,22 +38,57 @@
 
 <h1><liferay-ui:message key="settings" /></h1>  
 <aui:form action="${saveSettingsURL}" method="post" name="setSettings">
- 		             
-	<aui:input name="footerId1"    type="text"     label="footerId1"    value="${footerId1}"/>
-	<aui:input name="footerId2"    type="text"     label="footerId2"    value="${footerId2}"/>
-	<aui:input name="footerId3"    type="text"     label="footerId3"    value="${footerId3}"/>
-	<aui:input name="footerId4"    type="text"     label="footerId4"    value="${footerId4}"/>
+
+	<aui:fieldset label="footer">
+		<aui:field-wrapper>
+			<aui:input name="footerId1"    type="text"     label="footerId1"    value="${footerId1}"/>
+		</aui:field-wrapper>
+		<aui:field-wrapper>
+			<aui:input name="footerId2"    type="text"     label="footerId2"    value="${footerId2}"/>	
+		</aui:field-wrapper>
+		<aui:field-wrapper>
+			<aui:input name="footerId3"    type="text"     label="footerId3"    value="${footerId3}"/>	
+		</aui:field-wrapper>
+		<aui:field-wrapper>
+			<aui:input name="footerId4"    type="text"     label="footerId4"    value="${footerId4}"/>	
+		</aui:field-wrapper>	
+	</aui:fieldset>
+
+	<aui:fieldset label="start-page-search">
+		<aui:field-wrapper>
+			<aui:input name="bannerArticleId"    type="text"     label="bannerArticleId"    value="${bannerArticleId}"/>	
+		</aui:field-wrapper>
+		<aui:field-wrapper>
+			<aui:input name="searchclientArticleId"    type="text"     label="searchclientArticleId"    value="${searchclientArticleId}"/>	
+		</aui:field-wrapper>
+	</aui:fieldset>	
 	
-	<aui:input name="bannerArticleId"    type="text"     label="bannerArticleId"    value="${bannerArticleId}"/>
-	<aui:input name="searchclientArticleId"    type="text"     label="searchclientArticleId"    value="${searchclientArticleId}"/>
+	<aui:fieldset label="search">
+		<aui:field-wrapper>
+			<aui:input name="searchArticleId"    type="text"     label="searchArticleId"    value="${searchArticleId}"/>	
+		</aui:field-wrapper>
+		<aui:field-wrapper>
+			<aui:input name="searchFirstTimeArticleId"    type="text"     label="searchFirstTimeArticleId"    value="${searchFirstTimeArticleId}"/>
+		</aui:field-wrapper>
+		<aui:field-wrapper>
+			<aui:input name="searchNoHitsArticleId"    type="text"     label="searchNoHitsArticleId"    value="${searchNoHitsArticleId}"/>	
+		</aui:field-wrapper>
+	</aui:fieldset>
 	
-	<aui:input name="searchArticleId"    type="text"     label="searchArticleId"    value="${searchArticleId}"/>
-	<aui:input name="searchFirstTimeArticleId"    type="text"     label="searchFirstTimeArticleId"    value="${searchFirstTimeArticleId}"/>
-	<aui:input name="searchNoHitsArticleId"    type="text"     label="searchNoHitsArticleId"    value="${searchNoHitsArticleId}"/>
-		
-	<aui:input name="socialRequestSentArticlId"    type="text"     label="socialRequestSentArticlId"    value="${socialRequestSentArticlId}"/>
-	<aui:input name="fistTimeArticleId"    type="text"     label="fistTimeArticleId"    value="${fistTimeArticleId}"/>
+	<aui:fieldset label="user-articles">
+		<aui:field-wrapper>
+			<aui:input name="socialRequestSentArticlId"    type="text"     label="socialRequestSentArticlId"    value="${socialRequestSentArticlId}"/>	
+		</aui:field-wrapper>
+		<aui:field-wrapper>
+			<aui:input name="fistTimeArticleId"    type="text"     label="fistTimeArticleId"    value="${fistTimeArticleId}"/>	
+		</aui:field-wrapper>
+	</aui:fieldset>
 	
+	<aui:fieldset label="user-pages">
+		<aui:field-wrapper>
+			<aui:input name="showUserPages" type="checkbox" label="showUserPage" value="${showUserPages}" />	
+		</aui:field-wrapper>
+	</aui:fieldset>	
 			
 	<aui:button-row>
 		<aui:button type="submit" value="save" />

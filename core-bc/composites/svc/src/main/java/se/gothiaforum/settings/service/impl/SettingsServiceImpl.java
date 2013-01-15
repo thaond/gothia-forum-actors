@@ -77,6 +77,51 @@ public class SettingsServiceImpl implements SettingsService {
             e.printStackTrace();
         }
     }
+    
+    @Override
+    public void setSettingBoolean(boolean data, String columnName, long companyId, long groupId) {
+    	
+       try {
+            expandoValueService.addValue(companyId, GROUP_CLASSNAME, ExpandoTableConstants.DEFAULT_TABLE_NAME,
+                    columnName, groupId, data);
+            
+        } catch (PortalException e) {
+            if (e instanceof com.liferay.portlet.expando.NoSuchTableException) { // If table don't exists we try to create it
+
+            	System.out.println("Gothia - SettingsServiceImpl - setSettingBoolean - no table");
+            	
+            	try {
+                    expandoTableService.addDefaultTable(companyId, GROUP_CLASSNAME);
+                    setSettingBoolean(data, columnName, companyId, groupId);
+                } catch (PortalException e1) {
+                    e1.printStackTrace();
+                } catch (SystemException e1) {
+                    e1.printStackTrace();
+                }
+                
+            } else if (e instanceof com.liferay.portlet.expando.NoSuchColumnException) { // If column don't exists we try to create it
+
+            	System.out.println("Gothia - SettingsServiceImpl - setSettingBoolean - no column - will create one");
+            	
+            	try {
+                    long tableId = expandoTableService.getDefaultTable(companyId, GROUP_CLASSNAME).getTableId();
+                    expandoColumnService.addColumn(tableId, columnName, ExpandoColumnConstants.BOOLEAN);
+                    setSettingBoolean(data, columnName, companyId, groupId);
+                } catch (PortalException e2) {
+                    e2.printStackTrace();
+                } catch (SystemException e2) {
+                    e2.printStackTrace();
+                }
+            } else {
+            	System.out.println("Gothia - SettingsServiceImpl - setSettingBoolean - other problem");
+            	e.printStackTrace();
+            }
+        } catch (SystemException e) {
+            e.printStackTrace();
+        }
+        
+    }
+    
 
     @Override
     public String getSetting(String columnName, long companyId, long groupId) {
@@ -119,6 +164,52 @@ public class SettingsServiceImpl implements SettingsService {
         return String.valueOf(value);
     }
 
+    @Override
+    public boolean getSettingBoolean(String columnName, long companyId, long groupId) {
+
+        boolean value = false;
+        
+       try {
+
+            value = expandoValueService.getData(companyId, GROUP_CLASSNAME,
+                    ExpandoTableConstants.DEFAULT_TABLE_NAME, columnName, groupId, false);
+        } catch (PortalException e) {
+            if (e instanceof com.liferay.portlet.expando.NoSuchTableException) { // If table don't exists we try to create it
+            	System.out.println("Gothia - SettingsServiceImpl - getSettingBoolean - found no table");
+ 
+               try {
+                    expandoTableService.addDefaultTable(companyId, GROUP_CLASSNAME);
+                    getSettingBoolean(columnName, companyId, groupId);
+                } catch (PortalException e1) {
+                    e1.printStackTrace();
+                } catch (SystemException e1) {
+                    e1.printStackTrace();
+                }
+
+            } else if (e instanceof com.liferay.portlet.expando.NoSuchColumnException) { // If column don't exist we try to create it.
+            	System.out.println("Gothia - SettingsServiceImpl - getSettingBoolean - found no column");
+
+                try {
+
+                    long tableId = expandoTableService.getDefaultTable(companyId, GROUP_CLASSNAME).getTableId();
+                    expandoColumnService.addColumn(tableId, columnName, ExpandoColumnConstants.BOOLEAN);
+                    getSettingBoolean(columnName, companyId, groupId);
+                } catch (PortalException e2) {
+                    e2.printStackTrace();
+                } catch (SystemException e2) {
+                    e2.printStackTrace();
+                }
+
+            } else {
+                e.printStackTrace();
+            }
+        } catch (SystemException e) {
+            e.printStackTrace();
+        }
+
+        return value;
+    }    
+    
     private static final String GROUP_CLASSNAME = Group.class.getName();
 
 }
