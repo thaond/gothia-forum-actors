@@ -36,7 +36,14 @@ public final class ExpandoConstants {
         throw new UnsupportedOperationException();
     }
 
-    // Fotter
+    // Language
+    public static final String GOTHIA_SITE_LANGUAGE = "gothiaSiteLanguage";
+    
+    // Header
+    public static final String GOTHIA_HEADER_TOP_NAVIGATION_ARTICLE_ID = "gothiaTopNavigationArticleId";
+    
+    
+    // Footer
     public static final String GOTHIA_FOOTER_ARTICLE_ID1 = "gothiaFooterArticleId1";
     public static final String GOTHIA_FOOTER_ARTICLE_ID2 = "gothiaFooterArticleId2";
     public static final String GOTHIA_FOOTER_ARTICLE_ID3 = "gothiaFooterArticleId3";

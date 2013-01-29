@@ -70,33 +70,26 @@ public class SettingsController {
         long companyId = themeDisplay.getCompanyId();
         long groupId = themeDisplay.getScopeGroup().getGroupId();
 
-        String footerId1 = settingsService.getSetting(ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID1, companyId,
-                groupId);
-        String footerId2 = settingsService.getSetting(ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID2, companyId,
-                groupId);
-        String footerId3 = settingsService.getSetting(ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID3, companyId,
-                groupId);
-        String footerId4 = settingsService.getSetting(ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID4, companyId,
-                groupId);
-        String bannerArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_BANNER_ARTICLE, companyId,
-                groupId);
-        String searchclientArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_THIN_SEARCH_ARTICLE,
-                companyId, groupId);
-        String searchArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_SEARCH_ARTICLE, companyId,
-                groupId);
-        String socialRequestSentArticlId = settingsService.getSetting(ExpandoConstants.GOTHIA_SOCIAL_REQUEST_SENT,
-                companyId, groupId);
-        String searchFirstTimeArticleId = settingsService.getSetting(
-                ExpandoConstants.GOTHIA_SEARCH_FITST_TIME_ARTICLE, companyId, groupId);
-        String searchNoHitsArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_SEARCH_NO_HITS_ARTICLE,
-                companyId, groupId);
-        String fistTimeArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_FIRST_TIME, companyId,
-                groupId);
+        String siteLanguage = settingsService.getSetting(ExpandoConstants.GOTHIA_SITE_LANGUAGE, companyId, groupId);
+        
+        String topNavigationId = settingsService.getSetting(ExpandoConstants.GOTHIA_HEADER_TOP_NAVIGATION_ARTICLE_ID, companyId, groupId);
+        
+        String footerId1 = settingsService.getSetting(ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID1, companyId, groupId);
+        String footerId2 = settingsService.getSetting(ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID2, companyId, groupId);
+        String footerId3 = settingsService.getSetting(ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID3, companyId, groupId);
+        String footerId4 = settingsService.getSetting(ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID4, companyId, groupId);
+        String bannerArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_BANNER_ARTICLE, companyId, groupId);
+        String searchclientArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_THIN_SEARCH_ARTICLE, companyId, groupId);
+        String searchArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_SEARCH_ARTICLE, companyId, groupId);
+        String socialRequestSentArticlId = settingsService.getSetting(ExpandoConstants.GOTHIA_SOCIAL_REQUEST_SENT, companyId, groupId);
+        String searchFirstTimeArticleId = settingsService.getSetting( ExpandoConstants.GOTHIA_SEARCH_FITST_TIME_ARTICLE, companyId, groupId);
+        String searchNoHitsArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_SEARCH_NO_HITS_ARTICLE, companyId, groupId);
+        String fistTimeArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_FIRST_TIME, companyId, groupId);
 
-        boolean showUserPages = settingsService.getSettingBoolean(ExpandoConstants.GOTHIA_SHOW_USER_PAGES, companyId,
-                groupId);
+        boolean showUserPages = settingsService.getSettingBoolean(ExpandoConstants.GOTHIA_SHOW_USER_PAGES, companyId, groupId);
         
-        
+        model.addAttribute("siteLanguage", siteLanguage);
+        model.addAttribute("topNavigationId", topNavigationId);
         model.addAttribute("footerId1", footerId1);
         model.addAttribute("footerId2", footerId2);
         model.addAttribute("footerId3", footerId3);
@@ -129,6 +122,8 @@ public class SettingsController {
         long companyId = themeDisplay.getCompanyId();
         long groupId = themeDisplay.getScopeGroup().getGroupId();
 
+        String siteLanguage = request.getParameter("siteLanguage");
+        String topNavigationId = request.getParameter("topNavigationId");
         String footerId1 = request.getParameter("footerId1");
         String footerId2 = request.getParameter("footerId2");
         String footerId3 = request.getParameter("footerId3");
@@ -144,6 +139,8 @@ public class SettingsController {
         
         boolean showUserPages = ParamUtil.getBoolean(request, "showUserPages", false);
 
+        settingsService.setSetting(siteLanguage, ExpandoConstants.GOTHIA_SITE_LANGUAGE, companyId, groupId);
+        settingsService.setSetting(topNavigationId, ExpandoConstants.GOTHIA_HEADER_TOP_NAVIGATION_ARTICLE_ID, companyId, groupId);
         settingsService.setSetting(footerId1, ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID1, companyId, groupId);
         settingsService.setSetting(footerId2, ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID2, companyId, groupId);
         settingsService.setSetting(footerId3, ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID3, companyId, groupId);
