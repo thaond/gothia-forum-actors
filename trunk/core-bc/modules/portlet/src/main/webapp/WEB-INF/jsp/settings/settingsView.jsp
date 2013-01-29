@@ -39,6 +39,30 @@
 <h1><liferay-ui:message key="settings" /></h1>  
 <aui:form action="${saveSettingsURL}" method="post" name="setSettings">
 
+	<aui:fieldset label="language">
+		<aui:field-wrapper>
+			<aui:select name="siteLanguage">
+				<aui:option value="" label="" />
+				<c:set scope="page" var="swedishSelected" value="false" />
+				<c:set scope="page" var="englishSelected" value="false" />
+				<c:if test="${siteLanguage eq 'sv_SE'}">
+					<c:set scope="page" var="swedishSelected" value="true" />
+				</c:if>
+				<c:if test="${siteLanguage eq 'en_US'}">
+					<c:set scope="page" var="englishSelected" value="true" />
+				</c:if>
+				<aui:option value="sv_SE" label="Svenska" selected="${swedishSelected}" />
+				<aui:option value="en_US" label="Engelska" selected="${englishSelected}" />
+			</aui:select>
+		</aui:field-wrapper>
+	</aui:fieldset>
+
+	<aui:fieldset label="header">
+		<aui:field-wrapper>
+			<aui:input name="topNavigationId"    type="text"     label="topNavigationId"    value="${topNavigationId}"/>
+		</aui:field-wrapper>
+	</aui:fieldset>
+
 	<aui:fieldset label="footer">
 		<aui:field-wrapper>
 			<aui:input name="footerId1"    type="text"     label="footerId1"    value="${footerId1}"/>
