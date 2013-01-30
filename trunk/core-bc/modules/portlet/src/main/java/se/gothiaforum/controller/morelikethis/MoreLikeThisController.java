@@ -191,7 +191,7 @@ public class MoreLikeThisController {
 
                     actorArticle.setContent(content);
                     String namePrefix = groupService.getGroup(actorArticle.getGroupId()).getFriendlyURL();
-                    actorArticle.setProfileURL(ActorsConstants.PROFILE_RIDERECT_URL + namePrefix.substring(1));
+                    actorArticle.setProfileURL(ActorsConstants.PROFILE_REDIRECT_URL + namePrefix.substring(1));
                     actorArticles.add(actorArticle);
                 }
             }
