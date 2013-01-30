@@ -28,6 +28,12 @@
   <dependencies>
 
     <dependency>
+        <groupId>se.gothiaforum.gothia_actors</groupId>
+        <artifactId>gothia_actors-core-bc-composite-svc</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>com.liferay.portal</groupId>
       <artifactId>portal-service</artifactId>
       <version>6.0.12</version>

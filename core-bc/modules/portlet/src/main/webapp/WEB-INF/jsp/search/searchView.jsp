@@ -71,7 +71,13 @@ ${searchNoHitsArticleContent}
                 ${hit.title}
             </span>
             <span class="result-item-content">
-                ${hit.content}
+               <b> ${hit.intro}</b>
+               </br>
+               </br>
+               ${hit.detailedDescription}
+               </br>
+               ${hit.tagsStr}
+   
             </span>
         </a>
     </li>

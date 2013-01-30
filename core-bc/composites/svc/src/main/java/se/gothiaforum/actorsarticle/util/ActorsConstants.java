@@ -52,8 +52,8 @@ public final class ActorsConstants {
     public static final String ACTOR_LOGO_NAME = "actor-logo";
     public static final String ACTOR_LOGO_HEIGHT_AND_WIDTH = "&height=40&width=200";
 
-    public static final String SEARCH_RIDERECT_URL = "/sv/web/guest/sok-tjanst/-/s/";
-    public static final String PROFILE_RIDERECT_URL = "/sv/web/guest/profil/-/a/";
+    public static final String SEARCH_REDIRECT_URL = "/sv/web/guest/sok-tjanst/-/s/";
+    public static final String PROFILE_REDIRECT_URL = "/sv/web/guest/profil/-/a/";
 
     public static final int NUMBER_OF_NODES_ARTICLE_XML = 14;
 

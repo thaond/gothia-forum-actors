@@ -147,7 +147,7 @@ public class ActorsSearchThinClientController {
         String searchTerm = request.getParameter("searchTerm");
 
         try {
-            String redirect = ActorsConstants.SEARCH_RIDERECT_URL
+            String redirect = ActorsConstants.SEARCH_REDIRECT_URL
                     + URLEncoder.encode(searchTerm, ActorsConstants.UTF_8);
             response.sendRedirect(redirect);
         } catch (IOException e) {

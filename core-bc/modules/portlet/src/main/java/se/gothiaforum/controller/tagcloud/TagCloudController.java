@@ -126,7 +126,7 @@ public class TagCloudController {
                 }
 
                 TagVO tagVO = new TagVO(cssClass, entry.getElement().getName(),
-                        ActorsConstants.SEARCH_RIDERECT_URL + entry.getElement().getName(), entry.getElement()
+                        ActorsConstants.SEARCH_REDIRECT_URL + entry.getElement().getName(), entry.getElement()
                                 .getTagId());
 
                 tagVO.setCount(entry.getCount());
