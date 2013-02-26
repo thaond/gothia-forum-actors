@@ -45,8 +45,8 @@ import se.gothiaforum.controller.actorsearchthinclient.ActorsSearchThinClientCon
 import se.gothiaforum.settings.service.SettingsService;
 import se.gothiaforum.settings.service.impl.SettingsServiceImpl;
 
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalService;
 import com.liferay.portlet.expando.service.ExpandoTableLocalService;
 import com.liferay.portlet.expando.service.ExpandoValueLocalService;
@@ -78,7 +78,8 @@ public class ActorSearchThinCientControllerTest {
     private ExpandoValueLocalService expandoValueService;
 
     @InjectMocks
-    private final ActorsSearchThinClientController mockActorsSearchThinClientController = new ActorsSearchThinClientController();
+    private final ActorsSearchThinClientController mockActorsSearchThinClientController =
+            new ActorsSearchThinClientController();
 
     @InjectMocks
     private final SettingsService settingsService = new SettingsServiceImpl();
@@ -105,7 +106,8 @@ public class ActorSearchThinCientControllerTest {
         field.setAccessible(true);
         field.set(mockActorsSearchThinClientController, settingsService);
 
-        Field fieldArcticle = mockActorsSearchThinClientController.getClass().getDeclaredField("articleService");
+        Field fieldArcticle =
+                mockActorsSearchThinClientController.getClass().getDeclaredField("articleService");
         fieldArcticle.setAccessible(true);
         fieldArcticle.set(mockActorsSearchThinClientController, articleService);
 
@@ -140,7 +142,8 @@ public class ActorSearchThinCientControllerTest {
         // Settings service
         when(
                 expandoValueService.getData(Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(),
-                        Mockito.anyString(), Mockito.anyLong(), Mockito.anyString())).thenReturn("testBannerID");
+                        Mockito.anyString(), Mockito.anyLong(), Mockito.anyString())).thenReturn(
+                "testBannerID");
 
         when(
                 articleService.getArticleContent(Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(),

@@ -37,10 +37,10 @@ import se.gothiaforum.actorsarticle.util.ActorsConstants;
 import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 
@@ -79,8 +79,9 @@ public class ActorsSearchResultController {
             ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 
             try {
-                Group group = GroupLocalServiceUtil.getFriendlyURLGroup(themeDisplay.getCompanyId(), "/"
-                        + friendlyURL);
+                Group group =
+                        GroupLocalServiceUtil.getFriendlyURLGroup(themeDisplay.getCompanyId(), "/"
+                                + friendlyURL);
 
                 JournalArticle journalArticle = null;
                 List<JournalArticle> articles;
@@ -89,13 +90,15 @@ public class ActorsSearchResultController {
 
                 // Find the Journal Article for the current group.
                 for (JournalArticle jA : articles) {
-                    if (jA.getGroupId() == group.getGroupId() && jA.getType().equals(ActorsConstants.TYPE_ACTOR)) {
+                    if (jA.getGroupId() == group.getGroupId()
+                            && jA.getType().equals(ActorsConstants.TYPE_ACTOR)) {
                         journalArticle = articleService.getLatestArticle(jA.getResourcePrimKey());
                     }
                 }
 
-                String content = articleService.getArticleContent(journalArticle,
-                        ActorsConstants.GLOBAL_TEMPLATEID, null, themeDisplay.getLanguageId(), themeDisplay);
+                String content =
+                        articleService.getArticleContent(journalArticle, ActorsConstants.GLOBAL_TEMPLATEID,
+                                null, themeDisplay.getLanguageId(), themeDisplay);
 
                 model.addAttribute("content", content);
             } catch (NoSuchGroupException e1) {

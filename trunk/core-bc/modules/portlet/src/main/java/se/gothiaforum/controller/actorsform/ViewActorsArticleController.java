@@ -58,12 +58,12 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.UnicodeFormatter;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 import com.liferay.portlet.social.model.SocialRequest;
@@ -163,19 +163,21 @@ public class ViewActorsArticleController {
         User user = themeDisplay.getUser();
 
         try {
-            List<SocialRequest> requests = socialRequestService.getReceiverUserRequests(user.getUserId(),
-                    SocialRequestConstants.STATUS_PENDING, 0, NUMBER_OF_SOCIAL_REQUEST);
+            List<SocialRequest> requests =
+                    socialRequestService.getReceiverUserRequests(user.getUserId(),
+                            SocialRequestConstants.STATUS_PENDING, 0, NUMBER_OF_SOCIAL_REQUEST);
 
             List<SocialRequestVO> socialRequestVOs = new ArrayList<SocialRequestVO>();
 
             for (SocialRequest s : requests) {
                 SocialRequestVO socialRequestVO = new SocialRequestVO();
                 socialRequestVO.setSocialRequest(s);
-                socialRequestVO.setRequestFeedEntry(socialRequestInterpreterService.interpret(s, themeDisplay));
+                socialRequestVO.setRequestFeedEntry(socialRequestInterpreterService
+                        .interpret(s, themeDisplay));
                 socialRequestVOs.add(socialRequestVO);
             }
 
-            request.setAttribute(WebKeys.SOCIAL_REQUESTS, socialRequestVOs);
+            request.setAttribute("SOCIAL_REQUESTS", socialRequestVOs);
 
         } catch (SystemException e) {
             LOG.info("no social requests found.");
@@ -244,8 +246,9 @@ public class ViewActorsArticleController {
 
         try {
 
-            List<SocialRequest> socialRequests = socialRequestService.getUserRequests(userId, 0,
-                    socialRequestService.getUserRequestsCount(userId));
+            List<SocialRequest> socialRequests =
+                    socialRequestService.getUserRequests(userId, 0,
+                            socialRequestService.getUserRequestsCount(userId));
 
             for (SocialRequest s : socialRequests) {
                 if (s.getStatus() == SocialRequestConstants.STATUS_PENDING) {
@@ -253,10 +256,12 @@ public class ViewActorsArticleController {
                     // This is for pinking up the articles in the portlet.
 
                     try {
-                        String socialRequestSentArticleId = settingsService.getSetting(
-                                ExpandoConstants.GOTHIA_SOCIAL_REQUEST_SENT, companyId, groupId);
-                        String socialRequestSentArticleContent = articleService.getArticleContent(groupId,
-                                socialRequestSentArticleId, null, themeDisplay.getLanguageId(), themeDisplay);
+                        String socialRequestSentArticleId =
+                                settingsService.getSetting(ExpandoConstants.GOTHIA_SOCIAL_REQUEST_SENT,
+                                        companyId, groupId);
+                        String socialRequestSentArticleContent =
+                                articleService.getArticleContent(groupId, socialRequestSentArticleId, null,
+                                        themeDisplay.getLanguageId(), themeDisplay);
                         model.addAttribute("socialRequestSentArticleContent", socialRequestSentArticleContent);
                     } catch (PortalException e) {
                         LOG.info("no article for thin client search portlet found");
@@ -269,10 +274,11 @@ public class ViewActorsArticleController {
             }
 
             try {
-                String fistTimeArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_FIRST_TIME,
-                        companyId, groupId);
-                String fistTimeArticleContent = articleService.getArticleContent(groupId, fistTimeArticleId, null,
-                        themeDisplay.getLanguageId(), themeDisplay);
+                String fistTimeArticleId =
+                        settingsService.getSetting(ExpandoConstants.GOTHIA_FIRST_TIME, companyId, groupId);
+                String fistTimeArticleContent =
+                        articleService.getArticleContent(groupId, fistTimeArticleId, null,
+                                themeDisplay.getLanguageId(), themeDisplay);
                 model.addAttribute("fistTimeArticleContent", fistTimeArticleContent);
             } catch (PortalException e) {
                 LOG.info("no article for thin client search portlet found");
@@ -327,13 +333,14 @@ public class ViewActorsArticleController {
 
         try {
             defaultUserId = themeDisplay.getDefaultUserId();
-            ServiceContext serviceContext = ServiceContextFactory.getInstance(JournalArticle.class.getName(),
-                    request);
+            ServiceContext serviceContext =
+                    ServiceContextFactory.getInstance(JournalArticle.class.getName(), request);
 
             // Checks for duplicates, if exists return a validate error.
             List<Organization> orgs = actorsService.getOrganizations(themeDisplay.getCompanyId());
             for (Organization o : orgs) {
-                if (o.getName().equals(actorArticle.getCompanyName()) && actorArticle.getArticleId().isEmpty()) {
+                if (o.getName().equals(actorArticle.getCompanyName())
+                        && actorArticle.getArticleId().isEmpty()) {
                     result.rejectValue("companyName", "code.dublicate", "duplicate-companyName");
                 }
             }
@@ -351,8 +358,9 @@ public class ViewActorsArticleController {
                     actorsService.addActor(actorArticle, userId, defaultUserId, themeDisplay.getCompanyId(),
                             serviceContext, tagsEntries, themeDisplay.getScopeGroupId());
                 } else {
-                    JournalArticle article = actorsService.updateActors(actorArticle, userId, serviceContext,
-                            tagsEntries, themeDisplay.getScopeGroupId());
+                    JournalArticle article =
+                            actorsService.updateActors(actorArticle, userId, serviceContext, tagsEntries,
+                                    themeDisplay.getScopeGroupId());
                     Indexer indexer = IndexerRegistryUtil.getIndexer(JournalArticle.class.getName());
                     indexer.reindex(article);
                 }
@@ -391,8 +399,8 @@ public class ViewActorsArticleController {
 
         try {
 
-            ServiceContext serviceContext = ServiceContextFactory.getInstance(JournalArticle.class.getName(),
-                    request);
+            ServiceContext serviceContext =
+                    ServiceContextFactory.getInstance(JournalArticle.class.getName(), request);
 
             System.out.println("send Actor - actorArticle.getPrimKeyId() = " + actorArticle.getPrimKeyId());
 
@@ -427,7 +435,8 @@ public class ViewActorsArticleController {
 
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 
-        actorsService.sendConnectRequest(organizationId, themeDisplay.getUserId(), themeDisplay.getCompanyId());
+        actorsService.sendConnectRequest(organizationId, themeDisplay.getUserId(),
+                themeDisplay.getCompanyId());
 
         // This sets the view page for the render phase.
         response.setRenderParameter("view", "connectRequestSentView");
@@ -452,7 +461,8 @@ public class ViewActorsArticleController {
         long requestId = ParamUtil.getLong(request, "requestId");
 
         try {
-            socialRequestService.updateRequest(requestId, SocialRequestConstants.STATUS_CONFIRM, themeDisplay);
+            socialRequestService
+                    .updateRequest(requestId, SocialRequestConstants.STATUS_CONFIRM, themeDisplay);
         } catch (PortalException e) {
 
             LOG.error("Could not update the social request in the confirm action.", e);
