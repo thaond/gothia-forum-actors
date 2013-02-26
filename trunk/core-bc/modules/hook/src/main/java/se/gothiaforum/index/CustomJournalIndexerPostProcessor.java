@@ -33,19 +33,23 @@ public class CustomJournalIndexerPostProcessor implements IndexerPostProcessor {
     public void postProcessDocument(Document document, Object o) throws Exception {
 
         JournalArticle article = ((JournalArticle) o);
+        // System.out.println("------------------------------FIRST--------------------------------");
+        // System.out.println("              article.getTitle " + article.getTitle());
+        // System.out.println("              article.getType" + article.getType());
+        // System.out.println("-------------------------------------------------------------------");
 
         if (article.getType().equals("actor")) {
-            // System.out.println(document + " " + o);
-            // System.out.println("document content " + ((JournalArticle) o).getContent());
+            System.out.println(document + " " + o);
+            System.out.println("document content " + ((JournalArticle) o).getContent());
+
             ActorArticle actorArticle = actorsArticleConverterService.getActorsArticle(article.getContent());
 
-            System.out.println("-------------------------------------------------------------------");
-            System.out.println("actorArticle.getTitle " + article.getTitle());
-            System.out.println("actorArticle.getIntro " + actorArticle.getIntro());
-            System.out.println("actorArticle.getDetailedDescription() "
-                    + actorArticle.getDetailedDescription());
-            System.out.println("actorArticle.getTagStr " + actorArticle.getTagsStr());
-            System.out.println("-------------------------------------------------------------------");
+            // System.out.println("--------------------------SECOND---------------------------------");
+            // System.out.println("actorArticle.getIntro " + actorArticle.getIntro());
+            // System.out.println("actorArticle.getDetailedDescription() "
+            // + actorArticle.getDetailedDescription());
+            // System.out.println("actorArticle.getTagStr " + actorArticle.getTagsStr());
+            // System.out.println("-------------------------------------------------------------------");
 
             document.addKeyword(Field.TITLE, removeSuffix(article.getTitle()));
             document.addKeyword(ActorsConstants.ARTICLE_XML_COMPANY_NAME, actorArticle.getName());
