@@ -59,8 +59,8 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
@@ -100,11 +100,12 @@ public class ActorsSearchThinClientController {
         long groupId = themeDisplay.getScopeGroupId();
 
         try {
-            String bannerArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_BANNER_ARTICLE, companyId,
-                    groupId);
+            String bannerArticleId =
+                    settingsService.getSetting(ExpandoConstants.GOTHIA_BANNER_ARTICLE, companyId, groupId);
 
-            String bannerArticleContent = articleService.getArticleContent(groupId, bannerArticleId, null,
-                    themeDisplay.getLanguageId(), themeDisplay);
+            String bannerArticleContent =
+                    articleService.getArticleContent(groupId, bannerArticleId, null,
+                            themeDisplay.getLanguageId(), themeDisplay);
             model.addAttribute("bannerArticleContent", bannerArticleContent);
         } catch (PortalException e) {
             LOG.info("no article for thin client search portlet found");
@@ -113,10 +114,12 @@ public class ActorsSearchThinClientController {
         }
 
         try {
-            String searchclientArticleId = settingsService.getSetting(ExpandoConstants.GOTHIA_THIN_SEARCH_ARTICLE,
-                    companyId, groupId);
-            String searchclientArticleContent = articleService.getArticleContent(groupId, searchclientArticleId,
-                    null, themeDisplay.getLanguageId(), themeDisplay);
+            String searchclientArticleId =
+                    settingsService.getSetting(ExpandoConstants.GOTHIA_THIN_SEARCH_ARTICLE, companyId,
+                            groupId);
+            String searchclientArticleContent =
+                    articleService.getArticleContent(groupId, searchclientArticleId, null,
+                            themeDisplay.getLanguageId(), themeDisplay);
             model.addAttribute("searchclientArticleContent", searchclientArticleContent);
         } catch (PortalException e) {
             LOG.info("no article for thin client search portlet found");
@@ -147,8 +150,9 @@ public class ActorsSearchThinClientController {
         String searchTerm = request.getParameter("searchTerm");
 
         try {
-            String redirect = ActorsConstants.SEARCH_REDIRECT_URL
-                    + URLEncoder.encode(searchTerm, ActorsConstants.UTF_8);
+            String redirect =
+                    ActorsConstants.SEARCH_REDIRECT_URL
+                            + URLEncoder.encode(searchTerm, ActorsConstants.UTF_8);
             response.sendRedirect(redirect);
         } catch (IOException e) {
             throw new RuntimeException("Could not execute the search.", e);
@@ -203,7 +207,8 @@ public class ActorsSearchThinClientController {
         ArrayList<AssetTag> emptyList = new ArrayList<AssetTag>();
         List<AssetTag> tagsList = ListUtil.fromCollection(emptyList);
 
-        DynamicQuery dq = DynamicQueryFactoryUtil.forClass(AssetTag.class, PortalClassLoaderUtil.getClassLoader());
+        DynamicQuery dq =
+                DynamicQueryFactoryUtil.forClass(AssetTag.class, PortalClassLoaderUtil.getClassLoader());
 
         Criterion searchTermCriterion = RestrictionsFactoryUtil.ilike("name", searchWord + "%");
 

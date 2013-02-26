@@ -47,10 +47,10 @@ import se.gothiaforum.validator.actorsform.ImageValidator;
 
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.imagegallery.model.IGImage;
 import com.liferay.portlet.journal.model.JournalArticle;
 
@@ -133,16 +133,18 @@ public class AddImageController {
 
             if (multipartFile.getSize() == 0) {
 
-                ServiceContext serviceContext = ServiceContextFactory.getInstance(JournalArticle.class.getName(),
-                        request);
+                ServiceContext serviceContext =
+                        ServiceContextFactory.getInstance(JournalArticle.class.getName(), request);
 
-                String imageURL = actorsService.getIGImageURL((ThemeDisplay) request
-                        .getAttribute(WebKeys.THEME_DISPLAY));
+                String imageURL =
+                        actorsService.getIGImageURL((ThemeDisplay) request
+                                .getAttribute(WebKeys.THEME_DISPLAY));
 
                 actorArticle.setImageUuid(imageURL);
 
-                JournalArticle article = actorsService.updateActors(actorArticle, userId, serviceContext,
-                        actorArticle.getTagsStr(), themeDisplay.getScopeGroupId());
+                JournalArticle article =
+                        actorsService.updateActors(actorArticle, userId, serviceContext,
+                                actorArticle.getTagsStr(), themeDisplay.getScopeGroupId());
 
                 Indexer indexer = IndexerRegistryUtil.getIndexer(JournalArticle.class.getName());
                 indexer.reindex(article);
@@ -161,19 +163,22 @@ public class AddImageController {
 
                     byte[] logoInByte = multipartFile.getBytes();
 
-                    IGImage image = actorsService.addImage(userId, actorGroupId, originalFileName, logoInByte,
-                            mimeType);
+                    IGImage image =
+                            actorsService.addImage(userId, actorGroupId, originalFileName, logoInByte,
+                                    mimeType);
 
-                    ServiceContext serviceContext = ServiceContextFactory.getInstance(
-                            JournalArticle.class.getName(), request);
+                    ServiceContext serviceContext =
+                            ServiceContextFactory.getInstance(JournalArticle.class.getName(), request);
 
-                    String imageURL = "/image/image_gallery?uuid=" + image.getUuid() + "&groupId="
-                            + actorArticle.getGroupId();
+                    String imageURL =
+                            "/image/image_gallery?uuid=" + image.getUuid() + "&groupId="
+                                    + actorArticle.getGroupId();
 
                     actorArticle.setImageUuid(imageURL);
 
-                    JournalArticle article = actorsService.updateActors(actorArticle, userId, serviceContext,
-                            actorArticle.getTagsStr(), themeDisplay.getScopeGroupId());
+                    JournalArticle article =
+                            actorsService.updateActors(actorArticle, userId, serviceContext,
+                                    actorArticle.getTagsStr(), themeDisplay.getScopeGroupId());
 
                     Indexer indexer = IndexerRegistryUtil.getIndexer(JournalArticle.class.getName());
                     indexer.reindex(article);

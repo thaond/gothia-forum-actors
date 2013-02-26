@@ -43,11 +43,11 @@ import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.StringQueryImpl;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.service.GroupLocalService;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.service.AssetEntryLocalService;
@@ -98,9 +98,12 @@ public class MoreLikeThisController {
 
             String searchTags = tagsStr.replaceAll(",", " ");
 
-            query = new StringQueryImpl("(assetTagNames:" + searchTags
-                    + ") AND (entryClassName:com.liferay.portlet.journal.model.JournalArticle AND type:"
-                    + ActorsConstants.TYPE_ACTOR + ") sort=title asc");
+            query =
+                    new StringQueryImpl(
+                            "(assetTagNames:"
+                                    + searchTags
+                                    + ") AND (entryClassName:com.liferay.portlet.journal.model.JournalArticle AND type:"
+                                    + ActorsConstants.TYPE_ACTOR + ") sort=title asc");
 
         } else {
             String friendlyURL = request.getParameter("friendlyURL");
@@ -108,8 +111,9 @@ public class MoreLikeThisController {
 
                 Group group;
                 try {
-                    group = GroupLocalServiceUtil.getFriendlyURLGroup(themeDisplay.getCompanyId(), "/"
-                            + friendlyURL);
+                    group =
+                            GroupLocalServiceUtil.getFriendlyURLGroup(themeDisplay.getCompanyId(), "/"
+                                    + friendlyURL);
                     JournalArticle journalArticle = null;
                     List<JournalArticle> articles;
 
@@ -123,7 +127,8 @@ public class MoreLikeThisController {
                         }
                     }
 
-                    List<AssetTag> tags = getTags(Long.valueOf(group.getGroupId()), journalArticle.getArticleId());
+                    List<AssetTag> tags =
+                            getTags(Long.valueOf(group.getGroupId()), journalArticle.getArticleId());
 
                     if (!tags.isEmpty()) {
 
@@ -132,10 +137,14 @@ public class MoreLikeThisController {
                             searchTags.append(t.getName() + " ");
                         }
 
-                        query = new StringQueryImpl("(assetTagNames:" + searchTags
-                                + ") AND (entryClassName:com.liferay.portlet.journal.model.JournalArticle"
-                                + " AND type:" + ActorsConstants.TYPE_ACTOR + ") AND !(articleId:"
-                                + journalArticle.getArticleId() + ") sort=title asc");
+                        query =
+                                new StringQueryImpl(
+                                        "(assetTagNames:"
+                                                + searchTags
+                                                + ") AND (entryClassName:com.liferay.portlet.journal.model.JournalArticle"
+                                                + " AND type:" + ActorsConstants.TYPE_ACTOR
+                                                + ") AND !(articleId:" + journalArticle.getArticleId()
+                                                + ") sort=title asc");
 
                     }
 
@@ -182,16 +191,18 @@ public class MoreLikeThisController {
                     ActorArticle actorArticle = new ActorArticle();
                     actorArticle.setArticleId(d.get(ActorsConstants.ACTORS_ARTICLE_PK));
                     actorArticle.setGroupId(Long.valueOf(d.get(ActorsConstants.GROUP_ID)));
-                    JournalArticle tempJournalArticle = articleService.getArticle(actorArticle.getGroupId(),
-                            actorArticle.getArticleId());
+                    JournalArticle tempJournalArticle =
+                            articleService.getArticle(actorArticle.getGroupId(), actorArticle.getArticleId());
 
-                    String content = articleService.getArticleContent(tempJournalArticle,
-                            ActorsConstants.GLOBAL_MORE_LIKE_THIS_TEMPLATEID, null, themeDisplay.getLanguageId(),
-                            themeDisplay);
+                    String content =
+                            articleService.getArticleContent(tempJournalArticle,
+                                    ActorsConstants.GLOBAL_MORE_LIKE_THIS_TEMPLATEID, null,
+                                    themeDisplay.getLanguageId(), themeDisplay);
 
                     actorArticle.setContent(content);
                     String namePrefix = groupService.getGroup(actorArticle.getGroupId()).getFriendlyURL();
-                    actorArticle.setProfileURL(ActorsConstants.PROFILE_REDIRECT_URL + namePrefix.substring(1));
+                    actorArticle
+                            .setProfileURL(ActorsConstants.PROFILE_REDIRECT_URL + namePrefix.substring(1));
                     actorArticles.add(actorArticle);
                 }
             }
