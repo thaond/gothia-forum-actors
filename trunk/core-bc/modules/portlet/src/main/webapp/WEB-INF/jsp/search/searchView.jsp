@@ -22,6 +22,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
+<%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui"%>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui"%>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util"%>
@@ -46,76 +47,127 @@
 
 <c:set var="themeDisplay" value="${THEME_DISPLAY}" />
   
-<h1><liferay-ui:message key="our-search-service" /></h1>
-<aui:form action="<%= searchURL%>" method="post" name="addActorsArticleFM" cssClass="gothia-search-form">
-    <div id="<portlet:namespace />searchInputWrap" class="search-input-wrap clearfix">
-        <aui:input name="searchTerm" type="text" cssClass="gothia-search-input" label="" />
-        <aui:button type="submit" value="search" />  
-    </div>
-</aui:form>
+<div class="gothia-search-wrap clearfix">
+    <form action="${searchURL}" method="post">
+        <div id="<portlet:namespace />queryWrap" class="search-input-wrap clearfix">
+            <aui:button type="submit" value="search" cssClass="gothia-search-button" />
+            <aui:input name="searchTerm" type="text" cssClass="gothia-search-input" label="" value="" />          
+        </div>
+    </form>
+</div>
 
-<aui:a cssClass="gothia-search-view-all" href="${searchForAllURL}"><liferay-ui:message key="view-all"/></aui:a>
 
 
-${searchArticleContent} 
-${searchFirstTimeArticleContent} 
-${searchNoHitsArticleContent} 
+<!-- show articles hits  -->
 
-<!-- show all articles hits  -->
-
-<ul class="gothia-search-results-list clearfix">
-  <c:forEach items="${hits}" var="hit">
-    <li>
-        <a href="${hit.profileURL}">
-            <span class="result-item-title">
-                ${hit.title}
-            </span>
-            <span class="result-item-content">
-               <b> ${hit.intro}</b>
-               </br>
-               </br>
-               ${hit.detailedDescription}
-               </br>
-               ${hit.tagsStr}
-   
-            </span>
-        </a>
-    </li>
-  </c:forEach>
+<ul class="gothia-list">
+    <c:forEach items="${hits}" var="hit" varStatus="status">
+        <c:set scope="page" var="listItemCssClass" value="" />
+        <c:if test="${(status.index)%2 ne 0}">
+            <c:set var="listItemCssClass" value="${listItemCssClass} gothia-list-item-odd" scope="page" />
+        </c:if>
+        <c:if test="${status.last}">
+            <c:set var="listItemCssClass" value="${listItemCssClass} gothia-list-item-last" scope="page" />
+        </c:if>
+        <li class="gothia-list-item ${listItemCssClass}">
+            <div class="title">
+                <h3>
+                    <a href="${hit.profileURL}">${hit.title}</a>
+                </h3>
+                <c:if test="${not empty hit.organizationName}">
+                    <p class="subtitle">${hit.organizationName}</p>
+                </c:if>
+            </div>
+            <div class="content">
+                <a href="${hit.profileURL}">
+                   ${hit.intro}
+                </a> 
+            </div>
+            <div class="meta">
+                <ul class="search-tags">
+                    <c:forEach items="${hit.tags}" var="tag" varStatus="status">
+                        <li><a href="${tag.link}">${tag.name}</a></li>
+                    </c:forEach>
+                </ul>
+            </div>
+        </li>
+    </c:forEach>
 </ul>
 
-<liferay-util:html-bottom>
-    <script type="text/javascript" charset="utf-8">
-        AUI().use('aui-autocomplete', 'aui-io', 'json', function(A) {
-                      
-            var dataSourceURL = '<portlet:resourceURL  id="search" />'+'&searchTerm='+A.one('#<portlet:namespace/>searchTerm').get('value');
-            
-            var myDataSource = new A.DataSource.IO({source: dataSourceURL});
-
-            myDataSource.plug(A.Plugin.DataSourceJSONSchema, {
-                schema: {
-                    resultListLocator: 'results',
-                    resultFields: ['name', 'key']
-                }
-            });
-            
-            window.AC = new A.AutoComplete(
-                {
-                    button: false,
-                    contentBox: '#<portlet:namespace />searchInputWrap',
-                    dataSource: myDataSource,
-                    delimChar: false,
-                    forceSelection: false,
-                    input: '#<portlet:namespace />searchTerm',
-                    matchKey: 'name',
-                    minQueryLength: 2,
-                    queryDelay: 0.2,
-                    typeAhead: true
-                }
-            );
-
-            AC.render();            
-
-        });
-    </script>
-</liferay-util:html-bottom>
+<div class="gothia-paging-wrap">
+  <c:if test="${pageIterator.showPaginator}">
+      <ul class="gothia-paging clearfix">  
+        <!--   <c:if test="${pageIterator.showFirst}">
+            <li class="first">
+              
+                  <liferay-portlet:renderURL  portletMode="VIEW" var="firstUrl" windowState="normal" >
+                      <portlet:param name="pageNumber" value="1" />
+                      <c:if test="${isViewAll}">
+                           <portlet:param name="viewAll" value="viewAll" />    
+                      </c:if>               
+                  </liferay-portlet:renderURL>
+                  <a href="${firstUrl}">F&ouml;rsta</a>
+              </li>
+          </c:if> -->
+          <c:if test="${pageIterator.showPrevious}">
+              <li class="previous">
+                  <liferay-portlet:renderURL  portletMode="VIEW" var="previousUrl" windowState="normal" >
+                      <portlet:param name="pageNumber" value="${pageIterator.previous}" />
+                      <c:if test="${isViewAll}">
+                           <portlet:param name="viewAll" value="viewAll" />    
+                      </c:if>   
+                  </liferay-portlet:renderURL>
+                  <a href="${previousUrl}">F&ouml;reg&aring;ende</a>
+              </li>
+          </c:if> 
+          
+          <c:forEach var="page" items="${pageIterator.pages}">
+              
+              <c:set var="pageItemCssClass" value="" scope="page" />
+              <c:if test="${page.isSelected}">
+                  <c:set var="pageItemCssClass" value="selected" scope="page" />
+              </c:if>     
+          
+              <li class="${pageItemCssClass}">
+                  <c:choose>
+                      <c:when test="${page.isSelected}">
+                          <span>${page.pagenumber}</span>
+                      </c:when>
+                      <c:otherwise>
+                          <liferay-portlet:renderURL  portletMode="VIEW" var="url" windowState="normal" >
+                              <portlet:param name="pageNumber" value="${page.pagenumber}" />
+                              <c:if test="${isViewAll}">
+                                   <portlet:param name="viewAll" value="viewAll" />    
+                              </c:if>   
+                          </liferay-portlet:renderURL>        
+                          <a href="${url}">${page.pagenumber}</a>
+                      </c:otherwise>
+                  </c:choose>
+              </li>   
+          </c:forEach>
+          
+          <c:if test="${pageIterator.showNext}">
+              <li class="next">
+                  <liferay-portlet:renderURL  portletMode="VIEW" var="nextUrl" windowState="normal" >
+                      <portlet:param name="pageNumber" value="${pageIterator.next}" />
+                      <c:if test="${isViewAll}">
+                           <portlet:param name="viewAll" value="viewAll" />    
+                      </c:if>   
+                  </liferay-portlet:renderURL>
+                  <a href="${nextUrl}">N&auml;sta</a>
+              </li>
+          </c:if> 
+      <!--      <c:if test="${pageIterator.showLast}">
+              <li class="last">
+                  <liferay-portlet:renderURL  portletMode="VIEW" var="lastUrl" windowState="normal" >
+                      <portlet:param name="pageNumber" value="${pageIterator.last}" />
+                      <c:if test="${isViewAll}">
+                           <portlet:param name="viewAll" value="viewAll" />    
+                      </c:if>   
+                  </liferay-portlet:renderURL>
+                  <a href="${lastUrl}">Sista</a>
+              </li>
+          </c:if> -->
+      </ul>
+  </c:if> 
+</div>

@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
@@ -49,11 +50,13 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
+import se.gothiaforum.actorsarticle.domain.model.Tag;
 import se.gothiaforum.actorsarticle.util.ActorsConstants;
 import se.gothiaforum.settings.service.SettingsService;
 import se.gothiaforum.settings.util.ExpandoConstants;
 import se.gothiaforum.solr.ActroSolrQuery;
 import se.gothiaforum.util.Constants;
+import se.gothiaforum.util.model.PageIterator;
 
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -66,6 +69,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.service.GroupLocalService;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -121,98 +125,106 @@ public class ActorsSearchController {
         long groupId = themeDisplay.getScopeGroupId();
 
         String searchTerm = request.getParameter("searchTerm");
-        String viewAll = request.getParameter("viewAll");
 
-        if (searchTerm != null || viewAll != null) {
+        String isViewAll = "false";
 
-            if (viewAll != null) {
-                actroSolrQuery.findAllActorQuery();
-                actroSolrQuery.setRows(SEARCH_ROWS);
-            } else if (searchTerm != null) {
-                actroSolrQuery.actorQuery(searchTerm.toLowerCase(Constants.LOCALE));
-                actroSolrQuery.setStart(0);
-                actroSolrQuery.setRows(SEARCH_ROWS);
-            }
+        if (searchTerm == null) {
+            actroSolrQuery.findAllActorQuery();
+            actroSolrQuery.setRows(SEARCH_ROWS);
+            isViewAll = "true";
+        } else {
+            actroSolrQuery.actorQuery(searchTerm.toLowerCase(Constants.LOCALE));
+            actroSolrQuery.setStart(0);
+            actroSolrQuery.setRows(SEARCH_ROWS);
+        }
 
-            try {
-                actroSolrQuery.filterActors();
+        request.setAttribute("isViewAll", isViewAll);
 
-                QueryResponse queryResponse = actroSolrQuery.query();
+        try {
+            actroSolrQuery.filterActors();
 
-                List<ActorArticle> actorArticles = new ArrayList<ActorArticle>();
-                Iterator<SolrDocument> resultIter = null;
-                if (queryResponse != null) {
-                    if (queryResponse.getResults() != null) {
+            QueryResponse queryResponse = actroSolrQuery.query();
 
-                        resultIter = queryResponse.getResults().iterator();
+            List<ActorArticle> actorArticles = new ArrayList<ActorArticle>();
+            Iterator<SolrDocument> resultIter = null;
+            if (queryResponse != null) {
+                if (queryResponse.getResults() != null) {
 
-                        while (resultIter.hasNext()) {
-                            SolrDocument doc = resultIter.next();
-                            ActorArticle actorArticle = new ActorArticle();
-                            actorArticle.setArticleId((String) doc
-                                    .getFieldValue(ActorsConstants.ACTORS_ARTICLE_PK));
+                    resultIter = queryResponse.getResults().iterator();
 
-                            if (doc.getFieldValue(ActorsConstants.GROUP_ID) != null) {
-                                actorArticle.setGroupId(Long.valueOf((String) doc
-                                        .getFieldValue(ActorsConstants.GROUP_ID)));
-                            }
+                    while (resultIter.hasNext()) {
+                        SolrDocument doc = resultIter.next();
+                        ActorArticle actorArticle = new ActorArticle();
+                        actorArticle.setArticleId((String) doc
+                                .getFieldValue(ActorsConstants.ACTORS_ARTICLE_PK));
 
-                            // In case of faulty solr index take care of not adding incorrect articles.
-                            try {
-                                setArticleContentAndTitle(themeDisplay, queryResponse, doc, actorArticle);
-
-                                String namePrefix =
-                                        groupService.getGroup(actorArticle.getGroupId()).getFriendlyURL();
-
-                                actorArticle.setProfileURL(ActorsConstants.PROFILE_REDIRECT_URL
-                                        + namePrefix.substring(1));
-
-                                actorArticles.add(actorArticle);
-                            } catch (NoSuchArticleException e) {
-                                log.warn("Warning: " + e.getMessage() + "may reindex.");
-                            }
-
+                        if (doc.getFieldValue(ActorsConstants.GROUP_ID) != null) {
+                            actorArticle.setGroupId(Long.valueOf((String) doc
+                                    .getFieldValue(ActorsConstants.GROUP_ID)));
                         }
+
+                        // In case of faulty solr index take care of not adding incorrect articles.
+                        try {
+                            setArticleContentAndTitle(themeDisplay, queryResponse, doc, actorArticle);
+
+                            String namePrefix =
+                                    groupService.getGroup(actorArticle.getGroupId()).getFriendlyURL();
+
+                            actorArticle.setProfileURL(ActorsConstants.PROFILE_REDIRECT_URL
+                                    + namePrefix.substring(1));
+
+                            actorArticles.add(actorArticle);
+                        } catch (NoSuchArticleException e) {
+                            log.warn("Warning: " + e.getMessage() + "may reindex.");
+                        }
+
                     }
                 }
+            }
 
-                if (actorArticles.size() == 0) {
+            if (actorArticles.size() == 0) {
 
-                    try {
-                        String searchNoHitsArticleId =
-                                settingsService.getSetting(ExpandoConstants.GOTHIA_SEARCH_NO_HITS_ARTICLE,
-                                        companyId, groupId);
-                        String searchNoHitsArticleContent =
-                                articleService.getArticleContent(groupId, searchNoHitsArticleId, null,
-                                        themeDisplay.getLanguageId(), themeDisplay);
-                        model.addAttribute("searchNoHitsArticleContent", searchNoHitsArticleContent);
-                    } catch (PortalException e) {
-                        log.info("no article for thin client search portlet found");
-                    } catch (SystemException e) {
-                        log.info("no article for thin client search portlet found");
-                    }
-
+                try {
+                    String searchNoHitsArticleId =
+                            settingsService.getSetting(ExpandoConstants.GOTHIA_SEARCH_NO_HITS_ARTICLE,
+                                    companyId, groupId);
+                    String searchNoHitsArticleContent =
+                            articleService.getArticleContent(groupId, searchNoHitsArticleId, null,
+                                    themeDisplay.getLanguageId(), themeDisplay);
+                    model.addAttribute("searchNoHitsArticleContent", searchNoHitsArticleContent);
+                } catch (PortalException e) {
+                    log.info("no article for thin client search portlet found");
+                } catch (SystemException e) {
+                    log.info("no article for thin client search portlet found");
                 }
 
-                model.addAttribute("hits", actorArticles);
-
-            } catch (Exception e) {
-                throw new RuntimeException("An error occurred when the search was attempted to performed", e);
-            }
-        } else { // First time = no search made.
-
-            try {
-                String searchFirstTimeArticleId =
-                        settingsService.getSetting(ExpandoConstants.GOTHIA_SEARCH_FITST_TIME_ARTICLE,
-                                companyId, groupId);
-                String searchFirstTimeArticleContent =
-                        articleService.getArticleContent(groupId, searchFirstTimeArticleId, null,
-                                themeDisplay.getLanguageId(), themeDisplay);
-                model.addAttribute("searchFirstTimeArticleContent", searchFirstTimeArticleContent);
-            } catch (Exception e) {
-                log.info("no article for thin client search portlet found");
             }
 
+            //
+            // Paginator
+            //
+            PortletPreferences prefs = request.getPreferences();
+
+            int entryCount = Integer.valueOf(prefs.getValue("numberOfHitsToShow", "3"));
+            int currentPage = ParamUtil.getInteger(request, "pageNumber", 1);
+            int start = (currentPage - 1) * entryCount;
+            int end = currentPage * entryCount;
+
+            if (end > actorArticles.size()) {
+                end = actorArticles.size();
+            }
+
+            List<ActorArticle> sublist = actorArticles.subList(start, end);
+
+            setupTags(sublist);
+
+            model.addAttribute("hits", sublist);
+
+            PageIterator pageIterator = new PageIterator(actorArticles.size(), currentPage, entryCount, 10);
+            request.setAttribute("pageIterator", pageIterator);
+
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred when the search was attempted to performed", e);
         }
 
         // This is for picking up the articles in the portlet.
@@ -231,6 +243,23 @@ public class ActorsSearchController {
         return "searchView";
     }
 
+    private void setupTags(List<ActorArticle> sublist) {
+        for (ActorArticle actorArticle : sublist) {
+
+            ArrayList<Tag> tagsList = new ArrayList<Tag>();
+            String[] tags = actorArticle.getTagsStr().split(",");
+
+            for (String tagStr : tags) {
+                Tag tag = new Tag();
+                tag.setName(tagStr);
+                tag.setLink(ActorsConstants.SEARCH_REDIRECT_URL
+                        + tagStr.replace("<span class=\"hit\">", "").replace("</span>", ""));
+                tagsList.add(tag);
+            }
+            actorArticle.setTags(tagsList);
+        }
+    }
+
     private void setArticleContentAndTitle(ThemeDisplay themeDisplay, QueryResponse queryResponse,
             SolrDocument doc, ActorArticle actorArticle) throws PortalException, SystemException {
         StringBuilder sb = new StringBuilder();
@@ -244,16 +273,17 @@ public class ActorsSearchController {
         List<String> highlightIntroList = null;
         List<String> highlightTagsList = null;
 
-        System.out.println("highlighting" + highlighting);
+        // System.out.println("highlighting " + highlighting);
 
         if (highlighting != null) {
+
             Map<String, List<String>> highlightedFields = highlighting.get(doc.get("uid"));
 
             // Title highlighting
             List<String> title = highlightedFields.get(Field.TITLE);
             if (title != null && title.size() > 0) {
                 highlightTitle = title.get(0); // Probably rare with more than one but first should always be
-                System.out.println("highlightTitle " + highlightTitle);
+                // System.out.println("highlightTitle " + highlightTitle);
                 // enough.
             }
 
@@ -265,7 +295,8 @@ public class ActorsSearchController {
             }
 
             // Organisation name highlighting
-            List<String> orgName = highlightedFields.get(ActorsConstants.ARTICLE_XML_COMPANY_NAME);
+            List<String> orgName = highlightedFields.get(ActorsConstants.ARTICLE_XML_ORGANIZATION_NAME);
+
             if (orgName != null && orgName.size() > 0) {
                 highlightOrg = orgName.get(0); // Probably rare with more than one but first should always be
                 // enough.
@@ -277,6 +308,12 @@ public class ActorsSearchController {
 
             // Detailed Description highlighting
             highlightIntroList = highlightedFields.get(ActorsConstants.ARTICLE_XML_INTRO);
+
+            // If no highlighting in highlightIntroList use highlightDetailedDescriptionList if if there is anyone
+            // there.
+            if (highlightIntroList == null && highlightDetailedDescriptionList != null) {
+                highlightIntroList = highlightDetailedDescriptionList;
+            }
 
             // Asset tag highlighting
             highlightTagsList = highlightedFields.get(Field.ASSET_TAG_NAMES);
@@ -291,14 +328,15 @@ public class ActorsSearchController {
         if (highlightName != null) {
             actorArticle.setName(highlightName);
         } else {
-            String name = "";
+            String name = (String) doc.getFieldValue(ActorsConstants.ARTICLE_XML_COMPANY_NAME);
             actorArticle.setName(name);
         }
 
         if (highlightOrg != null) {
             actorArticle.setOrganizationName(highlightOrg);
         } else {
-            String organisationName = "";
+            String organisationName =
+                    (String) doc.getFieldValue(ActorsConstants.ARTICLE_XML_ORGANIZATION_NAME);
             actorArticle.setOrganizationName(organisationName);
         }
 
@@ -362,8 +400,8 @@ public class ActorsSearchController {
             }
         }
 
-        System.out.println("actorArticle intro " + actorArticle.getIntro());
-        System.out.println("actorArticle dede " + actorArticle.getDetailedDescription());
+        // System.out.println("actorArticle intro " + actorArticle.getIntro());
+        // System.out.println("actorArticle dede " + actorArticle.getDetailedDescription());
     }
 
     /**

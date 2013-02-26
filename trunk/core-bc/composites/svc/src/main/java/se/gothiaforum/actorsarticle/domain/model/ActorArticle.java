@@ -19,6 +19,8 @@
 
 package se.gothiaforum.actorsarticle.domain.model;
 
+import java.util.ArrayList;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -94,6 +96,8 @@ public class ActorArticle {
     private String imageUuid = "";
 
     private String profileURL = "";
+
+    private ArrayList<Tag> tags;
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
@@ -285,6 +289,14 @@ public class ActorArticle {
 
     public void setProfileURL(String profileURL) {
         this.profileURL = profileURL;
+    }
+
+    public ArrayList<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<Tag> tags) {
+        this.tags = tags;
     }
 
 }

@@ -107,6 +107,9 @@ public class ActroSolrQuery extends SolrQuery {
         this.set("hl.fl", "assetTagNames title actor-name org-name intro description");
         this.set("hl.snippets", 3);
         this.set("hl.mergeContiguous", true);
+        this.set("hl.simple.pre", "<span class=\"hit\">");
+        this.set("hl.simple.post", "</span>");
+
     }
 
     /**

@@ -39,13 +39,13 @@ public class CustomJournalIndexerPostProcessor implements IndexerPostProcessor {
             // System.out.println("document content " + ((JournalArticle) o).getContent());
             ActorArticle actorArticle = actorsArticleConverterService.getActorsArticle(article.getContent());
 
-            System.out.println("-------------------------------------------------------------------");
-            System.out.println("actorArticle.getTitle " + article.getTitle());
-            System.out.println("actorArticle.getIntro " + actorArticle.getIntro());
-            System.out.println("actorArticle.getDetailedDescription() "
-                    + actorArticle.getDetailedDescription());
-            System.out.println("actorArticle.getTagStr " + actorArticle.getTagsStr());
-            System.out.println("-------------------------------------------------------------------");
+            // System.out.println("-------------------------------------------------------------------");
+            // System.out.println("actorArticle.getTitle " + article.getTitle());
+            // System.out.println("actorArticle.getIntro " + actorArticle.getIntro());
+            // System.out.println("actorArticle.getDetailedDescription() "
+            // + actorArticle.getDetailedDescription());
+            // System.out.println("actorArticle.getTagStr " + actorArticle.getTagsStr());
+            // System.out.println("-------------------------------------------------------------------");
 
             document.addKeyword(Field.TITLE, removeSuffix(article.getTitle()));
             document.addKeyword(ActorsConstants.ARTICLE_XML_COMPANY_NAME, actorArticle.getName());
