@@ -33,7 +33,7 @@
         http://www.springframework.org/schema/util/spring-util-3.0.xsd
         ">
 
-  <context:component-scan base-package="se.gothiaforum.controller.actorsearchthinclient" />
+  <context:component-scan base-package="se.gothiaforum.controller.actorsearchthinclient,se.gothiaforum.portlet.service" />
   
   <import resource="classpath*:services-config.xml" />
 

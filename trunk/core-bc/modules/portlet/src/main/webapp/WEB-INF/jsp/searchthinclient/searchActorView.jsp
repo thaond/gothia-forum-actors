@@ -36,12 +36,14 @@
 
 <div class="search-box">
     <div class="search-box-hd">      
-    	${bannerArticleContent}
+    	${bannerArticleHtml}
     </div>
     <div class="search-box-bd">            
         <div class="search-wrap">
 			<div class="search-intro">
-				<p>${searchclientArticleContent}</p>
+				<p>
+					${searchclientArticleContent}
+				</p>
 			</div>
             <aui:form name="searchForm" action="${searchActorURL}" method="post">
                 <div id="<portlet:namespace />searchInputWrap" class="search-input-wrap clearfix">  

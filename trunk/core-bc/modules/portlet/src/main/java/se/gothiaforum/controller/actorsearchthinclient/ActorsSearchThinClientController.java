@@ -29,9 +29,15 @@ import java.util.List;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
+import javax.portlet.ReadOnlyException;
 import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.portlet.ValidatorException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,6 +51,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import se.gothiaforum.actorsarticle.util.ActorsConstants;
+import se.gothiaforum.portlet.service.PortletService;
 import se.gothiaforum.settings.service.SettingsService;
 import se.gothiaforum.settings.util.ExpandoConstants;
 
@@ -61,6 +68,8 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
@@ -81,6 +90,9 @@ public class ActorsSearchThinClientController {
 
     @Autowired
     private JournalArticleLocalService articleService;
+    
+    @Autowired
+    private PortletService portletService;
 
     /**
      * Render for showing the search for actor view.
@@ -92,13 +104,41 @@ public class ActorsSearchThinClientController {
      * @return the search actor page
      */
     @RenderMapping
-    public String showSearchActorView(RenderRequest request, Model model) {
+    public String showSearchActorView(RenderRequest request, RenderResponse response, Model model) {
 
         // This is for pinking up the articles in the portlet.
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         long companyId = themeDisplay.getCompanyId();
         long groupId = themeDisplay.getScopeGroupId();
+        
+        try {
+        	String webContentDisplayPortletId = "56_INSTANCE_bn02";
+        	
+        	HttpServletRequest servletRequest = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(request));
+        	
+        	PortletPreferences webContentDisplayPortletPrefs = PortletPreferencesFactoryUtil.getPortletPreferences(servletRequest, webContentDisplayPortletId);
+        	
+        	webContentDisplayPortletPrefs.setValue("portlet-setup-show-borders", "false");
+        	webContentDisplayPortletPrefs.store();        	
+        	
+			String bannerArticleHtml = portletService.renderPortlet(request, response, webContentDisplayPortletId, "");
+			
+			model.addAttribute("bannerArticleHtml", bannerArticleHtml);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (ValidatorException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ServletException e) {
+			e.printStackTrace();
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (ReadOnlyException e) {
+			e.printStackTrace();
+		}        
 
+        /*
         try {
             String bannerArticleId =
                     settingsService.getSetting(ExpandoConstants.GOTHIA_BANNER_ARTICLE, companyId, groupId);
@@ -112,6 +152,7 @@ public class ActorsSearchThinClientController {
         } catch (SystemException e) {
             LOG.info("no article for thin client search portlet found");
         }
+        */
 
         try {
             String searchclientArticleId =
