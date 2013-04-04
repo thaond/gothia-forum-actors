@@ -27,36 +27,55 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Enumeration;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
+import javax.portlet.ReadOnlyException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.ValidatorException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import org.springframework.ui.Model;
 
 import se.gothiaforum.controller.actorsearchthinclient.ActorsSearchThinClientController;
+import se.gothiaforum.portlet.service.PortletService;
 import se.gothiaforum.settings.service.SettingsService;
 import se.gothiaforum.settings.service.impl.SettingsServiceImpl;
 
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.Portal;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletPreferencesFactory;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalService;
 import com.liferay.portlet.expando.service.ExpandoTableLocalService;
 import com.liferay.portlet.expando.service.ExpandoValueLocalService;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 
+import static org.mockito.Mockito.*;
+
 /**
  * @author simongoransson
  * 
  */
-
+@RunWith(MockitoJUnitRunner.class)
 public class ActorSearchThinCientControllerTest {
 
     private ActionRequest actionRequest;
@@ -76,6 +95,10 @@ public class ActorSearchThinCientControllerTest {
 
     @Mock
     private ExpandoValueLocalService expandoValueService;
+    
+    @Mock
+    private PortletService portletService;
+    
 
     @InjectMocks
     private final ActorsSearchThinClientController mockActorsSearchThinClientController =
@@ -89,10 +112,13 @@ public class ActorSearchThinCientControllerTest {
             IllegalAccessException {
 
         // mock of services.
+    	/*
         articleService = mock(JournalArticleLocalService.class);
         expandoColumnService = mock(ExpandoColumnLocalService.class);
         expandoTableService = mock(ExpandoTableLocalService.class);
         expandoValueService = mock(ExpandoValueLocalService.class);
+        portletService = mock(PortletService.class);
+        */
 
         // mock creation
         actionRequest = mock(ActionRequest.class);
@@ -134,28 +160,37 @@ public class ActorSearchThinCientControllerTest {
     public void testView() throws Exception {
 
         ThemeDisplay themeDisplay = mock(ThemeDisplay.class);
-
         when(renderRequest.getAttribute(eq(WebKeys.THEME_DISPLAY))).thenReturn(themeDisplay);
         when(themeDisplay.getCompanyId()).thenReturn((long) 888);
         when(themeDisplay.getScopeGroupId()).thenReturn((long) 999);
+        
 
-        // Settings service
-        when(
-                expandoValueService.getData(Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(),
-                        Mockito.anyString(), Mockito.anyLong(), Mockito.anyString())).thenReturn(
-                "testBannerID");
+        // Servlet Request
+        PortalUtil portalUtil = new PortalUtil();
+        Portal portal = mock(Portal.class);
+        portalUtil.setPortal(portal);
+        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+        HttpServletRequest httpServletRequest2 = mock(HttpServletRequest.class);
+        when(portalUtil.getHttpServletRequest(any(PortletRequest.class))).thenReturn(httpServletRequest);
+        when(portalUtil.getOriginalServletRequest(any(HttpServletRequest.class))).thenReturn(httpServletRequest2);
+        
+        // Portlet Preferences
+        PortletPreferencesFactoryUtil portletPreferencesFactoryUtil = new PortletPreferencesFactoryUtil();
+        PortletPreferencesFactory factory = mock(PortletPreferencesFactory.class);
+        
+        PortletPreferences portletPreferences = mock(PortletPreferences.class);
+		when(factory.getPortletPreferences(Mockito.any(HttpServletRequest.class), Mockito.anyString())).thenReturn(portletPreferences);
 
-        when(
-                articleService.getArticleContent(Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(),
-                        Mockito.anyString(), (ThemeDisplay) Mockito.anyObject())).thenReturn("Hello World");
-
-        when(model.addAttribute(eq("bannerArticleContent"), eq("testBannerID"))).thenReturn(model);
+		portletPreferencesFactoryUtil.setPortletPreferencesFactory(factory);
+		
+		// Portlet Service
+		when(portletService.renderPortlet(any(PortletRequest.class), any(PortletResponse.class), anyString(), anyString())).thenReturn("Hello World");
 
         // using mock object
-        mockActorsSearchThinClientController.showSearchActorView(renderRequest, model);
+        mockActorsSearchThinClientController.showSearchActorView(renderRequest, renderResponse, model);
 
         // verification
-        verify(model).addAttribute(eq("bannerArticleContent"), eq("Hello World"));
+        verify(model).addAttribute(eq("bannerArticleHtml"), eq("Hello World"));
 
     }
 }
