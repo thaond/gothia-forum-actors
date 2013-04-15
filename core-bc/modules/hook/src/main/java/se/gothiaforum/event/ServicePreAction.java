@@ -67,7 +67,7 @@ public class ServicePreAction extends Action {
             }
 
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
     }
