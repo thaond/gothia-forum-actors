@@ -58,6 +58,7 @@ import se.gothiaforum.solr.ActroSolrQuery;
 import se.gothiaforum.util.Constants;
 import se.gothiaforum.util.model.PageIterator;
 
+import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -72,6 +73,7 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.service.GroupLocalService;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.asset.model.AssetTag;
@@ -166,14 +168,22 @@ public class ActorsSearchController {
                         // In case of faulty solr index take care of not adding incorrect articles.
                         try {
                             setArticleContentAndTitle(themeDisplay, queryResponse, doc, actorArticle);
+                            
+                            long articleGroupId = actorArticle.getGroupId();
+                            
+                            try {
+                            	Group actorGroup = groupService.getGroup(articleGroupId);
+                            	
+                                String namePrefix = actorGroup.getFriendlyURL();
 
-                            String namePrefix =
-                                    groupService.getGroup(actorArticle.getGroupId()).getFriendlyURL();
+                                actorArticle.setProfileURL(ActorsConstants.PROFILE_REDIRECT_URL
+                                        + namePrefix.substring(1));
 
-                            actorArticle.setProfileURL(ActorsConstants.PROFILE_REDIRECT_URL
-                                    + namePrefix.substring(1));
+                                actorArticles.add(actorArticle);
+                            } catch (NoSuchGroupException nsge) {
+                            	// Do nothing for now
+                            }
 
-                            actorArticles.add(actorArticle);
                         } catch (NoSuchArticleException e) {
                             log.warn("Warning: " + e.getMessage() + "may reindex.");
                         }
