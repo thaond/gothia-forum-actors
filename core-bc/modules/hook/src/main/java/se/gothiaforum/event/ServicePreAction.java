@@ -16,60 +16,55 @@ import com.liferay.util.CookieUtil;
 
 public class ServicePreAction extends Action {
 
-    private static final String LOCALE_KEY = "org.apache.struts.action.LOCALE";
+	private static final String LOCALE_KEY = "org.apache.struts.action.LOCALE";
 
-    public ServicePreAction() {
-        super();
-    }
+	public ServicePreAction() {
+		super();
+	}
 
-    @Override
-    public void run(HttpServletRequest request, HttpServletResponse response) throws ActionException {
+	public void run(HttpServletRequest request, HttpServletResponse response) throws ActionException {
 
-        try {
-            HttpSession session = request.getSession();
-            long groupIdFromSession = 0;
+		try {
+			HttpSession session = request.getSession();
+			
+			long companyId = PortalUtil.getCompanyId(request);
+			
+			Object groupFromSessionObj = session.getAttribute("LIFERAY_SHARED_VISITED_GROUP_ID_RECENT");
+			
+			if(groupFromSessionObj != null) {
+				
+				long groupIdFromSession = (Long)groupFromSessionObj;	
+				
+				String siteLanguageId = ExpandoValueLocalServiceUtil.getData(companyId, "com.liferay.portal.model.Group", "CUSTOM_FIELDS", "gothiaSiteLanguage", groupIdFromSession, "");
+				Locale siteLocale = LocaleUtil.fromLanguageId(siteLanguageId);
+				
+				if(!siteLanguageId.equals("")) {
+					boolean refresh = false;
+					Locale sessionLocale = (Locale) session.getAttribute(LOCALE_KEY);
+					String cookieLanguageId = CookieUtil.get(request, "GUEST_LANGUAGE_ID");
+					String currentURL = PortalUtil.getCurrentURL(request);
+					
+					if(cookieLanguageId == null || (!cookieLanguageId.equals(siteLanguageId))) {
+						LanguageUtil.updateCookie(request, response, siteLocale);
+						refresh = true;
+					}
+					
+					if(sessionLocale == null ||  (!sessionLocale.equals(siteLocale))) {
+						session.setAttribute(LOCALE_KEY, siteLocale);
+						refresh = true;
+					}
 
-            long companyId = PortalUtil.getCompanyId(request);
+					if(refresh) {
+						response.sendRedirect(currentURL);
+					}
+				}
+				
+			}
 
-            try {
-                groupIdFromSession = (Long) session.getAttribute("LIFERAY_SHARED_VISITED_GROUP_ID_RECENT");
-            } catch (ClassCastException cce) {
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-            }
-
-            if (groupIdFromSession != 0) {
-                String siteLanguageId =
-                        ExpandoValueLocalServiceUtil.getData(companyId, "com.liferay.portal.model.Group",
-                                "CUSTOM_FIELDS", "gothiaSiteLanguage", groupIdFromSession, "");
-                Locale siteLocale = LocaleUtil.fromLanguageId(siteLanguageId);
-
-                if (!siteLanguageId.equals("")) {
-                    boolean refresh = false;
-                    Locale sessionLocale = (Locale) session.getAttribute(LOCALE_KEY);
-                    String cookieLanguageId = CookieUtil.get(request, "GUEST_LANGUAGE_ID");
-                    String currentURL = PortalUtil.getCurrentURL(request);
-
-                    if (cookieLanguageId == null || (!cookieLanguageId.equals(siteLanguageId))) {
-                        LanguageUtil.updateCookie(request, response, siteLocale);
-                        refresh = true;
-                    }
-
-                    if (sessionLocale == null || (!sessionLocale.equals(siteLocale))) {
-                        session.setAttribute(LOCALE_KEY, siteLocale);
-                        refresh = true;
-                    }
-
-                    if (refresh) {
-                        response.sendRedirect(currentURL);
-                    }
-                }
-
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
+	}
 
 }
