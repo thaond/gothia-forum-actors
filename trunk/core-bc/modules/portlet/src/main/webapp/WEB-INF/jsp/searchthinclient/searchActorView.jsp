@@ -61,38 +61,25 @@
     ${hostName}
 </div>
 
+
 <liferay-util:html-bottom>
+
+	<script type="text/javascript" src="<%= request.getContextPath() %>/js/gothia-search-thin.js"></script>
     <script type="text/javascript" charset="utf-8">
-        AUI().use('aui-autocomplete', 'aui-io', 'json', function(A) {
-                      
-            var dataSourceURL = '<portlet:resourceURL  id="search" />'+'&searchTerm='+A.one('#<portlet:namespace/>searchTerm').get('value');
-            
-            var myDataSource = new A.DataSource.IO({source: dataSourceURL});
 
-            myDataSource.plug(A.Plugin.DataSourceJSONSchema, {
-                schema: {
-                    resultListLocator: 'results',
-                    resultFields: ['name', 'key']
-                }
-            });
-            
-            window.AC = new A.AutoComplete(
-                {
-                    button: false,
-                    contentBox: '#<portlet:namespace />searchInputWrap',
-                    dataSource: myDataSource,
-                    delimChar: false,
-                    forceSelection: false,
-                    input: '#<portlet:namespace />searchTerm',
-                    matchKey: 'name',
-                    minQueryLength: 2,
-                    queryDelay: 0.2,
-                    typeAhead: true
-                }
-            );
+	    AUI().use('aui-base', 'gothia-search-thin', function(A) {
+	
+	    	var dataSourceURL = '<portlet:resourceURL  id="search" />'+'&searchTerm='+ A.one('#<portlet:namespace/>searchTerm').get('value');
+	
+	    	var gothiaSearchThin = new A.GothiaSearchThin({
+	    		autoCompleteInput: '#<portlet:namespace />searchTerm',
+	    		autoCompleteUrl: dataSourceURL,
+	    		autoCompleteWrap: '#<portlet:namespace />searchInputWrap'
+	       	});
+	
+	    	gothiaSearchThin.render();
+	        
+		});
 
-            AC.render();            
-
-        });
     </script>
 </liferay-util:html-bottom>
