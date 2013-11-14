@@ -11,12 +11,12 @@ Generation time : 2011-04-29 14:01:22 CEST
   <parent>
     <groupId>se.gothiaforum.gothia_actors</groupId>
     <artifactId>gothia_actors-system</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
   </parent>
   <groupId>se.gothiaforum.gothia_actors</groupId>
   <artifactId>gothia_actors-core-bc</artifactId>
   <packaging>pom</packaging>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.1-SNAPSHOT</version>
   <name>${project.artifactId}</name>
 
   <modules>
