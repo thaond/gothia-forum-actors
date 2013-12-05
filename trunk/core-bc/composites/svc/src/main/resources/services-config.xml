@@ -26,13 +26,11 @@
     ignore-resource-not-found="true" ignore-unresolvable="true" />
 
 
-
-  <bean id="solrServer" class="org.apache.solr.client.solrj.impl.CommonsHttpSolrServer">
-    <constructor-arg type="java.lang.String" value="${solr.service}" />
-    <property name="requestWriter">
-      <bean class="org.apache.solr.client.solrj.impl.BinaryRequestWriter" />
-    </property>
-  </bean>
+    <bean id="solrServer" class="se.gothiaforum.solr.BasicAuthSolrServer">
+        <constructor-arg type="java.lang.String" value="${solr.user}" />
+        <constructor-arg type="java.lang.String" value="${solr.password}" />
+        <constructor-arg type="java.lang.String" value="${solr.service}" />
+    </bean>
 
   <bean id="actroSolrQuery" class="se.gothiaforum.solr.ActroSolrQuery" scope="prototype">
     <constructor-arg ref="solrServer" />
