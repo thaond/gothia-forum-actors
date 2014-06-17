@@ -19,16 +19,14 @@
 
 package se.gothiaforum.actorsarticle.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import se.gothiaforum.util.Constants;
-import se.gothiaforum.util.FriendlyURLNormalizer;
-
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.gothiaforum.util.Constants;
+import se.gothiaforum.util.FriendlyURLNormalizer;
 
 /**
  * This is a util class for actoraricles.
@@ -36,7 +34,7 @@ import com.liferay.portal.kernel.util.Validator;
  * @author simgo3
  */
 public class ActorsArticleUtil {
-    private static final Log LOG = LogFactory.getLog(ActorsArticleUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorsArticleUtil.class);
 
     /**
      * Generate an url title.

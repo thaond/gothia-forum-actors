@@ -19,10 +19,10 @@
 
 package se.gothiaforum.util;
 
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.List;
 
 /**
  * This class is an representation of a dynamic element that is the type of element that the content of an article
@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public class DynamicElement {
-    private static final Log LOG = LogFactory.getLog(DynamicElement.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DynamicElement.class);
 
     private String name;
     private String content;

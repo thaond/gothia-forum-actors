@@ -19,9 +19,8 @@
 
 package se.gothiaforum.actorsarticle.service.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
 import se.gothiaforum.actorsarticle.service.ActorsArticleConverterService;
 import se.gothiaforum.actorsarticle.util.ActorsConstants;
@@ -36,7 +35,7 @@ import se.gothiaforum.util.DynamicElement;
  */
 public class ActorsArticleConverterServiceImpl implements ActorsArticleConverterService {
 
-    private static final Log LOG = LogFactory.getLog(ActorsArticleConverterServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorsArticleConverterServiceImpl.class);
 
     /**
      * Instantiates a new actors article converter service impl.

@@ -4,23 +4,22 @@ import java.util.Locale;
 
 import javax.portlet.PortletURL;
 
+import com.liferay.portal.kernel.search.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
 import se.gothiaforum.actorsarticle.service.ActorsArticleConverterService;
 import se.gothiaforum.actorsarticle.service.impl.ActorsArticleConverterServiceImpl;
 import se.gothiaforum.actorsarticle.util.ActorsConstants;
 
-import com.liferay.portal.kernel.search.BooleanQuery;
-import com.liferay.portal.kernel.search.Document;
-import com.liferay.portal.kernel.search.Field;
-import com.liferay.portal.kernel.search.IndexerPostProcessor;
-import com.liferay.portal.kernel.search.SearchContext;
-import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portlet.journal.model.JournalArticle;
 
 /**
  * @author Patrik Bergström
  */
 public class CustomJournalIndexerPostProcessor implements IndexerPostProcessor {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomJournalIndexerPostProcessor.class);
 
     ActorsArticleConverterService actorsArticleConverterService = new ActorsArticleConverterServiceImpl();
 
@@ -31,6 +30,7 @@ public class CustomJournalIndexerPostProcessor implements IndexerPostProcessor {
 
     @Override
     public void postProcessDocument(Document document, Object o) throws Exception {
+        LOGGER.debug("postProcessDocument...");
 
         JournalArticle article = ((JournalArticle) o);
         // System.out.println("------------------------------FIRST--------------------------------");
@@ -39,8 +39,8 @@ public class CustomJournalIndexerPostProcessor implements IndexerPostProcessor {
         // System.out.println("-------------------------------------------------------------------");
 
         if (article.getType().equals("actor")) {
-            System.out.println(document + " " + o);
-            System.out.println("document content " + ((JournalArticle) o).getContent());
+//            System.out.println(document + " " + o);
+//            System.out.println("document content " + ((JournalArticle) o).getContent());
 
             ActorArticle actorArticle = actorsArticleConverterService.getActorsArticle(article.getContent());
 

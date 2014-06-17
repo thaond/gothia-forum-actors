@@ -19,15 +19,14 @@
 
 package se.gothiaforum.validator.actorsform;
 
-import java.util.regex.Pattern;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-
 import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
+
+import java.util.regex.Pattern;
 
 /**
  * Validating the ActorArticle object.
@@ -36,7 +35,7 @@ import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
  */
 public class ActorArticleValidator implements Validator {
 
-    private static final Log LOG = LogFactory.getLog(ActorArticleValidator.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorArticleValidator.class);
     private static final Pattern EMAIL_PATTERN = Pattern.compile(".+@.+\\.[a-z]+");
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^?[+]?[0-9]{8,14}");
 

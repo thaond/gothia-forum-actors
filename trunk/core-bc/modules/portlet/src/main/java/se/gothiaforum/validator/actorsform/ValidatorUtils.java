@@ -19,13 +19,12 @@
 
 package se.gothiaforum.validator.actorsform;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.gothiaforum.util.Constants;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import se.gothiaforum.util.Constants;
 
 /**
  * Generic methods to support validation.
@@ -34,7 +33,7 @@ import se.gothiaforum.util.Constants;
  * 
  */
 public final class ValidatorUtils {
-    private static final Log LOG = LogFactory.getLog(ValidatorUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ValidatorUtils.class);
 
     private ValidatorUtils() {
         throw new UnsupportedOperationException();
@@ -90,7 +89,7 @@ public final class ValidatorUtils {
                     }
 
                 } catch (Exception e) {
-                    LOG.error(e);
+                    LOG.error(e.getMessage(), e);
                     throw new RuntimeException(e);
                 }
             }

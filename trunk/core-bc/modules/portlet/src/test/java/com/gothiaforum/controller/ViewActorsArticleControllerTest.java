@@ -3,45 +3,42 @@
  */
 package com.gothiaforum.controller;
 
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.lang.reflect.Field;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletURL;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.support.SessionStatus;
-
-import se.gothiaforum.actorsarticle.service.ActorsService;
-import se.gothiaforum.controller.actorsform.ViewActorsArticleController;
-import se.gothiaforum.settings.service.SettingsService;
-import se.gothiaforum.validator.actorsform.ActorArticleValidator;
-
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 import com.liferay.portlet.social.service.SocialRequestInterpreterLocalService;
 import com.liferay.portlet.social.service.SocialRequestLocalService;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.support.SessionStatus;
+import se.gothiaforum.actorsarticle.service.ActorsService;
+import se.gothiaforum.controller.actorsform.ViewActorsArticleController;
+import se.gothiaforum.settings.service.SettingsService;
+import se.gothiaforum.validator.actorsform.ActorArticleValidator;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.PortletURL;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import java.lang.reflect.Field;
+
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author simongoransson
  * 
  */
 public class ViewActorsArticleControllerTest {
-    private static final Log LOG = LogFactory.getLog(ViewActorsArticleControllerTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ViewActorsArticleControllerTest.class);
 
     private ActionRequest actionRequest;
     private ActionResponse actionResponse;

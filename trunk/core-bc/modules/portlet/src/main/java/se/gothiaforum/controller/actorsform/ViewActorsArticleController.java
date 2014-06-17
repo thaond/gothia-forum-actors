@@ -19,39 +19,6 @@
 
 package se.gothiaforum.controller.actorsform;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.portlet.bind.annotation.ActionMapping;
-import org.springframework.web.portlet.bind.annotation.RenderMapping;
-
-import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
-import se.gothiaforum.actorsarticle.service.ActorsService;
-import se.gothiaforum.actorsarticle.util.ActorsConstants;
-import se.gothiaforum.settings.service.SettingsService;
-import se.gothiaforum.settings.util.ExpandoConstants;
-import se.gothiaforum.util.actorsform.SocialRequestVO;
-import se.gothiaforum.validator.actorsform.ActorArticleValidator;
-
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.Indexer;
@@ -70,6 +37,31 @@ import com.liferay.portlet.social.model.SocialRequest;
 import com.liferay.portlet.social.model.SocialRequestConstants;
 import com.liferay.portlet.social.service.SocialRequestInterpreterLocalService;
 import com.liferay.portlet.social.service.SocialRequestLocalService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.portlet.bind.annotation.ActionMapping;
+import org.springframework.web.portlet.bind.annotation.RenderMapping;
+import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
+import se.gothiaforum.actorsarticle.service.ActorsService;
+import se.gothiaforum.actorsarticle.util.ActorsConstants;
+import se.gothiaforum.settings.service.SettingsService;
+import se.gothiaforum.settings.util.ExpandoConstants;
+import se.gothiaforum.util.actorsform.SocialRequestVO;
+import se.gothiaforum.validator.actorsform.ActorArticleValidator;
+
+import javax.portlet.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This controller takes care of rendering of the create actor article page.
@@ -81,7 +73,7 @@ import com.liferay.portlet.social.service.SocialRequestLocalService;
 @RequestMapping("VIEW")
 public class ViewActorsArticleController {
 
-    private static final Log LOG = LogFactory.getLog(ViewActorsArticleController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ViewActorsArticleController.class);
     private static final int DEFAULT_CURRENT = 1;
     private static final int DEFAULT_DELTA = 10;
     private static final int NUMBER_OF_SOCIAL_REQUEST = 100;
@@ -281,9 +273,9 @@ public class ViewActorsArticleController {
                                 themeDisplay.getLanguageId(), themeDisplay);
                 model.addAttribute("fistTimeArticleContent", fistTimeArticleContent);
             } catch (PortalException e) {
-                LOG.info("no article for thin client search portlet found");
+                LOG.info("no article for thin client search portlet found", e);
             } catch (SystemException e) {
-                LOG.info("no article for thin client search portlet found");
+                LOG.info("no article for thin client search portlet found", e);
             }
 
         } catch (SystemException e) {
@@ -375,7 +367,7 @@ public class ViewActorsArticleController {
         model.addAttribute("actorArticle", actorArticle);
         model.addAttribute("tagsEntries", tagsEntries);
 
-        // This sets the view page for the render phase.
+        // This sets the view page for the render phase.N
         response.setRenderParameter("view", "showImageActorsForm");
 
     }

@@ -3,39 +3,36 @@
  */
 package com.gothiaforum.controller;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
-import java.lang.reflect.Field;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.liferay.portal.service.GroupLocalService;
+import com.liferay.portlet.journal.service.JournalArticleLocalService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.support.SessionStatus;
-
 import se.gothiaforum.controller.actorssearch.ActorsSearchController;
 import se.gothiaforum.settings.service.SettingsService;
 import se.gothiaforum.solr.ActroSolrQuery;
 
-import com.liferay.portal.service.GroupLocalService;
-import com.liferay.portlet.journal.service.JournalArticleLocalService;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import java.lang.reflect.Field;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author simongoransson
  * 
  */
 public class ActorsSearchControllerTest {
-    private static final Log LOG = LogFactory.getLog(ActorsSearchControllerTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorsSearchControllerTest.class);
 
     private ActionRequest actionRequest;
     private ActionResponse actionResponse;

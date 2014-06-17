@@ -19,10 +19,10 @@
 
 package se.gothiaforum.actorsarticle.domain.model;
 
-import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.ArrayList;
 
 /**
  * This Class is a model for the ActorArticle. This is the objects that is posted in from det the form to the
@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ActorArticle {
 
-    private static final Log LOG = LogFactory.getLog(ActorArticle.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorArticle.class);
 
     /** The company name. */
     private String companyName = "";

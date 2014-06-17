@@ -22,20 +22,20 @@
  */
 package se.gothiaforum.solr;
 
-import static org.junit.Assert.assertEquals;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Simon Göransson vgrid=simgo3
  * 
  */
 public class TestSolrQuery {
-    private static final Log LOG = LogFactory.getLog(TestSolrQuery.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TestSolrQuery.class);
 
     @Before
     public void before() {

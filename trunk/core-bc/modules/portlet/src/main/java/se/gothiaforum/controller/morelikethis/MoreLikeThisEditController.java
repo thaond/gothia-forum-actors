@@ -19,17 +19,8 @@
 
 package se.gothiaforum.controller.morelikethis;
 
-import java.io.IOException;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.PortletPreferences;
-import javax.portlet.ReadOnlyException;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.ValidatorException;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,13 +28,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import javax.portlet.*;
+import java.io.IOException;
+
 /**
  * The Class MoreLikeThisEditController.
  */
 @Controller
 @RequestMapping("EDIT")
 public class MoreLikeThisEditController {
-    private static final Log LOG = LogFactory.getLog(MoreLikeThisController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MoreLikeThisController.class);
 
     /**
      * Rendering the edit view.

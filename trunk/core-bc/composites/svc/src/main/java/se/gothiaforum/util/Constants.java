@@ -22,10 +22,10 @@
  */
 package se.gothiaforum.util;
 
-import java.util.Locale;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.Locale;
 
 /**
  * This is a constant file.
@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  * @author simongoransson
  */
 public class Constants {
-    private static final Log LOG = LogFactory.getLog(Constants.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Constants.class);
 
     private Constants() {
         throw new UnsupportedOperationException();

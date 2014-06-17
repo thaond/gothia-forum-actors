@@ -19,9 +19,8 @@
 
 package se.gothiaforum.settings.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.gothiaforum.actorsarticle.util.ActorsConstants;
 
 /**
@@ -30,7 +29,7 @@ import se.gothiaforum.actorsarticle.util.ActorsConstants;
  * @author simgo3
  */
 public final class ExpandoConstants {
-    private static final Log LOG = LogFactory.getLog(ActorsConstants.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorsConstants.class);
 
     private ExpandoConstants() {
         throw new UnsupportedOperationException();

@@ -22,19 +22,18 @@
  */
 package se.gothiaforum.actorsarticle.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.service.persistence.AssetEntryUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author simongoransson
  * 
  */
 public class ActorAssetEntryUtil {
-    private static final Log LOG = LogFactory.getLog(ActorAssetEntryUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorAssetEntryUtil.class);
 
     public void clearAssetTags(long pk) throws SystemException {
         AssetEntryUtil.clearAssetTags(pk);

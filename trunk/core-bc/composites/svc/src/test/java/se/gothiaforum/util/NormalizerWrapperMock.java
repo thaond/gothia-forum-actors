@@ -22,17 +22,15 @@
  */
 package se.gothiaforum.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import se.gothiaforum.util.NormalizerWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author simongoransson
  * 
  */
 public class NormalizerWrapperMock extends NormalizerWrapper {
-    private static final Log LOG = LogFactory.getLog(NormalizerWrapperMock.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NormalizerWrapperMock.class);
 
     /*
      * (non-Javadoc)

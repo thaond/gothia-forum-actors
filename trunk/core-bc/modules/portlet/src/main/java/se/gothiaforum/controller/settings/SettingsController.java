@@ -19,25 +19,23 @@
 
 package se.gothiaforum.controller.settings;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.RenderRequest;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.theme.ThemeDisplay;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
-
 import se.gothiaforum.settings.service.SettingsService;
 import se.gothiaforum.settings.util.ExpandoConstants;
 
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.theme.ThemeDisplay;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.RenderRequest;
 
 /**
  * This is the controller class for the settings portlet that is use to configure which article should been shown
@@ -49,7 +47,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 @Controller
 @RequestMapping(value = "VIEW")
 public class SettingsController {
-    private static final Log LOG = LogFactory.getLog(SettingsController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SettingsController.class);
 
     @Autowired
     private SettingsService settingsService;
