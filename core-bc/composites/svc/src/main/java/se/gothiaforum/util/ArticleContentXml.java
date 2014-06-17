@@ -19,8 +19,8 @@
 
 package se.gothiaforum.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is a help class that helps to create the XML for the content field on an journal article that
@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  * @author simgo3
  */
 public class ArticleContentXml {
-    private static final Log LOG = LogFactory.getLog(ArticleContentXml.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ArticleContentXml.class);
     private StringBuffer content = null;
     private static final String STARTTEXT = "<?xml version=\"1.0\"?><root>";
     private static final String ENDTEXT = "</root>";

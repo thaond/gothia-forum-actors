@@ -19,23 +19,6 @@
 
 package se.gothiaforum.controller.morelikethis;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.portlet.PortletPreferences;
-import javax.portlet.RenderRequest;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.portlet.bind.annotation.RenderMapping;
-
-import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
-import se.gothiaforum.actorsarticle.util.ActorsConstants;
-
 import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -53,6 +36,20 @@ import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.service.AssetEntryLocalService;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.portlet.bind.annotation.RenderMapping;
+import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
+import se.gothiaforum.actorsarticle.util.ActorsConstants;
+
+import javax.portlet.PortletPreferences;
+import javax.portlet.RenderRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the controller for the more like this portlet for actor presentations.
@@ -63,7 +60,7 @@ import com.liferay.portlet.journal.service.JournalArticleLocalService;
 @Controller
 @RequestMapping("VIEW")
 public class MoreLikeThisController {
-    private static final Log LOG = LogFactory.getLog(MoreLikeThisController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MoreLikeThisController.class);
     private static final int MORE_LIKE_THIS_SIZE = 5;
 
     @Autowired

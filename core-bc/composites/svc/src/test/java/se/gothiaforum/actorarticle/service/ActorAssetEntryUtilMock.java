@@ -22,20 +22,18 @@
  */
 package se.gothiaforum.actorarticle.service;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import se.gothiaforum.actorsarticle.util.ActorAssetEntryUtil;
-
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portlet.asset.model.AssetTag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.gothiaforum.actorsarticle.util.ActorAssetEntryUtil;
 
 /**
  * @author simongoransson
  * 
  */
 public class ActorAssetEntryUtilMock extends ActorAssetEntryUtil {
-    private static final Log LOG = LogFactory.getLog(ActorAssetEntryUtilMock.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorAssetEntryUtilMock.class);
 
     @Override
     public void clearAssetTags(long pk) throws SystemException {

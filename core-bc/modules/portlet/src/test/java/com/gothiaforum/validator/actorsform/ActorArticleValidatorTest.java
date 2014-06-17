@@ -22,24 +22,23 @@
  */
 package com.gothiaforum.validator.actorsform;
 
-import static org.mockito.Matchers.anyString;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.Errors;
-
 import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
 import se.gothiaforum.validator.actorsform.ActorArticleValidator;
+
+import static org.mockito.Matchers.anyString;
 
 /**
  * @author simongoransson
  * 
  */
 public class ActorArticleValidatorTest {
-    private static final Log LOG = LogFactory.getLog(ActorArticleValidatorTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorArticleValidatorTest.class);
 
     /** The actor article. */
     ActorArticle actorArticle;

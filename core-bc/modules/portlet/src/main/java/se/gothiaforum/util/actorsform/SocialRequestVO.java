@@ -19,17 +19,16 @@
 
 package se.gothiaforum.util.actorsform;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.liferay.portlet.social.model.SocialRequest;
 import com.liferay.portlet.social.model.SocialRequestFeedEntry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class Social Request Value Object.
  */
 public class SocialRequestVO {
-    private static final Log LOG = LogFactory.getLog(SocialRequestVO.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SocialRequestVO.class);
 
     private SocialRequest socialRequest;
 

@@ -22,30 +22,24 @@
  */
 package com.gothiaforum.validator.actorsform;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyString;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
+import se.gothiaforum.validator.actorsform.ImageValidator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.springframework.validation.Errors;
-import org.springframework.web.multipart.MultipartFile;
-
-import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
-import se.gothiaforum.validator.actorsform.ActorArticleValidator;
-import se.gothiaforum.validator.actorsform.ImageValidator;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author simongoransson
  * 
  */
 public class ImageValidatorTest {
-    private static final Log LOG = LogFactory.getLog(ImageValidatorTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ImageValidatorTest.class);
 
     /**
      * Test watch should work for jpg file

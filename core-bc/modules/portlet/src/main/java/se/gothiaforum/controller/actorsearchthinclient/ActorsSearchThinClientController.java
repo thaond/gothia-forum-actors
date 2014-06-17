@@ -19,42 +19,6 @@
 
 package se.gothiaforum.controller.actorsearchthinclient;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.URLEncoder;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletException;
-import javax.portlet.PortletPreferences;
-import javax.portlet.ReadOnlyException;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
-import javax.portlet.ValidatorException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.portlet.bind.annotation.ActionMapping;
-import org.springframework.web.portlet.bind.annotation.RenderMapping;
-import org.springframework.web.portlet.bind.annotation.ResourceMapping;
-
-import se.gothiaforum.actorsarticle.util.ActorsConstants;
-import se.gothiaforum.portlet.service.PortletService;
-import se.gothiaforum.settings.service.SettingsService;
-import se.gothiaforum.settings.util.ExpandoConstants;
-
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -73,6 +37,30 @@ import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.portlet.bind.annotation.ActionMapping;
+import org.springframework.web.portlet.bind.annotation.RenderMapping;
+import org.springframework.web.portlet.bind.annotation.ResourceMapping;
+import se.gothiaforum.actorsarticle.util.ActorsConstants;
+import se.gothiaforum.portlet.service.PortletService;
+import se.gothiaforum.settings.service.SettingsService;
+import se.gothiaforum.settings.util.ExpandoConstants;
+
+import javax.portlet.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.URLEncoder;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This Controller class is used as a client to call the "main" search component (ActorSearchController).
@@ -83,7 +71,7 @@ import com.liferay.portlet.journal.service.JournalArticleLocalService;
 @Controller
 @RequestMapping(value = "VIEW")
 public class ActorsSearchThinClientController {
-    private static final Log LOG = LogFactory.getLog(ActorsSearchThinClientController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorsSearchThinClientController.class);
 
     @Autowired
     private SettingsService settingsService;
@@ -265,7 +253,7 @@ public class ActorsSearchThinClientController {
             LOG.info("Number of matching tags: " + tagsList.size());
 
         } catch (SystemException e) {
-            LOG.error(e, e);
+            LOG.error(e.getMessage(), e);
         }
 
         return tagsList;

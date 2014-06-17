@@ -22,17 +22,16 @@
  */
 package se.gothiaforum.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.liferay.util.Normalizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author simongoransson
  * 
  */
 public class NormalizerWrapper {
-    private static final Log LOG = LogFactory.getLog(NormalizerWrapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NormalizerWrapper.class);
 
     public String normalizeToAscii(String s) {
 

@@ -19,11 +19,11 @@
 
 package se.gothiaforum.validator.actorsform;
 
-import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * This is a validation class for images.
@@ -31,7 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author simgo3
  */
 public class ImageValidator {
-    private static final Log LOG = LogFactory.getLog(ImageValidator.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ImageValidator.class);
     private static final int IMAGE_MIN_SIZE = 0;
     private static final int IMAGE_MAX_SIZE = 5 * 1024 * 1024;
 
