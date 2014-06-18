@@ -19,21 +19,6 @@
 
 package se.gothiaforum.controller.actorssearchresult;
 
-import java.util.List;
-
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.portlet.bind.annotation.RenderMapping;
-
-import se.gothiaforum.actorsarticle.util.ActorsConstants;
-
 import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -43,6 +28,18 @@ import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.portlet.bind.annotation.RenderMapping;
+import se.gothiaforum.actorsarticle.util.ActorsConstants;
+
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import java.util.List;
 
 /**
  * This controller class performs a search for actors.
@@ -53,7 +50,7 @@ import com.liferay.portlet.journal.service.JournalArticleLocalService;
 @Controller
 @RequestMapping(value = "VIEW")
 public class ActorsSearchResultController {
-    private static final Log LOG = LogFactory.getLog(ActorsSearchResultController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorsSearchResultController.class);
 
     @Autowired
     private JournalArticleLocalService articleService;
@@ -79,25 +76,25 @@ public class ActorsSearchResultController {
             ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 
             try {
-                Group group =
+                Group groupContainingArticle =
                         GroupLocalServiceUtil.getFriendlyURLGroup(themeDisplay.getCompanyId(), "/"
                                 + friendlyURL);
 
-                JournalArticle journalArticle = null;
+                JournalArticle foundJournalArticle = null;
                 List<JournalArticle> articles;
 
                 articles = articleService.getArticles();
 
                 // Find the Journal Article for the current group.
                 for (JournalArticle jA : articles) {
-                    if (jA.getGroupId() == group.getGroupId()
-                            && jA.getType().equals(ActorsConstants.TYPE_ACTOR)) {
-                        journalArticle = articleService.getLatestArticle(jA.getResourcePrimKey());
+                    if (jA.getGroupId() == groupContainingArticle.getGroupId() && jA.getType().equals(ActorsConstants.TYPE_ACTOR)) {
+                        foundJournalArticle = articleService.getLatestArticle(jA.getResourcePrimKey());
+                        break;
                     }
                 }
 
                 String content =
-                        articleService.getArticleContent(journalArticle, ActorsConstants.GLOBAL_TEMPLATEID,
+                        articleService.getArticleContent(foundJournalArticle, ActorsConstants.GLOBAL_TEMPLATEID,
                                 null, themeDisplay.getLanguageId(), themeDisplay);
 
                 model.addAttribute("content", content);

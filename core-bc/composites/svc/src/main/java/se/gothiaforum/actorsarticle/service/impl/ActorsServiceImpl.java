@@ -19,24 +19,9 @@
 
 package se.gothiaforum.actorsarticle.service.impl;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
-import se.gothiaforum.actorsarticle.service.ActorsArticleConverterService;
-import se.gothiaforum.actorsarticle.service.ActorsService;
-import se.gothiaforum.actorsarticle.util.ActorAssetEntryUtil;
-import se.gothiaforum.actorsarticle.util.ActorsConstants;
-import se.gothiaforum.actorsarticle.util.ActorsServiceUtil;
-
 import com.liferay.counter.service.CounterLocalService;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Organization;
@@ -52,17 +37,31 @@ import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.service.AssetEntryLocalService;
 import com.liferay.portlet.asset.service.AssetTagLocalService;
 import com.liferay.portlet.asset.service.AssetTagPropertyLocalService;
-import com.liferay.portlet.imagegallery.NoSuchFolderException;
-import com.liferay.portlet.imagegallery.model.IGFolder;
-import com.liferay.portlet.imagegallery.model.IGImage;
-import com.liferay.portlet.imagegallery.service.IGFolderLocalService;
-import com.liferay.portlet.imagegallery.service.IGImageLocalService;
+import com.liferay.portlet.documentlibrary.NoSuchFolderException;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.model.DLFolder;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryTypeLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFolderLocalService;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalArticleResource;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 import com.liferay.portlet.journal.service.JournalArticleResourceLocalService;
 import com.liferay.portlet.messageboards.service.MBMessageLocalService;
 import com.liferay.portlet.social.service.SocialRequestLocalService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
+import se.gothiaforum.actorsarticle.service.ActorsArticleConverterService;
+import se.gothiaforum.actorsarticle.service.ActorsService;
+import se.gothiaforum.actorsarticle.util.ActorAssetEntryUtil;
+import se.gothiaforum.actorsarticle.util.ActorsConstants;
+import se.gothiaforum.actorsarticle.util.ActorsServiceUtil;
+
+import java.io.ByteArrayInputStream;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * The Class ActorsArticleService.
@@ -72,23 +71,22 @@ import com.liferay.portlet.social.service.SocialRequestLocalService;
  */
 public class ActorsServiceImpl implements ActorsService {
 
-    private static final Log LOG = LogFactory.getLog(ActorsServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorsServiceImpl.class);
+    private final ActorAssetEntryUtil actorAssetEntryUtil;
     private final ActorsArticleConverterService actorsArticleConverterService;
     private final ActorsServiceUtil actorsServiceUtil;
     private final AssetEntryLocalService assetEntryService;
     private final AssetTagLocalService assetTagService;
     private final AssetTagPropertyLocalService assetTagPropertyService;
     private final CounterLocalService counterService;
-    private final IGImageLocalService iGImageService;
-    private final IGFolderLocalService iGFolderService;
+    private final DLFolderLocalService dlFolderLocalService;
     private final JournalArticleLocalService articleService;
     private final JournalArticleResourceLocalService articleResourceService;
+    private final MBMessageLocalService mBMessageLocalService;
     private final OrganizationLocalService organizationService;
     private final SocialRequestLocalService socialRequestService;
     private final RoleLocalService roleService;
     private final UserLocalService userService;
-    private final MBMessageLocalService mBMessageLocalService;
-    private final ActorAssetEntryUtil actorAssetEntryUtil;
 
     private static final int ADD_MEMBER = 1;
     private static final int FILE_SUFIX_LENGHT = 3;
@@ -108,9 +106,7 @@ public class ActorsServiceImpl implements ActorsService {
      *            the asset tag property service
      * @param counterService
      *            the counter service
-     * @param iGImageService
-     *            the i g image service
-     * @param iGFolderService
+     * @param dlFolderLocalService
      *            the i g folder service
      * @param articleService
      *            the article service
@@ -132,8 +128,8 @@ public class ActorsServiceImpl implements ActorsService {
     public ActorsServiceImpl(ActorsArticleConverterService actorsArticleConverterService,
             ActorsServiceUtil actorsServiceUtil, AssetEntryLocalService assetEntryService,
             AssetTagLocalService assetTagService, AssetTagPropertyLocalService assetTagPropertyService,
-            CounterLocalService counterService, IGImageLocalService iGImageService,
-            IGFolderLocalService iGFolderService, JournalArticleLocalService articleService,
+            CounterLocalService counterService,
+            DLFolderLocalService dlFolderLocalService, JournalArticleLocalService articleService,
             JournalArticleResourceLocalService articleResourceService,
             OrganizationLocalService organizationService, SocialRequestLocalService socialRequestService,
             RoleLocalService roleService, UserLocalService userService,
@@ -147,8 +143,7 @@ public class ActorsServiceImpl implements ActorsService {
         this.assetTagService = assetTagService;
         this.assetTagPropertyService = assetTagPropertyService;
         this.counterService = counterService;
-        this.iGImageService = iGImageService;
-        this.iGFolderService = iGFolderService;
+        this.dlFolderLocalService = dlFolderLocalService;
         this.articleService = articleService;
         this.articleResourceService = articleResourceService;
         this.organizationService = organizationService;
@@ -205,12 +200,8 @@ public class ActorsServiceImpl implements ActorsService {
                 actorArticle.setContent(articleService.getArticleContent(journalArticle,
                         ActorsConstants.GLOBAL_TEMPLATEID, null, themeDisplay.getLanguageId(), themeDisplay));
             } catch (PortalException e) {
-                // actorArticle.setContent("Fel");
-                // return actorArticle;
                 throw new RuntimeException("Unable to get actor's article.", e);
             } catch (SystemException e) {
-                // actorArticle.setContent("Fel");
-                // return actorArticle;
                 throw new RuntimeException("Unable to get actor's article.", e);
             }
         }
@@ -299,7 +290,7 @@ public class ActorsServiceImpl implements ActorsService {
 
         try {
             org = organizationService.addOrganization(userId, parentOrganizationId, name, type, recursable,
-                    regionId, countryId, statusId, comments, null);
+                    regionId, countryId, statusId, comments, false, serviceContext);
 
         } catch (PortalException e) {
             throw new RuntimeException("Unable to add a organization", e);
@@ -432,14 +423,10 @@ public class ActorsServiceImpl implements ActorsService {
             Long[] userGroupRole = new Long[] { longGroupId, roleId };
 
             userParams.put("userGroupRole", userGroupRole);
-            List<User> users = userService.search(companyId, null, true, userParams, QueryUtil.ALL_POS,
-                    QueryUtil.ALL_POS, (OrderByComparator) null);
+            User user = userService.getUserById(companyId, userId);
 
-            for (User user : users) {
-
-                socialRequestService.addRequest(userId, 0, Organization.class.getName(), organizationId,
-                        ADD_MEMBER, StringPool.BLANK, user.getUserId());
-            }
+            socialRequestService.addRequest(userId, 0, Organization.class.getName(), organizationId,
+                    ADD_MEMBER, StringPool.BLANK, user.getUserId());
 
         } catch (PortalException e) {
             throw new RuntimeException("Unable to send a social request", e);
@@ -455,15 +442,15 @@ public class ActorsServiceImpl implements ActorsService {
      * java.lang.String)
      */
     @Override
-    public IGImage addImage(long userId, long actorGroupId, String originalFileName, byte[] logoInByte,
-            String mimeType) {
+    public DLFileEntry addImage(long userId, long actorGroupId, String originalFileName, byte[] logoInByte,
+                                String mimeType, String portletId) {
 
         ServiceContext serviceContext = new ServiceContext();
         serviceContext.setScopeGroupId(actorGroupId);
-        IGFolder logoFolder = null;
+        DLFolder logoFolder = null;
 
         try {
-            logoFolder = iGFolderService.getFolder(actorGroupId, 0, ActorsConstants.LOGO_FOLDER_NAME);
+            logoFolder = dlFolderLocalService.getFolder(actorGroupId, 0, ActorsConstants.LOGO_FOLDER_NAME);
         } catch (NoSuchFolderException nsfe) {
             LOG.warn("Unable to add a image folder for an actor, reason no such folder");
         } catch (PortalException e) {
@@ -474,20 +461,31 @@ public class ActorsServiceImpl implements ActorsService {
 
         try {
             if (logoFolder != null) {
-                iGFolderService.deleteFolder(logoFolder.getFolderId());
+                dlFolderLocalService.deleteFolder(logoFolder.getFolderId());
             }
 
-            logoFolder = iGFolderService
-                    .addFolder(userId, 0, ActorsConstants.LOGO_FOLDER_NAME, "", serviceContext);
+            logoFolder = dlFolderLocalService.addFolder(userId, actorGroupId, actorGroupId, false, 0, ActorsConstants.LOGO_FOLDER_NAME,
+                    "", false, serviceContext);
 
-            String filename = "actor-logo."
-                    + originalFileName.substring(originalFileName.length() - FILE_SUFIX_LENGHT,
-                            originalFileName.length());
+            DLFileEntry addedImage = DLFileEntryLocalServiceUtil.addFileEntry( // todo inject dependency instead
+                    userId,
+                    actorGroupId,
+                    actorGroupId,
+                    logoFolder.getFolderId(),
+                    originalFileName,
+                    mimeType,
+                    originalFileName,
+                    "",
+                    "",
+                    DLFileEntryTypeLocalServiceUtil.getDLFileEntryType(46801).getFileEntryTypeId(), // IMAGE_GALLERY_IMAGE// todo inject dependency instead
+                    Collections.EMPTY_MAP,
+                    null,
+                    new ByteArrayInputStream(logoInByte),
+                    logoInByte.length,
+                    serviceContext
+            );
 
-            IGImage addImage = iGImageService.addImage(userId, actorGroupId, logoFolder.getFolderId(),
-                    ActorsConstants.ACTOR_LOGO_NAME, filename, filename, logoInByte, mimeType, serviceContext);
-
-            return addImage;
+            return addedImage;
 
         } catch (PortalException e) {
             throw new RuntimeException("Unable to add a image on an actor", e);
@@ -499,28 +497,25 @@ public class ActorsServiceImpl implements ActorsService {
     /*
      * (non-Javadoc)
      * 
-     * @see se.gothiaforum.actorsarticle.service.ActorsService#getIGImageURL(com.liferay.portal.theme.ThemeDisplay)
+     * @see se.gothiaforum.actorsarticle.service.ActorsService#getImageURL(com.liferay.portal.theme.ThemeDisplay)
      */
     @Override
-    public String getIGImageURL(ThemeDisplay themeDisplay) {
+    public String getImageURL(ThemeDisplay themeDisplay) {
 
         long groupId = getActorOrganization(themeDisplay.getUser());
 
-        IGFolder logoIGFolder;
+        DLFolder logoFolder;
         try {
-            logoIGFolder = iGFolderService.getFolder(groupId, 0, ActorsConstants.LOGO_FOLDER_NAME);
-            List<IGImage> images = iGImageService.getImages(groupId, logoIGFolder.getFolderId());
-            IGImage actorLogo = null;
+            logoFolder = dlFolderLocalService.getFolder(groupId, 0, ActorsConstants.LOGO_FOLDER_NAME);
 
-            for (IGImage image : images) {
-                if (image.getName().equals(ActorsConstants.ACTOR_LOGO_NAME)) {
-                    actorLogo = image;
-                }
-            }
-            if (actorLogo != null) {
-                String imageURL = themeDisplay.getPathImage() + "/image_gallery?img_id="
-                        + actorLogo.getLargeImageId() + ActorsConstants.ACTOR_LOGO_HEIGHT_AND_WIDTH;
-                return imageURL;
+            List<DLFileEntry> fileEntries = DLFileEntryLocalServiceUtil.getFileEntries(groupId, logoFolder.getFolderId());// todo inject dependency instead
+
+            if (fileEntries.size() > 1) {
+                throw new IllegalStateException("Only one image file is expected in an actor logo folder.");
+            } else if (fileEntries.size() < 1) {
+                throw new RuntimeException("Couldn't find the logo image.");
+            } else {
+                return ActorsServiceUtil.getImageUrl(fileEntries.get(0));
             }
 
         } catch (PortalException e) {

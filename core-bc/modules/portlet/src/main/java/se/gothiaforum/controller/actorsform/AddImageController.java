@@ -19,16 +19,16 @@
 
 package se.gothiaforum.controller.actorsform;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletRequest;
-import javax.portlet.RenderRequest;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.journal.model.JournalArticle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,19 +40,17 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.portlet.bind.PortletRequestDataBinder;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.multipart.MultipartActionRequest;
-
 import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
 import se.gothiaforum.actorsarticle.service.ActorsService;
+import se.gothiaforum.actorsarticle.util.ActorsServiceUtil;
 import se.gothiaforum.validator.actorsform.ImageValidator;
 
-import com.liferay.portal.kernel.search.Indexer;
-import com.liferay.portal.kernel.search.IndexerRegistryUtil;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.ServiceContextFactory;
-import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portlet.imagegallery.model.IGImage;
-import com.liferay.portlet.journal.model.JournalArticle;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.PortletRequest;
+import javax.portlet.RenderRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The controller that handles the logo (image) related functionality.
@@ -62,7 +60,7 @@ import com.liferay.portlet.journal.model.JournalArticle;
 @Controller
 @RequestMapping(value = "VIEW")
 public class AddImageController {
-    private static final Log LOG = LogFactory.getLog(AddImageController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AddImageController.class);
 
     @Autowired
     private ActorsService actorsService;
@@ -137,7 +135,7 @@ public class AddImageController {
                         ServiceContextFactory.getInstance(JournalArticle.class.getName(), request);
 
                 String imageURL =
-                        actorsService.getIGImageURL((ThemeDisplay) request
+                        actorsService.getImageURL((ThemeDisplay) request
                                 .getAttribute(WebKeys.THEME_DISPLAY));
 
                 actorArticle.setImageUuid(imageURL);
@@ -163,18 +161,17 @@ public class AddImageController {
 
                     byte[] logoInByte = multipartFile.getBytes();
 
-                    IGImage image =
+                    DLFileEntry image =
                             actorsService.addImage(userId, actorGroupId, originalFileName, logoInByte,
-                                    mimeType);
+                                    mimeType, themeDisplay.getPortletDisplay().getRootPortletId());
 
                     ServiceContext serviceContext =
                             ServiceContextFactory.getInstance(JournalArticle.class.getName(), request);
 
-                    String imageURL =
-                            "/image/image_gallery?uuid=" + image.getUuid() + "&groupId="
-                                    + actorArticle.getGroupId();
+                    // Assume there is no parent folder. Otherwise we would need to concatenate a like "{parentFolderId}/{image.getFolderId}
+                    String imageUrl = ActorsServiceUtil.getImageUrl(image);
 
-                    actorArticle.setImageUuid(imageURL);
+                    actorArticle.setImageUuid(imageUrl);
 
                     JournalArticle article =
                             actorsService.updateActors(actorArticle, userId, serviceContext,
@@ -201,7 +198,7 @@ public class AddImageController {
      */
     @ModelAttribute(value = "actorLogo")
     public String getActorsLogo(PortletRequest request) {
-        return actorsService.getIGImageURL((ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY));
+        return actorsService.getImageURL((ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY));
     }
 
     public void setActorsService(ActorsService actorsService) {
