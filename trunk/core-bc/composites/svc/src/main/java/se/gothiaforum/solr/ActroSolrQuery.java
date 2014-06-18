@@ -19,16 +19,14 @@
 
 package se.gothiaforum.solr;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.liferay.portal.kernel.search.Field;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.gothiaforum.actorsarticle.util.ActorsArticleUtil;
-
-import com.liferay.portal.kernel.search.Field;
 
 /**
  * The Class ActroSolrQuery is a extension of SolrQuery, so it is a query. ActroSolrQuery holds an connection to
@@ -42,7 +40,7 @@ public class ActroSolrQuery extends SolrQuery {
     private static final long serialVersionUID = 1L;
 
     /** The Constant LOG. */
-    private static final Log LOG = LogFactory.getLog(ActorsArticleUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorsArticleUtil.class);
 
     private SolrServer solrServer;
 
@@ -88,18 +86,27 @@ public class ActroSolrQuery extends SolrQuery {
     /**
      * Use this method to perform a weighted search for an actor.
      * 
-     * @param q
+     * @param searthTerm
      *            the search term.
      * @return it self.
      */
-    public ActroSolrQuery actorQuery(String q) {
-        this.setQuery(q);
-        this.setQueryType("dismax");
+    public ActroSolrQuery actorQuery(String searthTerm) {
+        this.setQuery(buildQueryString(searthTerm));
         this.set("qf", "assetTagNames^1000 title^100 actor-name^100 org-name^100 intro^10 description^1 ");
         this.set("mm", "50%");
         this.set("fl", "*");
         setHighlightingParameters();
         return this;
+    }
+
+    static String buildQueryString(String q) {
+        return String.format(
+                " OR title:%1$s" +
+                " OR assetTagNames:%1$s" +
+                " OR description:%1$s" +
+                " OR actor-name:%1$s" +
+                " OR org-name:%1$s" +
+                " OR intro:%1$s", q);
     }
 
     private void setHighlightingParameters() {

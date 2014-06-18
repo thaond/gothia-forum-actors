@@ -19,16 +19,15 @@
 
 package se.gothiaforum.actorsarticle.service;
 
-import java.util.List;
-
-import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
-
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portlet.imagegallery.model.IGImage;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.journal.model.JournalArticle;
+import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
+
+import java.util.List;
 
 /**
  * The Interface for the ActorsService.
@@ -138,7 +137,7 @@ public interface ActorsService {
      *            the theme display
      * @return the iG image url
      */
-    String getIGImageURL(ThemeDisplay themeDisplay);
+    String getImageURL(ThemeDisplay themeDisplay);
 
     /**
      * Adds the image to the image gallery and adds it to the actor article.
@@ -153,8 +152,9 @@ public interface ActorsService {
      *            the logo in byte
      * @param mimeType
      *            the mime type
+     * @param portletId
      * @return the iG image
      */
-    IGImage addImage(long userId, long actorGroupId, String originalFileName, byte[] logoInByte, String mimeType);
+    DLFileEntry addImage(long userId, long actorGroupId, String originalFileName, byte[] logoInByte, String mimeType, String portletId);
 
 }

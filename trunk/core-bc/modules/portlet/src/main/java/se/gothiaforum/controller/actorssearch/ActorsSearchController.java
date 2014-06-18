@@ -19,45 +19,6 @@
 
 package se.gothiaforum.controller.actorssearch;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletException;
-import javax.portlet.PortletPreferences;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.portlet.bind.annotation.ActionMapping;
-import org.springframework.web.portlet.bind.annotation.RenderMapping;
-import org.springframework.web.portlet.bind.annotation.ResourceMapping;
-
-import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
-import se.gothiaforum.actorsarticle.domain.model.Tag;
-import se.gothiaforum.actorsarticle.util.ActorsConstants;
-import se.gothiaforum.settings.service.SettingsService;
-import se.gothiaforum.settings.util.ExpandoConstants;
-import se.gothiaforum.solr.ActroSolrQuery;
-import se.gothiaforum.util.Constants;
-import se.gothiaforum.util.model.PageIterator;
-
 import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -80,6 +41,35 @@ import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.journal.NoSuchArticleException;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.portlet.bind.annotation.ActionMapping;
+import org.springframework.web.portlet.bind.annotation.RenderMapping;
+import org.springframework.web.portlet.bind.annotation.ResourceMapping;
+import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
+import se.gothiaforum.actorsarticle.domain.model.Tag;
+import se.gothiaforum.actorsarticle.util.ActorsConstants;
+import se.gothiaforum.settings.service.SettingsService;
+import se.gothiaforum.settings.util.ExpandoConstants;
+import se.gothiaforum.solr.ActroSolrQuery;
+import se.gothiaforum.util.Constants;
+import se.gothiaforum.util.model.PageIterator;
+
+import javax.portlet.*;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This controller class performs a search for actors.
@@ -91,7 +81,7 @@ import com.liferay.portlet.journal.service.JournalArticleLocalService;
 @RequestMapping(value = "VIEW")
 public class ActorsSearchController {
 
-    private static Log log = LogFactory.getLog(ActorsSearchController.class);
+    private static Logger log = LoggerFactory.getLogger(ActorsSearchController.class);
     private static final int SEARCH_ROWS = 100;
 
     @Autowired
@@ -155,19 +145,19 @@ public class ActorsSearchController {
                     resultIter = queryResponse.getResults().iterator();
 
                     while (resultIter.hasNext()) {
-                        SolrDocument doc = resultIter.next();
+                        SolrDocument solrArticleEntry = resultIter.next();
                         ActorArticle actorArticle = new ActorArticle();
-                        actorArticle.setArticleId((String) doc
-                                .getFieldValue(ActorsConstants.ACTORS_ARTICLE_PK));
 
-                        if (doc.getFieldValue(ActorsConstants.GROUP_ID) != null) {
-                            actorArticle.setGroupId(Long.valueOf((String) doc
-                                    .getFieldValue(ActorsConstants.GROUP_ID)));
+                        String actorsArticlePk = extractFieldValue(solrArticleEntry, ActorsConstants.ACTORS_ARTICLE_PK);
+                        actorArticle.setArticleId(actorsArticlePk);
+
+                        if (solrArticleEntry.getFieldValue(ActorsConstants.GROUP_ID) != null) {
+                            actorArticle.setGroupId(Long.valueOf(extractFieldValue(solrArticleEntry, ActorsConstants.GROUP_ID)));
                         }
 
                         // In case of faulty solr index take care of not adding incorrect articles.
                         try {
-                            setArticleContentAndTitle(themeDisplay, queryResponse, doc, actorArticle);
+                            setArticleContentAndTitle(themeDisplay, queryResponse, solrArticleEntry, actorArticle);
                             
                             long articleGroupId = actorArticle.getGroupId();
                             
@@ -203,9 +193,9 @@ public class ActorsSearchController {
                                     themeDisplay.getLanguageId(), themeDisplay);
                     model.addAttribute("searchNoHitsArticleContent", searchNoHitsArticleContent);
                 } catch (PortalException e) {
-                    log.info("no article for thin client search portlet found");
+                    log.warn("no article for thin client search portlet found", e);
                 } catch (SystemException e) {
-                    log.info("no article for thin client search portlet found");
+                    log.warn("no article for thin client search portlet found", e);
                 }
 
             }
@@ -253,6 +243,21 @@ public class ActorsSearchController {
         return "searchView";
     }
 
+    private String extractFieldValue(SolrDocument solrArticleEntry, String fieldName) {
+        Object fieldValue = solrArticleEntry.getFieldValue(fieldName);
+        if (fieldValue instanceof String) {
+            return (String) fieldValue;
+        } else if (fieldValue instanceof List) {
+            List list = (List) fieldValue;
+            if (list.size() != 1) {
+                throw new IllegalStateException("Unexpected size. Expected 1. Got " + list.size());
+            }
+            return (String) list.get(0);
+        } else {
+            throw new IllegalStateException("Unexpected type. Expected String or List. Got " + fieldValue.getClass().getName());
+        }
+    }
+
     private void setupTags(List<ActorArticle> sublist) {
         for (ActorArticle actorArticle : sublist) {
 
@@ -292,9 +297,7 @@ public class ActorsSearchController {
             // Title highlighting
             List<String> title = highlightedFields.get(Field.TITLE);
             if (title != null && title.size() > 0) {
-                highlightTitle = title.get(0); // Probably rare with more than one but first should always be
-                // System.out.println("highlightTitle " + highlightTitle);
-                // enough.
+                highlightTitle = title.get(0); // Probably rare with more than one but first should always be enough.
             }
 
             // Name highlighting
@@ -330,9 +333,9 @@ public class ActorsSearchController {
         }
 
         if (highlightTitle != null) {
-            actorArticle.setTitle(highlightTitle);
+            actorArticle.setTitle(stripLanguageSuffix(highlightTitle));
         } else {
-            actorArticle.setTitle((String) doc.getFieldValue(Field.TITLE));
+            actorArticle.setTitle(stripLanguageSuffix((String) doc.getFieldValue(Field.TITLE)));
         }
 
         if (highlightName != null) {
@@ -412,6 +415,12 @@ public class ActorsSearchController {
 
         // System.out.println("actorArticle intro " + actorArticle.getIntro());
         // System.out.println("actorArticle dede " + actorArticle.getDetailedDescription());
+    }
+
+    private String stripLanguageSuffix(String string) {
+        string = string.replace("_sv", "");
+        string = string.replace("_SV", "");
+        return string;
     }
 
     /**
@@ -538,7 +547,7 @@ public class ActorsSearchController {
             log.info("Number of matching tags: " + tagsList.size());
 
         } catch (SystemException e) {
-            log.error(e, e);
+            log.error(e.getMessage(), e);
         }
 
         return tagsList;

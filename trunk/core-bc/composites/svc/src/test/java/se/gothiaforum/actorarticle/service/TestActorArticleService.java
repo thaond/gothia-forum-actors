@@ -22,27 +22,6 @@
  */
 package se.gothiaforum.actorarticle.service;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-
-import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
-import se.gothiaforum.actorsarticle.service.ActorsArticleConverterService;
-import se.gothiaforum.actorsarticle.service.ActorsService;
-import se.gothiaforum.actorsarticle.service.impl.ActorsArticleConverterServiceImpl;
-import se.gothiaforum.actorsarticle.service.impl.ActorsServiceImpl;
-import se.gothiaforum.actorsarticle.util.ActorAssetEntryUtil;
-import se.gothiaforum.actorsarticle.util.ActorsConstants;
-import se.gothiaforum.actorsarticle.util.ActorsServiceUtil;
-
 import com.liferay.counter.service.CounterLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -51,21 +30,11 @@ import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistry;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.kernel.xml.SAXReader;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.model.ListType;
-import com.liferay.portal.model.Organization;
-import com.liferay.portal.model.Role;
-import com.liferay.portal.model.User;
+import com.liferay.portal.model.*;
 import com.liferay.portal.model.impl.ListTypeImpl;
 import com.liferay.portal.model.impl.OrganizationImpl;
 import com.liferay.portal.model.impl.RoleImpl;
-import com.liferay.portal.service.ClassNameLocalService;
-import com.liferay.portal.service.ListTypeService;
-import com.liferay.portal.service.OrganizationLocalService;
-import com.liferay.portal.service.RoleLocalService;
-import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.UserGroupRoleLocalService;
-import com.liferay.portal.service.UserLocalService;
+import com.liferay.portal.service.*;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.xml.SAXReaderImpl;
 import com.liferay.portlet.asset.model.AssetEntry;
@@ -75,8 +44,7 @@ import com.liferay.portlet.asset.model.impl.AssetTagImpl;
 import com.liferay.portlet.asset.service.AssetEntryLocalService;
 import com.liferay.portlet.asset.service.AssetTagLocalService;
 import com.liferay.portlet.asset.service.AssetTagPropertyLocalService;
-import com.liferay.portlet.imagegallery.service.IGFolderLocalService;
-import com.liferay.portlet.imagegallery.service.IGImageLocalService;
+import com.liferay.portlet.documentlibrary.service.DLFolderLocalService;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalArticleResource;
 import com.liferay.portlet.journal.model.impl.JournalArticleImpl;
@@ -87,14 +55,33 @@ import com.liferay.portlet.journal.service.JournalStructureLocalService;
 import com.liferay.portlet.journal.service.JournalTemplateLocalService;
 import com.liferay.portlet.messageboards.service.MBMessageLocalService;
 import com.liferay.portlet.social.service.SocialRequestLocalService;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
+import se.gothiaforum.actorsarticle.service.ActorsArticleConverterService;
+import se.gothiaforum.actorsarticle.service.ActorsService;
+import se.gothiaforum.actorsarticle.service.impl.ActorsArticleConverterServiceImpl;
+import se.gothiaforum.actorsarticle.service.impl.ActorsServiceImpl;
+import se.gothiaforum.actorsarticle.util.ActorAssetEntryUtil;
+import se.gothiaforum.actorsarticle.util.ActorsConstants;
+import se.gothiaforum.actorsarticle.util.ActorsServiceUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author simongoransson
  * 
  */
 
-public class TestActroArticleService {
-    private static final Log LOG = LogFactory.getLog(TestActroArticleService.class);
+public class TestActorArticleService {
+    private static final Logger LOG = LoggerFactory.getLogger(TestActorArticleService.class);
 
     private ActorsArticleConverterService actorsArticleConverterService;
     private ActorsServiceUtil actorsServiceUtil;
@@ -111,8 +98,7 @@ public class TestActroArticleService {
     private RoleLocalService roleService;
     private UserGroupRoleLocalService userGroupRoleService;
     private UserLocalService userService;
-    private IGImageLocalService iGImageService;
-    private IGFolderLocalService iGFolderService;
+    private DLFolderLocalService iGFolderService;
     private JournalArticleLocalService articleService;
     private JournalArticleResourceLocalService articleResourceService;
     private SocialRequestLocalService socialRequestService;
@@ -144,8 +130,7 @@ public class TestActroArticleService {
         roleService = Mockito.mock(RoleLocalService.class);
         userGroupRoleService = Mockito.mock(UserGroupRoleLocalService.class);
         userService = Mockito.mock(UserLocalService.class);
-        iGImageService = Mockito.mock(IGImageLocalService.class);
-        iGFolderService = Mockito.mock(IGFolderLocalService.class);
+        iGFolderService = Mockito.mock(DLFolderLocalService.class);
         articleService = Mockito.mock(JournalArticleLocalService.class);
         articleResourceService = Mockito.mock(JournalArticleResourceLocalService.class);
         socialRequestService = Mockito.mock(SocialRequestLocalService.class);
@@ -156,7 +141,7 @@ public class TestActroArticleService {
                 structureService, templateService, listTypeService, organizationService, roleService,
                 userGroupRoleService, userService);
         actorsService = new ActorsServiceImpl(actorsArticleConverterService, actorsServiceUtil, assetEntryService,
-                assetTagService, assetTagPropertyService, counterService, iGImageService, iGFolderService,
+                assetTagService, assetTagPropertyService, counterService, /*iGImageService,*/ iGFolderService,
                 articleService, articleResourceService, organizationService, socialRequestService, roleService,
                 userService, mBMessageLocalService, actorAssetEntryUtil);
 
@@ -188,7 +173,7 @@ public class TestActroArticleService {
         Mockito.when(
                 organizationService.addOrganization(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString(),
                         Mockito.anyString(), Mockito.anyBoolean(), Mockito.anyLong(), Mockito.anyLong(),
-                        Mockito.anyInt(), Mockito.anyString(), (ServiceContext) Mockito.isNull())).thenReturn(
+                        Mockito.anyInt(), Mockito.anyString(), Mockito.anyBoolean(), (ServiceContext) Mockito.isNull())).thenReturn(
                 organizationMock);
 
         Role role = new RoleImpl();
@@ -269,6 +254,8 @@ public class TestActroArticleService {
         Mockito.when(articleService.getArticles()).thenReturn(articles);
         Mockito.when(articleService.getLatestArticle(Mockito.anyLong())).thenReturn(journalArticle2);
 
+        // An exception will occur of we don't set this value.
+        System.setProperty("plugin.servlet.context.name", "asdf");
         ActorArticle actorArticle = actorsService.getActorsArticle(themeDisplay);
 
         assertEquals("11111", actorArticle.getArticleId());

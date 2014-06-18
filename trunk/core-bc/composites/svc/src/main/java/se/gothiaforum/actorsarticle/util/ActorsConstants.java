@@ -30,13 +30,10 @@ public final class ActorsConstants {
         throw new UnsupportedOperationException();
     }
 
-    public static final String GLOBAL_STRUCTRUEID = "GF_ACTOR_STRUCTURE"; // GF_SERVICE or GF_ACTOR_STRUCTURE
+    public static final String GLOBAL_STRUCTRUEID = "GF_SERVICE"; // GF_SERVICE or GF_ACTOR_STRUCTURE
     public static final String GLOBAL_TEMPLATEID = "GF_ACTOR_TEMPLATE"; // GF_SERVICE or GF_ACTOR_TEMPLATE
     public static final String GLOBAL_LIST_TEMPLATEID = "GF_ACTOR_LIST";
     public static final String GLOBAL_MORE_LIKE_THIS_TEMPLATEID = "GF_MORE_LIKE_THIS";
-
-    public static final String STRUCTRUEID = "GF_ACTOR"; // GF_SERVICE or GF_ACTOR_STRUCTURE
-    public static final String TEMPLATEID = "GF_ACTOR"; // GF_SERVICE or GF_ACTOR_TEMPLATE
 
     public static final String PARENT_ORGANIZATION = "Gothia Parent Organization";
     public static final String ORGNIZATION_ACTOR_TYPE = "gothia-actor";

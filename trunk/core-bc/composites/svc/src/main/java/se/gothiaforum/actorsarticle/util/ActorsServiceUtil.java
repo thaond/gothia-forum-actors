@@ -19,23 +19,6 @@
 
 package se.gothiaforum.actorsarticle.util;
 
-import java.io.File;
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
-import se.gothiaforum.util.ArticleContentXml;
-import se.gothiaforum.util.Constants;
-
 import com.liferay.counter.service.CounterLocalService;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -49,20 +32,26 @@ import com.liferay.portal.model.ListType;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
-import com.liferay.portal.service.ClassNameLocalService;
-import com.liferay.portal.service.ListTypeService;
-import com.liferay.portal.service.OrganizationLocalService;
-import com.liferay.portal.service.RoleLocalService;
-import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.UserGroupRoleLocalService;
-import com.liferay.portal.service.UserLocalService;
+import com.liferay.portal.service.*;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.service.AssetEntryLocalService;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalStructure;
 import com.liferay.portlet.journal.model.JournalTemplate;
 import com.liferay.portlet.journal.service.JournalStructureLocalService;
 import com.liferay.portlet.journal.service.JournalTemplateLocalService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.gothiaforum.actorsarticle.domain.model.ActorArticle;
+import se.gothiaforum.util.ArticleContentXml;
+import se.gothiaforum.util.Constants;
+
+import java.io.File;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.*;
 
 /**
  * This is a util class that provide help methods for the actor article service.
@@ -71,7 +60,7 @@ import com.liferay.portlet.journal.service.JournalTemplateLocalService;
  */
 public class ActorsServiceUtil {
 
-    private static final Log LOG = LogFactory.getLog(ActorsServiceUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActorsServiceUtil.class);
     private final AssetEntryLocalService assetEntryService;
     private final ClassNameLocalService classNameService;
     private final CounterLocalService counterService;
@@ -247,6 +236,13 @@ public class ActorsServiceUtil {
     public JournalStructure addJournalStructure(long userId, long groupId, String xsd, String structureName,
             String structureDescription) throws Exception {
 
+        Map<Locale, String> structureNames = new HashMap<Locale, String>();
+        Locale swedishLocale = new Locale("sv", "SE");
+        structureNames.put(swedishLocale, structureName);
+
+        Map<Locale, String> structureDescriptions = new HashMap<Locale, String>();
+        structureDescriptions.put(swedishLocale, structureDescription);
+
         String structureId = String.valueOf(counterService.increment());
         boolean autoStructureId = true;
         String parentStructureId = "";
@@ -255,7 +251,7 @@ public class ActorsServiceUtil {
         serviceContext.setAddGuestPermissions(true);
 
         return structureService.addStructure(userId, groupId, structureId, autoStructureId, parentStructureId,
-                structureName, structureDescription, xsd, serviceContext);
+                structureNames, structureDescriptions, xsd, serviceContext);
     }
 
     /**
@@ -282,6 +278,13 @@ public class ActorsServiceUtil {
 
         String templateId = String.valueOf(CounterLocalServiceUtil.increment());
 
+        Map<Locale, String> templateNames = new HashMap<Locale, String>();
+        Locale swedishLocale = new Locale("sv", "SE");
+        templateNames.put(swedishLocale, templateName);
+
+        Map<Locale, String> templateDescriptions = new HashMap<Locale, String>();
+        templateDescriptions.put(swedishLocale, templateDescription);
+
         boolean autoTemplateId = true;
         boolean formatXsl = true;
         String langType = "vm";
@@ -295,8 +298,8 @@ public class ActorsServiceUtil {
         serviceContext.setAddCommunityPermissions(true);
         serviceContext.setAddGuestPermissions(true);
 
-        return templateService.addTemplate(userId, groupId, templateId, autoTemplateId, structureId, templateName,
-                templateDescription, xsl, formatXsl, langType, cacheable, smallImage, smallImageURL, smallFile,
+        return templateService.addTemplate(userId, groupId, templateId, autoTemplateId, structureId, templateNames,
+                templateDescriptions, xsl, formatXsl, langType, cacheable, smallImage, smallImageURL, smallFile,
                 serviceContext);
     }
 
@@ -328,7 +331,6 @@ public class ActorsServiceUtil {
                 long parentOrganizationId = 0;
                 String name = "Gothia Parent Organization";
                 String type = ActorsConstants.ACTOR_PARENT;
-                boolean recursable = true;
                 long regionId = 0;
                 long countryId = 0;
                 int statusId = getStatusIdForOrganizationFullMember();
@@ -336,7 +338,7 @@ public class ActorsServiceUtil {
                 ServiceContext serviceContext = null;
 
                 org = organizationService.addOrganization(defaultUserId, parentOrganizationId, name, type,
-                        recursable, regionId, countryId, statusId, comments, serviceContext);
+                        regionId, countryId, statusId, comments, false, serviceContext);
 
             } else if (parentOrgs.size() == 1) {
                 org = parentOrgs.get(0);
@@ -509,7 +511,7 @@ public class ActorsServiceUtil {
      * 
      * @param userId
      * @param companyId
-     * @param organizationId
+     * @param groupId
      */
     public void addUserRole(long userId, long companyId, long groupId) {
         try {
@@ -523,6 +525,10 @@ public class ActorsServiceUtil {
             throw new RuntimeException("Unable to add user to a role", e1);
         }
 
+    }
+
+    public static String getImageUrl(DLFileEntry image) {
+        return String.format("/documents/%s%s%s/%s", image.getGroupId(), image.getTreePath(), image.getTitle(), image.getUuid());
     }
 
 }

@@ -20,6 +20,8 @@
 --%>
 
 <%@page import="com.liferay.portlet.journal.model.JournalArticle"%>
+<%@ page import="com.liferay.portal.theme.ThemeDisplay" %>
+<%@ page import="com.liferay.portal.kernel.util.WebKeys" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
@@ -84,6 +86,13 @@
             <liferay-ui:message key="help-tag-message" />
         </p>
         <liferay-ui:message key="tags" />
+
+        <%-- https://issues.liferay.com/browse/LPS-41285. A hack to mitigate a bug. '--%>
+          <%
+              ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+              pageContext.setAttribute("themeDisplay", themeDisplay);
+          %>
+
         <liferay-ui:asset-tags-selector
           className="<%= com.liferay.portlet.journal.model.JournalArticle.class.getName() %>"
           classPK="${actorArticle.resourcePrimKeyId}" hiddenInput="tagsEntries" curTags="${tagsEntries}" />

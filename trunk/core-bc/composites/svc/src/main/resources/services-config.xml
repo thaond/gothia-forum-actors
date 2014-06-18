@@ -47,8 +47,7 @@
     <constructor-arg name="assetTagService" ref="assetTagService" />
     <constructor-arg name="assetTagPropertyService" ref="assetTagPropertyService" />   
     <constructor-arg name="counterService" ref="counterService" />
-    <constructor-arg name="iGImageService" ref="iGImageService" />
-    <constructor-arg name="iGFolderService" ref="iGFolderService" />
+    <constructor-arg name="dlFolderLocalService" ref="dlFolderLocalService" />
     <constructor-arg name="articleService" ref="articleService" />
     <constructor-arg name="articleResourceService" ref="articleResourceService" />
     <constructor-arg name="organizationService" ref="organizationService" />
@@ -99,9 +98,7 @@
   <bean id="socialRequestInterpreterService" class="com.liferay.portlet.social.service.SocialRequestInterpreterLocalServiceUtil"
     factory-method="getService" />
   <bean id="roleService" class="com.liferay.portal.service.RoleLocalServiceUtil" factory-method="getService" />
-  <bean id="iGImageService" class="com.liferay.portlet.imagegallery.service.IGImageLocalServiceUtil"
-    factory-method="getService" />
-  <bean id="iGFolderService" class="com.liferay.portlet.imagegallery.service.IGFolderLocalServiceUtil"
+  <bean id="dlFolderLocalService" class="com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil"
     factory-method="getService" />
   <bean id="userGroupRoleService" class="com.liferay.portal.service.UserGroupRoleLocalServiceUtil"
     factory-method="getService" />
@@ -115,8 +112,6 @@
 
   <bean id="mBMessageLocalService" class="com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil"
     factory-method="getService" />
-
-
 
   <bean id="workflowHandlerRegistry" class="com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil" />
   <bean id="actorsArticleConverterService" class="se.gothiaforum.actorsarticle.service.impl.ActorsArticleConverterServiceImpl" />

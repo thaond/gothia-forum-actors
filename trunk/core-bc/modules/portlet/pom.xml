@@ -42,6 +42,11 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>gothia_actors-core-bc-composite-svc</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>javax.portlet</groupId>
       <artifactId>portlet-api</artifactId>
     </dependency>
@@ -123,7 +128,11 @@
       <artifactId>guava</artifactId>
       <version>10.0.1</version>
     </dependency>
-
+    <dependency>
+      <artifactId>solr-solrj</artifactId>
+      <groupId>org.apache.solr</groupId>
+      <version>3.6.2</version>
+    </dependency>
 
     <!-- TEST -->
     <dependency>

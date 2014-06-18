@@ -23,24 +23,6 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     version="2.4">
     
- <!--  <listener>
-    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-  </listener>
-   -->
-
-  <filter>
-    <filter-name>encodingFilter</filter-name>
-    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-    <init-param>
-      <param-name>encoding</param-name>
-      <param-value>UTF-8</param-value>
-    </init-param>
-    <init-param>
-      <param-name>forceEncoding</param-name>
-      <param-value>false</param-value>
-    </init-param>
-  </filter>
-
     <servlet>
         <servlet-name>view</servlet-name>
         <servlet-class>org.springframework.web.servlet.ViewRendererServlet</servlet-class>
@@ -52,11 +34,4 @@
         <url-pattern>/WEB-INF/servlet/view</url-pattern>
     </servlet-mapping>
     
-    <jsp-config>
-        <taglib>
-        <taglib-uri>http://java.sun.com/portlet_2_0</taglib-uri>
-        <taglib-location>/WEB-INF/tld/liferay-portlet.tld</taglib-location>
-        </taglib>
-    </jsp-config>
-
 </web-app>

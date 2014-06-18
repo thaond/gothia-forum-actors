@@ -30,7 +30,7 @@
   </scm>
 
   <properties>
-    <liferay.version>6.0.12</liferay.version>
+    <liferay.version>${liferay.version}</liferay.version>
   </properties>
 
 </project>

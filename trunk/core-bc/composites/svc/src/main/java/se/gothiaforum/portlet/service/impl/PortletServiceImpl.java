@@ -1,10 +1,17 @@
 package se.gothiaforum.portlet.service.impl;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.portlet.PortletContainerException;
+import com.liferay.portal.kernel.portlet.PortletContainerUtil;
+import com.liferay.portal.kernel.servlet.PipingServletResponse;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Portlet;
+import com.liferay.portal.service.PortletLocalServiceUtil;
+import com.liferay.portal.theme.PortletDisplay;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import org.springframework.stereotype.Service;
+import se.gothiaforum.portlet.service.PortletService;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -12,20 +19,12 @@ import javax.portlet.ValidatorException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.stereotype.Service;
-
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.portlet.PortletBag;
-import com.liferay.portal.kernel.portlet.PortletBagPool;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.service.PortletLocalServiceUtil;
-import com.liferay.portal.theme.PortletDisplay;
-import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortalUtil;
-import com.liferay.portal.util.PortletKeys;
-
-import se.gothiaforum.portlet.service.PortletService;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class PortletServiceImpl implements PortletService {
@@ -49,10 +48,16 @@ public class PortletServiceImpl implements PortletService {
         // Render the portlet as a runtime portlet
         String result;
         try {
-            PortletBag implPortletBag = PortletBagPool.get(PortletKeys.JOURNAL);
-            com.liferay.portal.model.Portlet portlet = PortletLocalServiceUtil.getPortletById(PortalUtil.getCompanyId(request), portletId);
+            Portlet portlet = PortletLocalServiceUtil.getPortletById(PortalUtil.getCompanyId(request), portletId);
+
             servletRequest.setAttribute(WebKeys.RENDER_PORTLET_RESOURCE, Boolean.TRUE);
-            result = PortalUtil.renderPortlet(implPortletBag.getServletContext(), servletRequest, servletResponse, portlet, queryString, false);
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            PortletContainerUtil.render(servletRequest, new PipingServletResponse(servletResponse, outputStream), portlet);
+            result = outputStream.toString("UTF-8");
+
+        } catch (PortletContainerException e) {
+            throw new RuntimeException(e);
         } finally {
             // Restore the state
             portletDisplay.copyFrom(portletDisplayClone);
