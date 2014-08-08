@@ -81,8 +81,6 @@ public class SettingsController {
                 settingsService.getSetting(ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID2, companyId, groupId);
         String footerId3 =
                 settingsService.getSetting(ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID3, companyId, groupId);
-        String footerId4 =
-                settingsService.getSetting(ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID4, companyId, groupId);
         String bannerArticleId =
                 settingsService.getSetting(ExpandoConstants.GOTHIA_BANNER_ARTICLE, companyId, groupId);
         String searchclientArticleId =
@@ -109,7 +107,6 @@ public class SettingsController {
         model.addAttribute("footerId1", footerId1);
         model.addAttribute("footerId2", footerId2);
         model.addAttribute("footerId3", footerId3);
-        model.addAttribute("footerId4", footerId4);
         model.addAttribute("bannerArticleId", bannerArticleId);
         model.addAttribute("searchclientArticleId", searchclientArticleId);
         model.addAttribute("searchArticleId", searchArticleId);
@@ -143,7 +140,6 @@ public class SettingsController {
         String footerId1 = request.getParameter("footerId1");
         String footerId2 = request.getParameter("footerId2");
         String footerId3 = request.getParameter("footerId3");
-        String footerId4 = request.getParameter("footerId4");
 
         String bannerArticleId = request.getParameter("bannerArticleId");
         String searchclientArticleId = request.getParameter("searchclientArticleId");
@@ -161,7 +157,6 @@ public class SettingsController {
         settingsService.setSetting(footerId1, ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID1, companyId, groupId);
         settingsService.setSetting(footerId2, ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID2, companyId, groupId);
         settingsService.setSetting(footerId3, ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID3, companyId, groupId);
-        settingsService.setSetting(footerId4, ExpandoConstants.GOTHIA_FOOTER_ARTICLE_ID4, companyId, groupId);
         settingsService.setSetting(bannerArticleId, ExpandoConstants.GOTHIA_BANNER_ARTICLE, companyId,
                 groupId);
         settingsService.setSetting(searchclientArticleId, ExpandoConstants.GOTHIA_THIN_SEARCH_ARTICLE,

@@ -151,9 +151,9 @@ public class ActorsSearchThinClientController {
                             themeDisplay.getLanguageId(), themeDisplay);
             model.addAttribute("searchclientArticleContent", searchclientArticleContent);
         } catch (PortalException e) {
-            LOG.info("no article for thin client search portlet found");
+            LOG.info("no article for thin client search portlet found", e);
         } catch (SystemException e) {
-            LOG.info("no article for thin client search portlet found");
+            LOG.info("no article for thin client search portlet found", e);
         }
 
         try {

@@ -39,13 +39,12 @@ public final class ExpandoConstants {
     public static final String GOTHIA_SITE_LANGUAGE = "gothiaSiteLanguage";
     
     // Header
-    public static final String GOTHIA_HEADER_TOP_NAVIGATION_ARTICLE_ID = "gothiaTopNavigationArticleId";
-    
-    
+    public static final String GOTHIA_HEADER_TOP_NAVIGATION_ARTICLE_ID = "top-nav-article-id";
+
     // Footer
-    public static final String GOTHIA_FOOTER_ARTICLE_ID1 = "gothiaFooterArticleId1";
-    public static final String GOTHIA_FOOTER_ARTICLE_ID2 = "gothiaFooterArticleId2";
-    public static final String GOTHIA_FOOTER_ARTICLE_ID3 = "gothiaFooterArticleId3";
+    public static final String GOTHIA_FOOTER_ARTICLE_ID1 = "footer-col-1-article-id";
+    public static final String GOTHIA_FOOTER_ARTICLE_ID2 = "footer-col-2-article-id";
+    public static final String GOTHIA_FOOTER_ARTICLE_ID3 = "footer-col-3-article-id";
     public static final String GOTHIA_FOOTER_ARTICLE_ID4 = "gothiaFooterArticleId4";
 
     // Search client portet

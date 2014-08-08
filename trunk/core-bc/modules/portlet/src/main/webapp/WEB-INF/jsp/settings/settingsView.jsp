@@ -73,9 +73,6 @@
 		<aui:field-wrapper>
 			<aui:input name="footerId3"    type="text"     label="footerId3"    value="${footerId3}"/>	
 		</aui:field-wrapper>
-		<aui:field-wrapper>
-			<aui:input name="footerId4"    type="text"     label="footerId4"    value="${footerId4}"/>	
-		</aui:field-wrapper>	
 	</aui:fieldset>
 
 	<aui:fieldset label="start-page-search">
