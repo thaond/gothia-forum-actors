@@ -10,7 +10,7 @@ public class ActroSolrQueryTest {
     public void testBuildQueryString() throws Exception {
         String query = ActroSolrQuery.buildQueryString("searchText");
 
-        assertEquals("content:searchText OR title:searchText OR assetTagNames:searchText OR description:searchText OR "
+        assertEquals("title:searchText OR assetTagNames:searchText OR description:searchText OR "
                 + "actor-name:searchText OR org-name:searchText OR intro:searchText", query);
     }
 }

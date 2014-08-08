@@ -101,7 +101,7 @@ public class ActroSolrQuery extends SolrQuery {
 
     static String buildQueryString(String q) {
         return String.format(
-                " OR title:%1$s" +
+                "title:%1$s" +
                 " OR assetTagNames:%1$s" +
                 " OR description:%1$s" +
                 " OR actor-name:%1$s" +
