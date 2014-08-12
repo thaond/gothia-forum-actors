@@ -30,7 +30,7 @@
         <pattern>/view-all</pattern>
         <generated-parameter name="viewAll">viewAll</generated-parameter>
         <generated-parameter name="searchTerm"></generated-parameter>
-        <implicit-parameter name="p_p_id">actorsSearch_WAR_gothia_actorscorebcmoduleportlet</implicit-parameter>
+        <implicit-parameter name="p_p_id">actorsSearch_WAR_gothiaactorsportlet</implicit-parameter>
         <implicit-parameter name="p_p_lifecycle">0</implicit-parameter>
         <implicit-parameter name="p_p_state">normal</implicit-parameter>
         <implicit-parameter name="p_p_mode">view</implicit-parameter>
@@ -40,7 +40,7 @@
      <route>
         <pattern>/{searchTerm}</pattern>
          <generated-parameter name="searchTerm">{searchTerm}</generated-parameter>
-        <implicit-parameter name="p_p_id">actorsSearch_WAR_gothia_actorscorebcmoduleportlet</implicit-parameter>
+        <implicit-parameter name="p_p_id">actorsSearch_WAR_gothiaactorsportlet</implicit-parameter>
         <implicit-parameter name="p_p_lifecycle">0</implicit-parameter>
         <implicit-parameter name="p_p_state">normal</implicit-parameter>
         <implicit-parameter name="p_p_mode">view</implicit-parameter>

@@ -41,6 +41,7 @@ import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.journal.NoSuchArticleException;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.slf4j.Logger;
@@ -389,32 +390,52 @@ public class ActorsSearchController {
         }
 
         if (highlightTagsList != null && highlightTagsList.size() > 0) {
-            String tagsStr = "";
+            StringBuilder tagsStr = new StringBuilder();
             for (String tag : highlightTagsList) {
-                tagsStr = tagsStr + tag + ",";
+                String commaOrNot = tagsStr.length() > 0 ? "," : ""; // If empty we don't add a comma before next tag.
+                tagsStr.append(commaOrNot + tag);
             }
-            actorArticle.setTagsStr(tagsStr);
+
+            addTheNonHighlightedTags(doc, tagsStr);
+
+            actorArticle.setTagsStr(tagsStr.toString());
         } else {
-            String tagsStr = "";
 
             Object tags = doc.getFieldValue(Field.ASSET_TAG_NAMES);
 
             if (tags != null) {
 
-                if (tags instanceof String) {
-                    tagsStr = (String) tags;
-                } else if (tags instanceof ArrayList) {
-                    ArrayList<String> tags2 = (ArrayList<String>) tags;
-                    for (String tag : tags2) {
-                        tagsStr = tagsStr + tag + ",";
-                    }
-                }
+                List<String> allTagsOfArticle = extractTags(tags);
+
+                String tagsStr = StringUtils.join(allTagsOfArticle, ',');
                 actorArticle.setTagsStr(tagsStr);
             }
         }
+    }
 
-        // System.out.println("actorArticle intro " + actorArticle.getIntro());
-        // System.out.println("actorArticle dede " + actorArticle.getDetailedDescription());
+    private void addTheNonHighlightedTags(SolrDocument doc, StringBuilder tagsStr) {
+        Object tags = doc.getFieldValue(Field.ASSET_TAG_NAMES);
+        List<String> allTagsOfArticle = extractTags(tags);
+
+        for (String tag : allTagsOfArticle) {
+            // Only add those which aren't already existing since they are highlighted.
+            if (tagsStr.indexOf(tag) == -1) {
+                tagsStr.append("," + tag);
+            }
+        }
+    }
+
+    private List<String> extractTags(Object tags) {
+        List<String> allTagsOfArticle = new ArrayList<String>();
+        if (tags instanceof String) {
+            allTagsOfArticle.add((String) tags);
+        } else if (tags instanceof List) {
+            List<String> tagList = (List<String>) tags;
+            for (String tag : tagList) {
+                allTagsOfArticle.add(tag);
+            }
+        }
+        return allTagsOfArticle;
     }
 
     private String stripLanguageSuffix(String string) {
