@@ -87,7 +87,7 @@ public class MoreLikeThisController {
 
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         PortletPreferences prefs = request.getPreferences();
-        String tagsStr = prefs.getValue("tags", "tags");
+        String tagsStr = prefs.getValue("tags", "");
 
         StringQueryImpl query = new StringQueryImpl("");
 
