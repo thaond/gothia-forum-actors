@@ -51,8 +51,8 @@
 
 	AUI().ready('aui-tooltip', function(A) {
 	
-		var t1 = new A.Tooltip({
-			trigger: '#<portlet:namespace />mltWrap .mlt-title',
+		var t1 = new A.TooltipDelegate({
+			trigger: '.mlt-wrap .mlt-title',
 			align: { points: [ 'br', 'tl' ] },
 			anim: {
 				show: true
