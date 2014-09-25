@@ -98,6 +98,7 @@ public class ActorArticle {
     private String profileURL = "";
 
     private ArrayList<Tag> tags;
+    private String version;
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
@@ -299,4 +300,11 @@ public class ActorArticle {
         this.tags = tags;
     }
 
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getVersion() {
+        return version;
+    }
 }
