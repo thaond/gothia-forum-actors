@@ -67,10 +67,7 @@ import se.gothiaforum.util.model.PageIterator;
 import javax.portlet.*;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This controller class performs a search for actors.
@@ -138,50 +135,7 @@ public class ActorsSearchController {
 
             QueryResponse queryResponse = actroSolrQuery.query();
 
-            List<ActorArticle> actorArticles = new ArrayList<ActorArticle>();
-            Iterator<SolrDocument> resultIter = null;
-            if (queryResponse != null) {
-                if (queryResponse.getResults() != null) {
-
-                    resultIter = queryResponse.getResults().iterator();
-
-                    while (resultIter.hasNext()) {
-                        SolrDocument solrArticleEntry = resultIter.next();
-                        ActorArticle actorArticle = new ActorArticle();
-
-                        String actorsArticlePk = extractFieldValue(solrArticleEntry, ActorsConstants.ACTORS_ARTICLE_PK);
-                        actorArticle.setArticleId(actorsArticlePk);
-
-                        if (solrArticleEntry.getFieldValue(ActorsConstants.GROUP_ID) != null) {
-                            actorArticle.setGroupId(Long.valueOf(extractFieldValue(solrArticleEntry, ActorsConstants.GROUP_ID)));
-                        }
-
-                        // In case of faulty solr index take care of not adding incorrect articles.
-                        try {
-                            setArticleContentAndTitle(themeDisplay, queryResponse, solrArticleEntry, actorArticle);
-                            
-                            long articleGroupId = actorArticle.getGroupId();
-                            
-                            try {
-                            	Group actorGroup = groupService.getGroup(articleGroupId);
-                            	
-                                String namePrefix = actorGroup.getFriendlyURL();
-
-                                actorArticle.setProfileURL(ActorsConstants.PROFILE_REDIRECT_URL
-                                        + namePrefix.substring(1));
-
-                                actorArticles.add(actorArticle);
-                            } catch (NoSuchGroupException nsge) {
-                            	// Do nothing for now
-                            }
-
-                        } catch (NoSuchArticleException e) {
-                            log.warn("Warning: " + e.getMessage() + "may reindex.");
-                        }
-
-                    }
-                }
-            }
+            List<ActorArticle> actorArticles = extractActorArticles(themeDisplay, queryResponse);
 
             if (actorArticles.size() == 0) {
 
@@ -242,6 +196,79 @@ public class ActorsSearchController {
         }
 
         return "searchView";
+    }
+
+    private List<ActorArticle> extractActorArticles(ThemeDisplay themeDisplay, QueryResponse queryResponse) throws PortalException, SystemException {
+        Map<String, ActorArticle> articleIdActorArticleMap = new HashMap<String, ActorArticle>();
+        Iterator<SolrDocument> resultIter;
+        if (queryResponse != null) {
+            if (queryResponse.getResults() != null) {
+
+                resultIter = queryResponse.getResults().iterator();
+
+                while (resultIter.hasNext()) {
+                    SolrDocument solrArticleEntry = resultIter.next();
+                    ActorArticle actorArticle = new ActorArticle();
+
+                    String actorsArticlePk = extractFieldValue(solrArticleEntry, ActorsConstants.ACTORS_ARTICLE_PK);
+                    actorArticle.setArticleId(actorsArticlePk);
+
+                    if (solrArticleEntry.getFieldValue(ActorsConstants.GROUP_ID) != null) {
+                        actorArticle.setGroupId(Long.valueOf(extractFieldValue(solrArticleEntry, ActorsConstants.GROUP_ID)));
+                    }
+
+                    if (solrArticleEntry.getFieldValue("version") != null) {
+                        actorArticle.setVersion(extractFieldValue(solrArticleEntry, "version"));
+                    }
+
+                    // In case of faulty solr index take care of not adding incorrect articles.
+                    try {
+                        setArticleContentAndTitle(themeDisplay, queryResponse, solrArticleEntry, actorArticle);
+
+                        long articleGroupId = actorArticle.getGroupId();
+
+                        try {
+                            Group actorGroup = groupService.getGroup(articleGroupId);
+
+                            String namePrefix = actorGroup.getFriendlyURL();
+
+                            actorArticle.setProfileURL(ActorsConstants.PROFILE_REDIRECT_URL
+                                    + namePrefix.substring(1));
+
+                            // If the map doesn't contain the article id, just add it...
+                            if (!articleIdActorArticleMap.containsKey(actorArticle.getArticleId())) {
+                                articleIdActorArticleMap.put(actorArticle.getArticleId(), actorArticle);
+                            } else {
+                                // otherwise only add if this is a later version
+                                Float thisVersion = Float.valueOf(actorArticle.getVersion());
+                                ActorArticle that = articleIdActorArticleMap.get(actorArticle.getArticleId());
+                                Float thatVersion = Float.valueOf(that.getVersion());
+                                if (thisVersion > thatVersion) {
+                                    articleIdActorArticleMap.put(actorArticle.getArticleId(), actorArticle);
+                                }
+                            }
+                        } catch (NoSuchGroupException nsge) {
+                            // Do nothing for now
+                        }
+
+                    } catch (NoSuchArticleException e) {
+                        log.warn("Warning: " + e.getMessage() + "may reindex.");
+                    }
+
+                }
+            }
+        }
+
+        ArrayList<ActorArticle> actorArticles = new ArrayList<ActorArticle>(articleIdActorArticleMap.values());
+
+        Collections.sort(actorArticles, new Comparator<ActorArticle>() {
+            @Override
+            public int compare(ActorArticle o1, ActorArticle o2) {
+                return o1.getTitle().compareTo(o2.getTitle());
+            }
+        });
+
+        return actorArticles;
     }
 
     private String extractFieldValue(SolrDocument solrArticleEntry, String fieldName) {
