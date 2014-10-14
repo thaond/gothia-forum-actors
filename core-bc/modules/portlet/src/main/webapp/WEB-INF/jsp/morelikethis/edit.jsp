@@ -19,6 +19,8 @@
 
 --%>
 
+<%@ page import="com.liferay.portal.theme.ThemeDisplay" %>
+<%@ page import="com.liferay.portal.kernel.util.WebKeys" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
@@ -39,6 +41,12 @@
 
 <aui:form action="<%= saveURL%>" method="post"
 	name="addActorsArticleFM" cssClass="actors-form">
+
+    <%
+        // Horrible quick fix but it works. See https://issues.liferay.com/browse/LPS-41285
+        ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+        pageContext.setAttribute("themeDisplay", themeDisplay);
+    %>
 	<liferay-ui:asset-tags-selector curTags="${tagsEntries}" hiddenInput="tagsEntries" />
 	<aui:button-row>
 		<aui:button type="submit" value="save" />
