@@ -20,17 +20,24 @@
 package se.gothiaforum.actorsarticle.service.impl;
 
 import com.liferay.counter.service.CounterLocalService;
+import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Organization;
+import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.Role;
+import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.OrganizationLocalService;
+import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalService;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalService;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.AssetTag;
@@ -39,6 +46,7 @@ import com.liferay.portlet.asset.service.AssetTagLocalService;
 import com.liferay.portlet.asset.service.AssetTagPropertyLocalService;
 import com.liferay.portlet.documentlibrary.NoSuchFolderException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryTypeLocalServiceUtil;
@@ -423,10 +431,12 @@ public class ActorsServiceImpl implements ActorsService {
             Long[] userGroupRole = new Long[] { longGroupId, roleId };
 
             userParams.put("userGroupRole", userGroupRole);
-            User user = userService.getUserById(companyId, userId);
+
+            // Assume there is at least one user. Otherwise we would probably want to send a RuntimeException anyway.
+            long receiverUserId = UserLocalServiceUtil.getOrganizationUsers(organizationId).get(0).getUserId();
 
             socialRequestService.addRequest(userId, 0, Organization.class.getName(), organizationId,
-                    ADD_MEMBER, StringPool.BLANK, user.getUserId());
+                    ADD_MEMBER, StringPool.BLANK, receiverUserId);
 
         } catch (PortalException e) {
             throw new RuntimeException("Unable to send a social request", e);
@@ -467,6 +477,25 @@ public class ActorsServiceImpl implements ActorsService {
             logoFolder = dlFolderLocalService.addFolder(userId, actorGroupId, actorGroupId, false, 0, ActorsConstants.LOGO_FOLDER_NAME,
                     "", false, serviceContext);
 
+            // Make the folder public to make everyone able to see the profile image
+            ResourcePermission permissionForFolder = ResourcePermissionLocalServiceUtil.createResourcePermission(CounterLocalServiceUtil.increment());
+            permissionForFolder.setActionIds(1); // View
+            permissionForFolder.setName(DLFolder.class.getName());
+            permissionForFolder.setCompanyId(logoFolder.getCompanyId());
+            permissionForFolder.setScope(ResourceConstants.SCOPE_INDIVIDUAL);
+            permissionForFolder.setPrimKey(String.valueOf(logoFolder.getFolderId()));
+            permissionForFolder.setRoleId(RoleLocalServiceUtil.getRole(logoFolder.getCompanyId(), RoleConstants.GUEST).getRoleId());
+
+            ResourcePermissionLocalServiceUtil.addResourcePermission(permissionForFolder);
+
+            List<DLFileEntryType> dlFileEntryTypes = DLFileEntryTypeLocalServiceUtil.search(logoFolder.getCompanyId(), new long[0], "IMAGE", false, 0, 100, null);
+
+            if (dlFileEntryTypes.size() == 0) {
+                throw new RuntimeException("Couldn't find a DLFileEntryType for the image to be added.");
+            }
+
+            long fileEntryTypeId = dlFileEntryTypes.get(0).getFileEntryTypeId();
+
             DLFileEntry addedImage = DLFileEntryLocalServiceUtil.addFileEntry( // todo inject dependency instead
                     userId,
                     actorGroupId,
@@ -477,13 +506,24 @@ public class ActorsServiceImpl implements ActorsService {
                     originalFileName,
                     "",
                     "",
-                    DLFileEntryTypeLocalServiceUtil.getDLFileEntryType(46801).getFileEntryTypeId(), // IMAGE_GALLERY_IMAGE// todo inject dependency instead
+                    DLFileEntryTypeLocalServiceUtil.getDLFileEntryType(fileEntryTypeId).getFileEntryTypeId(), // IMAGE_GALLERY_IMAGE// todo inject dependency instead
                     Collections.EMPTY_MAP,
                     null,
                     new ByteArrayInputStream(logoInByte),
                     logoInByte.length,
                     serviceContext
             );
+
+            // Make the file public to make everyone able to see the profile image
+            ResourcePermission permissionForAddedImage = ResourcePermissionLocalServiceUtil.createResourcePermission(CounterLocalServiceUtil.increment());
+            permissionForAddedImage.setActionIds(1); // View
+            permissionForAddedImage.setName(DLFileEntry.class.getName());
+            permissionForAddedImage.setCompanyId(addedImage.getCompanyId());
+            permissionForAddedImage.setScope(ResourceConstants.SCOPE_INDIVIDUAL);
+            permissionForAddedImage.setPrimKey(String.valueOf(addedImage.getFileEntryId()));
+            permissionForAddedImage.setRoleId(RoleLocalServiceUtil.getRole(addedImage.getCompanyId(), RoleConstants.GUEST).getRoleId());
+
+            ResourcePermissionLocalServiceUtil.addResourcePermission(permissionForAddedImage);
 
             return addedImage;
 
@@ -511,9 +551,10 @@ public class ActorsServiceImpl implements ActorsService {
             List<DLFileEntry> fileEntries = DLFileEntryLocalServiceUtil.getFileEntries(groupId, logoFolder.getFolderId());// todo inject dependency instead
 
             if (fileEntries.size() > 1) {
-                throw new IllegalStateException("Only one image file is expected in an actor logo folder.");
+                LOG.error("Only one image file is expected in an actor logo folder.");
             } else if (fileEntries.size() < 1) {
-                throw new RuntimeException("Couldn't find the logo image.");
+                LOG.error("Couldn't find the logo image.");
+
             } else {
                 return ActorsServiceUtil.getImageUrl(fileEntries.get(0));
             }

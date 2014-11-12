@@ -173,8 +173,7 @@ public class AddImageController {
 
                     actorArticle.setImageUuid(imageUrl);
 
-                    JournalArticle article =
-                            actorsService.updateActors(actorArticle, userId, serviceContext,
+                    JournalArticle article = actorsService.updateActors(actorArticle, userId, serviceContext,
                                     actorArticle.getTagsStr(), themeDisplay.getScopeGroupId());
 
                     Indexer indexer = IndexerRegistryUtil.getIndexer(JournalArticle.class.getName());

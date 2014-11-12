@@ -144,7 +144,6 @@ public class MoreLikeThisController {
                                                 + ") sort=title asc");
 
                     }
-
                 } catch (NoSuchGroupException e1) {
                     LOG.warn("No such group found");
                 } catch (PortalException e) {
@@ -158,7 +157,12 @@ public class MoreLikeThisController {
         }
 
         // Search for more like this.
-        List<ActorArticle> actorArticles = search(themeDisplay, query);
+        List<ActorArticle> actorArticles;
+        if (query != null && !"".equals(query.toString())) {
+            actorArticles = search(themeDisplay, query);
+        } else {
+            actorArticles = new ArrayList<ActorArticle>();
+        }
 
         model.addAttribute("hitsIsNotEmpty", !actorArticles.isEmpty());
         model.addAttribute("hits", actorArticles);
