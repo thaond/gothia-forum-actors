@@ -33,10 +33,11 @@
  <liferay-ui:search-container id="<portlet:namespace />parentSearchContainer"
     delta="${delta}"
     iteratorURL="${iteratorURL}"
->
+    total="${total}"
+         >
     <liferay-ui:search-container-results
         results="${actors}"
-        total="${total}"
+
     />
     <liferay-ui:search-container-row
         className="com.liferay.portal.model.Organization"
