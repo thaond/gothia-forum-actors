@@ -385,6 +385,12 @@ public class ActorsSearchController {
             Iterator<String> iterator = highlightIntroList.iterator();
             while (true) {
                 String content = iterator.next();
+
+                // Remove all html start and closing tags except span tags which may hold the highlighting info. If another span tag is
+                // included we may have a problem but this is the best we got for now. The highlighting info is created
+                // by Solr for the response so those tags will never cause illegal html.
+                content = content.replaceAll("</?+(?!span)([^>]*)>", "");
+
                 sb.append(content);
                 if (iterator.hasNext()) {
                     sb.append("<b>... </b> ");
